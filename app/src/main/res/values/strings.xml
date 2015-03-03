@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">JoinMyBridge</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="bridgeName">Test Bridge</string>
+    <string name="checkBoxHost">Use Host Code</string>
+    <string name="checkBoxPIN">Use PIN Code</string>
+    <string name="dialButton">Dial</string>
+    <string name="dialWithPINButton">Dial with PIN</string>
+    <string name="dialWithHostButton">Dial with PIN and Host Code</string>
+    <string name="next">Next</string>
+
+
+    <string name="drawer_open">Open</string>
+    <string name="drawer_close">Close</string>
+
+</resources>
