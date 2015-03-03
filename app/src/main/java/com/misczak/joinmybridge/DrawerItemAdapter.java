@@ -18,9 +18,13 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<DrawerItemAdapter.Dr
 
 
     private LayoutInflater inflater;
+    private Context context;
+    private ClickListener clickListener;
+
     List<DrawerItem> drawerItems = Collections.emptyList();
 
     public DrawerItemAdapter (Context context, List<DrawerItem> drawerItems) {
+        this.context = context;
         inflater = LayoutInflater.from(context);
         this.drawerItems = drawerItems;
     }
@@ -33,6 +37,7 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<DrawerItemAdapter.Dr
         return holder;
     }
 
+    //remove final from position
     @Override
     public void onBindViewHolder(DrawerItemViewHolder holder, int position) {
 
@@ -42,12 +47,16 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<DrawerItemAdapter.Dr
         holder.drawerItemImage.setImageResource(currentDrawerItem.drawerItemIconId);
     }
 
+    public void setClickListener(ClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
+
     @Override
     public int getItemCount() {
         return drawerItems.size();
     }
 
-    class DrawerItemViewHolder extends RecyclerView.ViewHolder {
+    class DrawerItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView drawerItemName;
         ImageView drawerItemImage;
@@ -55,9 +64,23 @@ public class DrawerItemAdapter extends RecyclerView.Adapter<DrawerItemAdapter.Dr
         public DrawerItemViewHolder(View itemView) {
             super(itemView);
 
+            itemView.setOnClickListener(this);
+
             drawerItemName = (TextView) itemView.findViewById(R.id.drawerItemName);
             drawerItemImage = (ImageView) itemView.findViewById(R.id.drawerItemId);
 
         }
+
+        @Override
+        public void onClick(View v) {
+            if (clickListener != null){
+                clickListener.itemClicked(v, getPosition());
+            }
+        }
     }
+
+    public interface ClickListener{
+        public void itemClicked(View view, int position);
+    }
+
 }

@@ -6,11 +6,20 @@
         android:background="@color/navigationDrawerColor"
         tools:context="com.misczak.joinmybridge.NavigationDrawerFragment">
 
+
+        <ImageView
+            android:id="@+id/drawerImage"
+            android:layout_width="280dp"
+            android:layout_height="140dp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="@dimen/drawer_margin_top"
+            android:src="@drawable/ic_abstract" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/drawerList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="96dp">
+            android:layout_below="@id/drawerImage">
 
         </android.support.v7.widget.RecyclerView>
 

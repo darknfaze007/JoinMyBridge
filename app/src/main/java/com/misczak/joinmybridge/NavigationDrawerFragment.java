@@ -2,6 +2,7 @@ package com.misczak.joinmybridge;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,7 +22,7 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NavigationDrawerFragment extends Fragment {
+public class NavigationDrawerFragment extends Fragment implements DrawerItemAdapter.ClickListener{
 
 
     private RecyclerView recyclerView;
@@ -65,6 +66,7 @@ public class NavigationDrawerFragment extends Fragment {
         recyclerView = (RecyclerView) layout.findViewById(R.id.drawerList);
 
         adapter = new DrawerItemAdapter(getActivity(), getData());
+        adapter.setClickListener(this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -146,6 +148,11 @@ public class NavigationDrawerFragment extends Fragment {
         SharedPreferences sharedPreferences = context.getSharedPreferences(PREF_FILE_NAME,
                 Context.MODE_PRIVATE);
         return sharedPreferences.getString(preferenceName, defaultValue);
+    }
+
+    @Override
+    public void itemClicked(View view, int position) {
+        startActivity(new Intent(getActivity(), PhoneBookActivity.class));
     }
 
 }
