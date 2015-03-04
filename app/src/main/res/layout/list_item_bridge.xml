@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/bridge_card_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimaryDark"
+        android:text="Bridge Name"
+        android:gravity="center_vertical"
+        android:textColor="@android:color/white"
+        android:textSize="14dp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/bridge_card_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bridge Number"
+        android:gravity="center_vertical"
+        android:textSize="10dp"
+        android:layout_below="@id/bridge_card_name"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"/>
+
+    <TextView
+        android:id="@+id/bridge_card_hostCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Host Code"
+        android:gravity="center_vertical"
+        android:textSize="10dp"
+        android:layout_below="@id/bridge_card_number"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="5dp"/>
+
+    <TextView
+        android:id="@+id/bridge_card_participantCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PIN Code"
+        android:textSize="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="150dp"
+        android:layout_alignBaseline="@id/bridge_card_hostCode"/>
+
+</RelativeLayout>

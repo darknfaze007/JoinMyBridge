@@ -8,7 +8,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/bridgeName"
+        android:text="@string/bridgeNameLabel"
         android:id="@+id/bridgeName"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />

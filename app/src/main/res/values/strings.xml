@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">JoinMyBridge</string>
+    <string name="app_name">Join My Bridge</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
@@ -9,7 +9,18 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
-    <string name="bridgeName">Test Bridge</string>
+    <string name="phonebook_title">PhoneBook</string>
+
+    <string name="bridgeNameLabel">Bridge Name</string>
+    <string name="bridgeNumberLabel">Bridge Number</string>
+
+    <string name="bridgeParticipantCodeLabel">Participant (PIN) Code</string>
+    <string name="bridgeHostCodeLabel">Host Code</string>
+
+
+   <string name="bridgeFirstToneLabel">First Tone Key</string>
+    <string name="bridgeSecondToneLabel">Second Tone Key</string>
+
     <string name="checkBoxHost">Use Host Code</string>
     <string name="checkBoxPIN">Use PIN Code</string>
     <string name="dialButton">Dial</string>
@@ -20,5 +31,19 @@
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+
+
+    <string name="bridge_name_hint">Bridge Name</string>
+    <string name="bridge_number_hint">Bridge Number</string>
+    <string name="participant_code_hint">Participant Code</string>
+    <string name="host_code_hint">Host Code</string>
+
+
+    <string name="dtmf_prompt">Tone Key</string>
+
+    <string-array name="dtmf_tones">
+        <item>#</item>
+        <item>*</item>
+    </string-array>
 
 </resources>

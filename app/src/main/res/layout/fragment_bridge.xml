@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/bridgeNameLabel"
+        android:id="@+id/bridgeNameLabel"
+        style="?android:listSeparatorTextViewStyle" />
+
+    <EditText android:id="@+id/bridge_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/bridge_name_hint" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bridgeNumberLabel"
+        android:text="@string/bridgeNumberLabel"
+        style="?android:listSeparatorTextViewStyle" />
+
+    <EditText android:id="@+id/bridge_number"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:hint="@string/bridge_number_hint" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bridgeParticipantCodeLabel"
+        android:text="@string/bridgeParticipantCodeLabel"
+        style="?android:listSeparatorTextViewStyle" />
+
+    <EditText android:id="@+id/participant_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:hint="@string/participant_code_hint" />
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bridgeHostCodeLabel"
+        android:text="@string/bridgeHostCodeLabel"
+        style="?android:listSeparatorTextViewStyle" />
+
+    <EditText android:id="@+id/host_code"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="phone"
+        android:hint="@string/host_code_hint" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bridgeFirstToneLabel"
+        android:text="@string/bridgeFirstToneLabel"
+        style="?android:listSeparatorTextViewStyle" />
+
+    <Spinner
+        android:id="@+id/bridgeFirstToneKey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/dtmf_tones"
+        android:prompt="@string/dtmf_prompt" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/bridgeSecondToneLabel"
+        android:text="@string/bridgeSecondToneLabel"
+        style="?android:listSeparatorTextViewStyle" />
+
+    <Spinner
+        android:id="@+id/bridgeSecondToneKey"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/dtmf_tones"
+        android:prompt="@string/dtmf_prompt" />
+
+
+</LinearLayout>

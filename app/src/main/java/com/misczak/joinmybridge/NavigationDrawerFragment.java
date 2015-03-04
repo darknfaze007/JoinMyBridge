@@ -152,7 +152,7 @@ public class NavigationDrawerFragment extends Fragment implements DrawerItemAdap
 
     @Override
     public void itemClicked(View view, int position) {
-        startActivity(new Intent(getActivity(), PhoneBookActivity.class));
+        startActivity(new Intent(getActivity(), BridgeActivity.class));
     }
 
 }

@@ -1,101 +1,76 @@
 package com.misczak.joinmybridge;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
+import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.EditText;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import java.util.ArrayList;
 
-public class PhoneBookFragment extends Fragment {
+/**
+ * Created by misczak on 3/3/15.
+ */
+public class PhoneBookFragment extends ListFragment {
 
-
-    public static PhoneBookFragment newInstance() {
-        PhoneBookFragment fragment = new PhoneBookFragment();
-
-        return fragment;
-    }
-
-    public PhoneBookFragment() {
-        // Required empty public constructor
-    }
+    private ArrayList<Bridge> mBridgeList;
+    private static final String TAG = "PhoneBookFragment";
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-
+    public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getActivity().setTitle(R.string.phonebook_title);
+        mBridgeList = PhoneBook.get(getActivity()).getBridges();
+
+        BridgeAdapter adapter = new BridgeAdapter(mBridgeList);
+        setListAdapter(adapter);
+
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        //LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View v = inflater.inflate(R.layout.fragment_phonebook, container, false);
-
-        EditText bridgeNumber = (EditText)v.findViewById(R.id.bridgeNumber);
-        bridgeNumber.setText("18885859008");
-
-        EditText pinCode = (EditText)v.findViewById(R.id.bridgePINCode);
-        pinCode.setText("370814751");
-
-        EditText hostCode = (EditText)v.findViewById(R.id.bridgeHostCode);
-        hostCode.setText("9869976");
-
-        Button dialButton = (Button)v.findViewById(R.id.dialButton);
-        dialButton.setOnClickListener(new DialOnClickListener(bridgeNumber.getText().toString(),
-                pinCode.getText().toString(), hostCode.getText().toString()));
-
-        Button dialWithPINButton = (Button)v.findViewById(R.id.dialWithPINButton);
-        dialWithPINButton.setOnClickListener(new DialOnClickListener(bridgeNumber.getText().toString(),
-                pinCode.getText().toString(), hostCode.getText().toString()));
-
-        Button dialWithHostButton = (Button)v.findViewById(R.id.dialWithHostButton);
-        dialWithHostButton.setOnClickListener(new DialOnClickListener(bridgeNumber.getText().toString(),
-                pinCode.getText().toString(), hostCode.getText().toString()));
-
-        return v;
-
+    public void onListItemClick(ListView l, View v, int position, long id){
+        Bridge b = ((BridgeAdapter)getListAdapter()).getItem(position);
+        Log.d(TAG, b.getBridgeName() + " was clicked");
     }
-    public class DialOnClickListener implements View.OnClickListener {
 
-        String phoneNumber, pinCode, hostCode;
-        Intent dial;
+    private class BridgeAdapter extends ArrayAdapter<Bridge> {
 
-        public DialOnClickListener(String phoneNumber, String pinCode, String hostCode) {
-            this.phoneNumber = "tel:" + phoneNumber.trim();
-            this.pinCode = pinCode.trim();
-            this.hostCode = hostCode.trim();
+        public BridgeAdapter(ArrayList<Bridge> bridgeList) {
+            super(getActivity(), 0, bridgeList);
         }
 
         @Override
-        public void onClick(View v) {
+        public View getView(int position, View convertView, ViewGroup parent) {
 
-            switch (v.getId()) {
-                case R.id.dialButton:
-                    //Uncomment for testing regular bridge line calls
-                    dial = new Intent(Intent.ACTION_CALL, Uri.parse(phoneNumber));
-                    startActivity(dial);
-                    break;
-                case R.id.dialWithPINButton:
-                    //Uncomment for testing bridge plus participant code calls
-                    phoneNumber += "," + pinCode + "%23";
-                    dial = new Intent(Intent.ACTION_CALL, Uri.parse(phoneNumber));
-                    startActivity(dial);
-                    break;
-                case R.id.dialWithHostButton:
-                    //Uncomment for testing bridge plus participant plus host code calls
-                    phoneNumber += "," + pinCode + "%23" + "," + hostCode + "*";
-                    dial = new Intent(Intent.ACTION_CALL, Uri.parse(phoneNumber));
-                    startActivity(dial);
-                    break;
+            if (convertView == null) {
+                convertView = getActivity().getLayoutInflater()
+                        .inflate(R.layout.list_item_bridge, null);
             }
+
+            Bridge b = getItem(position);
+
+            TextView bridgeNameView = (TextView)convertView.findViewById(R.id.bridge_card_name);
+            bridgeNameView.setText(b.getBridgeName());
+
+            TextView bridgeNumberView = (TextView)convertView.findViewById(R.id.bridge_card_number);
+            bridgeNumberView.setText(b.getBridgeNumber());
+
+            TextView bridgeHostCodeView = (TextView)convertView.findViewById(R.id.bridge_card_hostCode);
+            bridgeHostCodeView.setText(b.getHostCode());
+
+            TextView bridgeParticipantCodeView = (TextView)convertView.findViewById(R.id.bridge_card_participantCode);
+            bridgeParticipantCodeView.setText(b.getParticipantCode());
+
+            return convertView;
         }
 
+
     }
+
+
 
 }
