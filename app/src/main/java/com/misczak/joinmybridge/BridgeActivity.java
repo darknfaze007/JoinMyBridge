@@ -2,6 +2,8 @@ package com.misczak.joinmybridge;
 
 import android.support.v4.app.Fragment;
 
+import java.util.UUID;
+
 
 public class BridgeActivity extends SingleFragmentActivity {
 
@@ -10,7 +12,9 @@ public class BridgeActivity extends SingleFragmentActivity {
 
     @Override
     protected Fragment createFragment() {
-        return new BridgeFragment();
+        UUID bridgeId = (UUID)getIntent().getSerializableExtra(BridgeFragment.EXTRA_BRIDGE_ID);
+
+        return BridgeFragment.newInstance(bridgeId);
     }
 
     /*@Override

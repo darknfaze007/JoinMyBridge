@@ -9,10 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import java.util.UUID;
+
 /**
  * Created by misczak on 3/3/15.
  */
 public class BridgeFragment extends Fragment {
+
+    public static final String EXTRA_BRIDGE_ID = "com.misczak.joinmybridge.bridge_id";
 
     private Bridge mBridge;
     private EditText mBridgeName, mBridgeNumber, mParticipantCode, mHostCode;
@@ -20,7 +24,10 @@ public class BridgeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mBridge = new Bridge();
+
+        UUID bridgeId = (UUID)getArguments().getSerializable(EXTRA_BRIDGE_ID);
+
+        mBridge = PhoneBook.get(getActivity()).getBridge(bridgeId);
     }
 
     @Override
@@ -28,6 +35,7 @@ public class BridgeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_bridge, parent, false);
 
         mBridgeName = (EditText)v.findViewById(R.id.bridge_name);
+        mBridgeName.setText(mBridge.getBridgeName());
         mBridgeName.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int after){
                 mBridge.setBridgeName(c.toString());
@@ -43,6 +51,7 @@ public class BridgeFragment extends Fragment {
 
 
         mBridgeNumber = (EditText)v.findViewById(R.id.bridge_number);
+        mBridgeNumber.setText(mBridge.getBridgeNumber());
         mBridgeNumber.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int after){
                 mBridge.setBridgeNumber(c.toString());
@@ -58,6 +67,7 @@ public class BridgeFragment extends Fragment {
 
 
         mHostCode = (EditText)v.findViewById(R.id.host_code);
+        mHostCode.setText(mBridge.getHostCode());
         mHostCode.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int after){
                 mBridge.setHostCode(c.toString());
@@ -73,6 +83,7 @@ public class BridgeFragment extends Fragment {
 
 
         mParticipantCode = (EditText)v.findViewById(R.id.participant_code);
+        mParticipantCode.setText(mBridge.getParticipantCode());
         mParticipantCode.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int after){
                 mBridge.setParticipantCode(c.toString());
@@ -92,6 +103,16 @@ public class BridgeFragment extends Fragment {
 
 
         return v;
+    }
+
+    public static BridgeFragment newInstance(UUID bridgeId) {
+        Bundle args = new Bundle();
+        args.putSerializable(EXTRA_BRIDGE_ID, bridgeId);
+
+        BridgeFragment fragment = new BridgeFragment();
+        fragment.setArguments(args);
+
+        return fragment;
     }
 
 
