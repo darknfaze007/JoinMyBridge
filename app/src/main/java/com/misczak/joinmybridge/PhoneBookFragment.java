@@ -41,7 +41,7 @@ public class PhoneBookFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id){
         Bridge b = ((BridgeAdapter)getListAdapter()).getItem(position);
 
-        Intent i = new Intent(getActivity(), BridgeActivity.class);
+        Intent i = new Intent(getActivity(), BridgePagerActivity.class);
         i.putExtra(BridgeFragment.EXTRA_BRIDGE_ID, b.getBridgeId());
         startActivity(i);
     }
