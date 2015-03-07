@@ -6,10 +6,12 @@ import android.support.v4.app.ListFragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Created by misczak on 3/3/15.
@@ -57,10 +59,10 @@ public class PhoneBookFragment extends ListFragment {
 
             if (convertView == null) {
                 convertView = getActivity().getLayoutInflater()
-                        .inflate(R.layout.list_item_bridge, null);
+                        .inflate(R.layout.list_item_bridge2, null);
             }
 
-            Bridge b = getItem(position);
+            final Bridge b = getItem(position);
 
             TextView bridgeNameView = (TextView)convertView.findViewById(R.id.bridge_card_name);
             bridgeNameView.setText(b.getBridgeName());
@@ -74,12 +76,33 @@ public class PhoneBookFragment extends ListFragment {
             TextView bridgeParticipantCodeView = (TextView)convertView.findViewById(R.id.bridge_card_participantCode);
             bridgeParticipantCodeView.setText(b.getParticipantCode());
 
+            Button callButton = (Button)convertView.findViewById(R.id.bridge_card_callButton);
+            callButton.setTag(Integer.valueOf(position));
+
+            Button editButton = (Button)convertView.findViewById(R.id.bridge_card_editButton);
+            editButton.setOnClickListener(new View.OnClickListener() {
+
+                UUID bridgeId;
+
+                @Override
+                public void onClick(View v) {
+
+                    Intent i = new Intent(getActivity(), BridgePagerActivity.class);
+                    i.putExtra(BridgeFragment.EXTRA_BRIDGE_ID, b.getBridgeId());
+                    startActivity(i);
+
+                }
+            });
+            editButton.setTag(Integer.valueOf(position));
+
+            Button shareButton = (Button)convertView.findViewById(R.id.bridge_card_shareButton);
+            shareButton.setTag(Integer.valueOf(position));
+
+
             return convertView;
         }
 
 
     }
-
-
 
 }

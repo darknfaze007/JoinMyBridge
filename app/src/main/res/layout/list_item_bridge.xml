@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/bridge_card_name"
@@ -25,26 +26,51 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="5dp"/>
 
-    <TextView
-        android:id="@+id/bridge_card_hostCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Host Code"
-        android:gravity="center_vertical"
-        android:textSize="10dp"
-        android:layout_below="@id/bridge_card_number"
-        android:layout_marginTop="10dp"
-        android:layout_marginLeft="5dp"/>
 
-    <TextView
-        android:id="@+id/bridge_card_participantCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="PIN Code"
-        android:textSize="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="150dp"
-        android:layout_alignBaseline="@id/bridge_card_hostCode"/>
+        <TextView
+            android:id="@+id/bridge_card_hostCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Host Code"
+            android:gravity="center_vertical"
+            android:textSize="10dp"
+            android:layout_below="@id/bridge_card_number"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="5dp"/>
+
+
+        <TextView
+            android:id="@+id/bridge_card_participantCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="PIN Code"
+            android:textSize="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="150dp"
+            android:layout_alignBaseline="@id/bridge_card_hostCode"/>
+
+
+        <Button
+            android:id="@+id/bridge_card_callButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/call_button"/>
+
+        <Button
+            android:id="@+id/bridge_card_editButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/edit_button"/>
+
+        <Button
+            android:id="@+id/bridge_card_shareButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/share_button"/>
+
 
 </RelativeLayout>
