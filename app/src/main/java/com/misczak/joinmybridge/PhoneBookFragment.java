@@ -1,8 +1,12 @@
 package com.misczak.joinmybridge;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -11,12 +15,18 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.UUID;
 
 /**
  * Created by misczak on 3/3/15.
  */
 public class PhoneBookFragment extends ListFragment {
+
+    private static final String DIALOG_CALL = "call";
+    private static final String EXTRA_CALL_OPTIONS = "call_options";
+    private static final String EXTRA_BRIDGE_ID = "bridgeId";
+    private static final int REQUEST_CALL = 0;
 
     private ArrayList<Bridge> mBridgeList;
     private static final String TAG = "PhoneBookFragment";
@@ -48,6 +58,52 @@ public class PhoneBookFragment extends ListFragment {
         startActivity(i);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Intent dial;
+        UUID bridgeId;
+
+        if (resultCode != Activity.RESULT_OK) return;
+
+        if (requestCode == REQUEST_CALL) {
+            boolean[] options = data.getBooleanArrayExtra(EXTRA_CALL_OPTIONS);
+            bridgeId = (UUID)data.getSerializableExtra(EXTRA_BRIDGE_ID);
+
+            Log.d("JOHNZZZ", "onActivityResult arr: " + Arrays.toString(options));
+
+
+            //REPLACE ALL OF THIS, JUST FOR TESTING
+            if (options[0] == true && options[1] == true) {
+                Log.d("JOHNZZZ", "Call option 1");
+                dial = new Intent(Intent.ACTION_CALL, Uri.parse("tel:11111" + bridgeId.toString()));
+                startActivity(dial);
+
+            }
+            else if (options[0] == true && options[1] == false) {
+                Log.d("JOHNZZZ", "Call option 2");
+                dial = new Intent(Intent.ACTION_CALL, Uri.parse("tel:222222" + bridgeId.toString()));
+                startActivity(dial);
+
+            }
+            else if (options[0] == false && options[1] == true) {
+                Log.d("JOHNZZZ", "Call option 3");
+                dial = new Intent(Intent.ACTION_CALL, Uri.parse("tel:333333" + bridgeId.toString()));
+                startActivity(dial);
+
+            }
+            else {
+                Log.d("JOHNZZZ", "Call option 4");
+                dial = new Intent(Intent.ACTION_CALL, Uri.parse("tel:444444" + bridgeId.toString()));
+                startActivity(dial);
+
+            }
+
+        }
+
+    }
+
+
     private class BridgeAdapter extends ArrayAdapter<Bridge> {
 
         public BridgeAdapter(ArrayList<Bridge> bridgeList) {
@@ -77,7 +133,14 @@ public class PhoneBookFragment extends ListFragment {
             bridgeParticipantCodeView.setText(b.getParticipantCode());
 
             Button callButton = (Button)convertView.findViewById(R.id.bridge_card_callButton);
-            callButton.setTag(Integer.valueOf(position));
+            callButton.setOnClickListener(new View.OnClickListener() {
+                public void onClick(View v) {
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    CallDialogFragment dialog = CallDialogFragment.newInstance(b.getBridgeId());
+                    dialog.setTargetFragment(PhoneBookFragment.this, REQUEST_CALL);
+                    dialog.show(fm, DIALOG_CALL);
+                }
+            });
 
             Button editButton = (Button)convertView.findViewById(R.id.bridge_card_editButton);
             editButton.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +156,6 @@ public class PhoneBookFragment extends ListFragment {
 
                 }
             });
-            editButton.setTag(Integer.valueOf(position));
 
             Button shareButton = (Button)convertView.findViewById(R.id.bridge_card_shareButton);
             shareButton.setTag(Integer.valueOf(position));

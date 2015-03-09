@@ -9,6 +9,8 @@
     <string name="edit_button">Modify</string>
     <string name="share_button">Share</string>
 
+    <string name="call_option_title">Call Options</string>
+
 <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

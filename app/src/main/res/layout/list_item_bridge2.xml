@@ -64,8 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/call_button"
-                android:focusable="true"
-                android:focusableInTouchMode="true"/>
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
 
             <Button
                 android:id="@+id/bridge_card_editButton"
