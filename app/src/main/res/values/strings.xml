@@ -8,6 +8,8 @@
     <string name="call_button">Call</string>
     <string name="edit_button">Modify</string>
     <string name="share_button">Share</string>
+    <string name="new_bridge">New Bridge</string>
+    <string name="delete_bridge">Delete</string>
 
     <string name="call_option_title">Call Options</string>
 

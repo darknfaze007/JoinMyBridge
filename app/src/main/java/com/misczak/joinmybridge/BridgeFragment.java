@@ -5,6 +5,8 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -24,10 +26,16 @@ public class BridgeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
         UUID bridgeId = (UUID)getArguments().getSerializable(EXTRA_BRIDGE_ID);
-
         mBridge = PhoneBook.get(getActivity()).getBridge(bridgeId);
+        getActivity().setTitle(mBridge.getBridgeName());
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_bridge_list, menu);
     }
 
     @Override

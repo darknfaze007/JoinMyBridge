@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -34,6 +36,8 @@ public class PhoneBookFragment extends ListFragment {
     @Override
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setHasOptionsMenu(true);
         getActivity().setTitle(R.string.phonebook_title);
         mBridgeList = PhoneBook.get(getActivity()).getBridges();
 
@@ -47,6 +51,12 @@ public class PhoneBookFragment extends ListFragment {
     public void onResume() {
         super.onResume();
         ((BridgeAdapter)getListAdapter()).notifyDataSetChanged();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.fragment_bridge_list, menu);
     }
 
     @Override
@@ -150,7 +160,7 @@ public class PhoneBookFragment extends ListFragment {
                 @Override
                 public void onClick(View v) {
 
-                    Intent i = new Intent(getActivity(), BridgePagerActivity.class);
+                    Intent i = new Intent(getActivity(), BridgeActivity.class);
                     i.putExtra(BridgeFragment.EXTRA_BRIDGE_ID, b.getBridgeId());
                     startActivity(i);
 
