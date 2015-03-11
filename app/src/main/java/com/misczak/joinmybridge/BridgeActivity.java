@@ -1,6 +1,8 @@
 package com.misczak.joinmybridge;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.Toolbar;
 
 import java.util.UUID;
 
@@ -15,6 +17,19 @@ public class BridgeActivity extends SingleFragmentActivity {
         UUID bridgeId = (UUID)getIntent().getSerializableExtra(BridgeFragment.EXTRA_BRIDGE_ID);
 
         return BridgeFragment.newInstance(bridgeId);
+    }
+
+    @Override
+    public void onCreate (Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
+        if (toolbar != null) {
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+        }
+
     }
 
     /*@Override

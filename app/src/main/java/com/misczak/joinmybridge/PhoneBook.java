@@ -16,7 +16,7 @@ public class PhoneBook {
     private PhoneBook(Context context) {
         mContext = context;
         mBridgeList = new ArrayList<Bridge>();
-        for (int i = 0; i < 100; i++) {
+        /*for (int i = 0; i < 100; i++) {
             Bridge b = new Bridge();
             b.setBridgeName("Bridge #" + i);
             b.setBridgeNumber(i + "");
@@ -25,7 +25,7 @@ public class PhoneBook {
             b.setFirstTone("#");
             b.setSecondTone("#");
             mBridgeList.add(b);
-        }
+        }*/
     }
 
     public static PhoneBook get(Context c){
@@ -34,6 +34,10 @@ public class PhoneBook {
         }
 
         return sPhoneBook;
+    }
+
+    public void addBridge(Bridge b) {
+        mBridgeList.add(b);
     }
 
     public ArrayList<Bridge> getBridges(){
@@ -48,5 +52,6 @@ public class PhoneBook {
 
         return null;
     }
+
 
 }

@@ -2,11 +2,13 @@ package com.misczak.joinmybridge;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -21,6 +23,7 @@ public class BridgeFragment extends Fragment {
     public static final String EXTRA_BRIDGE_ID = "com.misczak.joinmybridge.bridge_id";
 
     private Bridge mBridge;
+    private String mBridgeNameString;
     private EditText mBridgeName, mBridgeNumber, mParticipantCode, mHostCode;
 
     @Override
@@ -29,13 +32,37 @@ public class BridgeFragment extends Fragment {
         setHasOptionsMenu(true);
         UUID bridgeId = (UUID)getArguments().getSerializable(EXTRA_BRIDGE_ID);
         mBridge = PhoneBook.get(getActivity()).getBridge(bridgeId);
-        getActivity().setTitle(mBridge.getBridgeName());
+
+        mBridgeNameString = mBridge.getBridgeName();
+
+        if (mBridgeNameString != null) {
+            getActivity().setTitle(mBridgeNameString);
+        }
+        else {
+            getActivity().setTitle("New Bridge");
+        }
+
+        //getActivity().setTitle(mBridge.getBridgeName());
+        //getActivity().setTitle("Bridge Details");
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_bridge_list, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (NavUtils.getParentActivityName(getActivity()) != null) {
+                    NavUtils.navigateUpFromSameTask(getActivity());
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override

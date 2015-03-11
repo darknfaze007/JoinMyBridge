@@ -21,7 +21,13 @@ public abstract class SingleFragmentActivity extends ActionBarActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.app_bar);
         if (toolbar != null){
             setSupportActionBar(toolbar);
+            //getSupportActionBar().setHomeButtonEnabled(true);
+            //getSupportActionBar().setDisplayShowHomeEnabled(true);
+            //toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+            //toolbar.setLogo(R.drawable.ic_launcher);
         }
+
+
 
         FragmentManager fm = getSupportFragmentManager();
         Fragment fragment = fm.findFragmentById(R.id.fragment_container);

@@ -9,6 +9,7 @@ import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -57,6 +58,21 @@ public class PhoneBookFragment extends ListFragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_bridge_list, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_item_new_bridge:
+                Bridge bridge = new Bridge();
+                PhoneBook.get(getActivity()).addBridge(bridge);
+                Intent i = new Intent(getActivity(), BridgeActivity.class);
+                i.putExtra(BridgeFragment.EXTRA_BRIDGE_ID, bridge.getBridgeId());
+                startActivityForResult(i, 0);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
