@@ -156,7 +156,7 @@ public class PhoneBookFragment extends ListFragment {
 
             if (convertView == null) {
                 convertView = getActivity().getLayoutInflater()
-                        .inflate(R.layout.list_item_bridge2, null);
+                        .inflate(R.layout.list_item_bridge3, null);
             }
 
             final Bridge b = getItem(position);

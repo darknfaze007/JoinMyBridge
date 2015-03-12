@@ -30,7 +30,8 @@ public class BridgeFragment extends Fragment {
     private Spinner mFirstTone, mSecondTone, mCallOrder;
 
     private static final String DEFAULT_TONE = "#";
-    private static final String DEFAULT_ORDER = "Participant Code First, Then Host Code";
+    //private static final String DEFAULT_ORDER = "Participant Code First, Then Host Code";
+    private static final String DEFAULT_ORDER = "Host Code First, Then Participant Code";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,9 +48,6 @@ public class BridgeFragment extends Fragment {
         else {
             getActivity().setTitle("New Bridge");
         }
-
-        //getActivity().setTitle(mBridge.getBridgeName());
-        //getActivity().setTitle("Bridge Details");
     }
 
     @Override
@@ -183,9 +181,6 @@ public class BridgeFragment extends Fragment {
                 mBridge.setCallOrder(DEFAULT_ORDER);
             }
         });
-
-
-
 
         return v;
     }
