@@ -85,5 +85,18 @@
         android:entries="@array/dtmf_tones"
         android:prompt="@string/dtmf_prompt" />
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/callOrderLabel"
+        android:text="@string/callOrderLabel"
+        style="?android:listSeparatorTextViewStyle" />
+
+    <Spinner
+        android:id="@+id/callOrderSpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/call_order"
+        android:prompt="@string/call_order_prompt" />
 
 </LinearLayout>

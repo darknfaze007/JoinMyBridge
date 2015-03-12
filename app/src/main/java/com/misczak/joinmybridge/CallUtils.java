@@ -14,12 +14,12 @@ public class CallUtils {
     private static final String ENCODED_STAR_SIGN = "*";
     private static final String TAG = "CallUtils";
 
+    private static final String HOST_FIRST="Host Code First, Then Participant Code";
+
     private String mBridgeNumber, mHostCode, mParticipantCode, mFirstTone, mSecondTone;
     private String mNumberToCall, log;
     private ArrayList<Bridge> mBridgeList;
     private Bridge mBridge;
-
-
 
 
     public String getCompleteNumber (UUID bridgeId, ArrayList<Bridge> bridgeList, boolean dialWithParticipant, boolean dialWithHost) {
@@ -76,14 +76,27 @@ public class CallUtils {
     }
 
     private String getNumberWithBoth (UUID bridgeId) {
-        return "tel:"
-                + mBridge.getBridgeNumber().trim()
-                + ","
-                + mBridge.getParticipantCode().trim()
-                + encodeToneString(mBridge.getFirstTone().toString())
-                + ","
-                + mBridge.getHostCode().trim()
-                + encodeToneString(mBridge.getSecondTone().toString());
+
+        if (mBridge.getCallOrder().equals(HOST_FIRST)) {
+            return "tel:"
+                    + mBridge.getBridgeNumber().trim()
+                    + ","
+                    + mBridge.getHostCode().trim()
+                    + encodeToneString(mBridge.getSecondTone().toString())
+                    + ","
+                    + mBridge.getParticipantCode().trim()
+                    + encodeToneString(mBridge.getFirstTone().toString());
+        } else {
+            return "tel:"
+                    + mBridge.getBridgeNumber().trim()
+                    + ","
+                    + mBridge.getParticipantCode().trim()
+                    + encodeToneString(mBridge.getFirstTone().toString())
+                    + ","
+                    + mBridge.getHostCode().trim()
+                    + encodeToneString(mBridge.getSecondTone().toString());
+        }
+
     }
 
     private String getNumber (UUID bridgeId) {

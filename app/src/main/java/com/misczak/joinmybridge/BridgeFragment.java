@@ -27,9 +27,10 @@ public class BridgeFragment extends Fragment {
     private Bridge mBridge;
     private String mBridgeNameString;
     private EditText mBridgeName, mBridgeNumber, mParticipantCode, mHostCode;
-    private Spinner mFirstTone, mSecondTone;
+    private Spinner mFirstTone, mSecondTone, mCallOrder;
 
     private static final String DEFAULT_TONE = "#";
+    private static final String DEFAULT_ORDER = "Participant Code First, Then Host Code";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -167,6 +168,19 @@ public class BridgeFragment extends Fragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 mBridge.setSecondTone(DEFAULT_TONE);
+            }
+        });
+
+        mCallOrder = (Spinner)v.findViewById(R.id.callOrderSpinner);
+        mCallOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mBridge.setCallOrder(DEFAULT_ORDER);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                mBridge.setCallOrder(DEFAULT_ORDER);
             }
         });
 

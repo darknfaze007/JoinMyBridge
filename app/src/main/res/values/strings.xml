@@ -48,10 +48,21 @@
 
 
     <string name="dtmf_prompt">Tone Key</string>
+    <string name="call_order_prompt"></string>
+
+    <string name="callOrderLabel">Dial Code Order (for Hosting Calls)</string>
+
+    <string name="participantFirst">Participant Code First, Then Host Code</string>
+    <string name="hostFirst">Host Code First, Then Participant Code</string>
 
     <string-array name="dtmf_tones">
         <item>#</item>
         <item>*</item>
+    </string-array>
+
+    <string-array name="call_order">
+        <item>@string/participantFirst</item>
+        <item>@string/hostFirst</item>
     </string-array>
 
 </resources>

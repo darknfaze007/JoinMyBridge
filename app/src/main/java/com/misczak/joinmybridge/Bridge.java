@@ -17,6 +17,7 @@ public class Bridge {
     private String mParticipantCode;
     private String mFirstTone;
     private String mSecondTone;
+    private String mCallOrder;
 
     private static final String JSON_ID = "id";
     private static final String JSON_NAME = "title";
@@ -25,6 +26,7 @@ public class Bridge {
     private static final String JSON_PARTICIPANT = "participant";
     private static final String JSON_FIRSTTONE = "firsttone";
     private static final String JSON_SECONDTONE = "secondtone";
+    private static final String JSON_CALLORDER = "callorder";
 
     /*
     protected static final String NAME_PREFIX = "Name_";
@@ -45,6 +47,7 @@ public class Bridge {
         mParticipantCode = json.getString(JSON_PARTICIPANT);
         mFirstTone = json.getString(JSON_FIRSTTONE);
         mSecondTone = json.getString(JSON_SECONDTONE);
+        mCallOrder = json.getString(JSON_CALLORDER);
     }
 
 
@@ -104,6 +107,10 @@ public class Bridge {
         this.mSecondTone = secondTone;
     }
 
+    public String getCallOrder() { return mCallOrder; }
+
+    public void setCallOrder(String callOrder) { this.mCallOrder = callOrder; }
+
 
     public JSONObject toJSON() throws JSONException {
         JSONObject json = new JSONObject();
@@ -114,6 +121,7 @@ public class Bridge {
         json.put(JSON_PARTICIPANT, mParticipantCode.toString());
         json.put(JSON_FIRSTTONE, mFirstTone.toString());
         json.put(JSON_SECONDTONE, mSecondTone.toString());
+        json.put(JSON_CALLORDER, mCallOrder.toString());
 
         return json;
     }
@@ -122,8 +130,6 @@ public class Bridge {
     public String toString() {
         return mBridgeName;
     }
-
-
 
 
 }
