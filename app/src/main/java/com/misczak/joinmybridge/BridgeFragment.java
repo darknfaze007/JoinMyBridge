@@ -11,7 +11,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.Spinner;
 
 import java.util.UUID;
 
@@ -25,6 +27,9 @@ public class BridgeFragment extends Fragment {
     private Bridge mBridge;
     private String mBridgeNameString;
     private EditText mBridgeName, mBridgeNumber, mParticipantCode, mHostCode;
+    private Spinner mFirstTone, mSecondTone;
+
+    private static final String DEFAULT_TONE = "#";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +68,12 @@ public class BridgeFragment extends Fragment {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        PhoneBook.get(getActivity()).savePhoneBook();
     }
 
     @Override
@@ -133,6 +144,31 @@ public class BridgeFragment extends Fragment {
         });
 
 
+        mFirstTone = (Spinner)v.findViewById(R.id.bridgeFirstToneKey);
+        mFirstTone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mBridge.setFirstTone(DEFAULT_TONE);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                mBridge.setFirstTone(DEFAULT_TONE);
+            }
+        });
+
+        mSecondTone = (Spinner)v.findViewById(R.id.bridgeSecondToneKey);
+        mSecondTone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                mBridge.setSecondTone(DEFAULT_TONE);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                mBridge.setSecondTone(DEFAULT_TONE);
+            }
+        });
 
 
 

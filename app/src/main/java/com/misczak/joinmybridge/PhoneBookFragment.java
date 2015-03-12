@@ -31,6 +31,7 @@ public class PhoneBookFragment extends ListFragment {
     private static final String EXTRA_BRIDGE_ID = "bridgeId";
     private static final int REQUEST_CALL = 0;
 
+    private String phoneNumber;
     private ArrayList<Bridge> mBridgeList;
     private static final String TAG = "PhoneBookFragment";
 
@@ -87,7 +88,7 @@ public class PhoneBookFragment extends ListFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        Intent dial;
+
         UUID bridgeId;
 
         if (resultCode != Activity.RESULT_OK) return;
@@ -99,7 +100,15 @@ public class PhoneBookFragment extends ListFragment {
             Log.d("JOHNZZZ", "onActivityResult arr: " + Arrays.toString(options));
 
 
-            //REPLACE ALL OF THIS, JUST FOR TESTING
+            CallUtils utils = new CallUtils();
+
+            phoneNumber = utils.getCompleteNumber(bridgeId, mBridgeList, options[0], options[1]);
+            placePhoneCall(phoneNumber);
+
+            //dial = new Intent(Intent.ACTION_CALL, Uri.parse(phoneNumber));
+            //startActivity(dial);
+
+            /*REPLACE ALL OF THIS, JUST FOR TESTING
             if (options[0] == true && options[1] == true) {
                 Log.d("JOHNZZZ", "Call option 1");
                 dial = new Intent(Intent.ACTION_CALL, Uri.parse("tel:11111" + bridgeId.toString()));
@@ -123,10 +132,16 @@ public class PhoneBookFragment extends ListFragment {
                 dial = new Intent(Intent.ACTION_CALL, Uri.parse("tel:444444" + bridgeId.toString()));
                 startActivity(dial);
 
-            }
+            }*/
 
         }
 
+    }
+
+    private void placePhoneCall (String number) {
+
+        Intent dial = new Intent(Intent.ACTION_CALL, Uri.parse(number));
+        startActivity(dial);
     }
 
 

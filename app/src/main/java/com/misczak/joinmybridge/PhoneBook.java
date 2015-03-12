@@ -1,6 +1,7 @@
 package com.misczak.joinmybridge;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -9,13 +10,32 @@ import java.util.UUID;
  * Created by misczak on 3/3/15.
  */
 public class PhoneBook {
+    private static final String TAG = "PhoneBook";
+    private static final String FILENAME = "phonebook.json";
+
     private static PhoneBook sPhoneBook;
     private ArrayList<Bridge> mBridgeList;
+    private BridgeJSONSerializer mSerializer;
     private Context mContext;
+
+
+
+
 
     private PhoneBook(Context context) {
         mContext = context;
-        mBridgeList = new ArrayList<Bridge>();
+
+        mSerializer = new BridgeJSONSerializer(mContext, FILENAME);
+
+        try {
+            mBridgeList = mSerializer.loadPhoneBook();
+        } catch (Exception e) {
+            mBridgeList = new ArrayList<Bridge>();
+            Log.e(TAG, "Error loading PhoneBook: ", e);
+        }
+
+
+        //mBridgeList = new ArrayList<Bridge>();
         /*for (int i = 0; i < 100; i++) {
             Bridge b = new Bridge();
             b.setBridgeName("Bridge #" + i);
@@ -51,6 +71,19 @@ public class PhoneBook {
         }
 
         return null;
+    }
+
+
+    public boolean savePhoneBook() {
+        try {
+            mSerializer.savePhoneBook(mBridgeList);
+            Log.d(TAG, "PhoneBook saved to file");
+            return true;
+        }
+        catch (Exception e) {
+            Log.e(TAG, "Error saving PhoneBook: ", e);
+            return false;
+        }
     }
 
 

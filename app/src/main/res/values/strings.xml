@@ -26,8 +26,8 @@
     <string name="bridgeHostCodeLabel">Host Code</string>
 
 
-   <string name="bridgeFirstToneLabel">First Tone Key</string>
-    <string name="bridgeSecondToneLabel">Second Tone Key</string>
+   <string name="bridgeFirstToneLabel">Participant Code Tone Key</string>
+    <string name="bridgeSecondToneLabel">Host Code Tone Key</string>
 
     <string name="checkBoxHost">Use Host Code</string>
     <string name="checkBoxPIN">Use PIN Code</string>

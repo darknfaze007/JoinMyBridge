@@ -4,4 +4,7 @@
         <item>@string/bridgeParticipantCodeLabel</item>
         <item>@string/bridgeHostCodeLabel</item>
     </string-array>
+
+
+
 </resources>
