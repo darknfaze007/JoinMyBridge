@@ -52,8 +52,8 @@
 
     <string name="callOrderLabel">Dial Code Order (for Hosting Calls)</string>
 
-    <string name="participantFirst">Participant Code First, Then Host Code</string>
-    <string name="hostFirst">Host Code First, Then Participant Code</string>
+    <string name="participantFirst">Participant Code First</string>
+    <string name="hostFirst">Host Code First</string>
 
     <string-array name="dtmf_tones">
         <item>#</item>

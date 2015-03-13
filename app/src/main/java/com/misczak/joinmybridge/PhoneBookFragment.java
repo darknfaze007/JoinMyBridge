@@ -14,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -30,6 +32,7 @@ public class PhoneBookFragment extends ListFragment {
     private static final String EXTRA_CALL_OPTIONS = "call_options";
     private static final String EXTRA_BRIDGE_ID = "bridgeId";
     private static final int REQUEST_CALL = 0;
+    private final int DIVIDER_HEIGHT = 10;
 
     private String phoneNumber;
     private ArrayList<Bridge> mBridgeList;
@@ -46,6 +49,21 @@ public class PhoneBookFragment extends ListFragment {
         BridgeAdapter adapter = new BridgeAdapter(mBridgeList);
         setListAdapter(adapter);
 
+
+    }
+
+
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        getListView().setDivider(null);
+        getListView().setDividerHeight(DIVIDER_HEIGHT);
+        getListView().setHeaderDividersEnabled(true);
+        getListView().setFooterDividersEnabled(true);
+        getListView().addHeaderView(new View(getActivity()));
+        getListView().addFooterView(new View(getActivity()));
 
     }
 
@@ -80,9 +98,15 @@ public class PhoneBookFragment extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id){
         Bridge b = ((BridgeAdapter)getListAdapter()).getItem(position);
 
-        Intent i = new Intent(getActivity(), BridgePagerActivity.class);
+        /*Intent i = new Intent(getActivity(), BridgePagerActivity.class);
         i.putExtra(BridgeFragment.EXTRA_BRIDGE_ID, b.getBridgeId());
-        startActivity(i);
+        startActivity(i);*/
+
+
+        FragmentManager fm = getActivity().getSupportFragmentManager();
+        CallDialogFragment dialog = CallDialogFragment.newInstance(b.getBridgeId());
+        dialog.setTargetFragment(PhoneBookFragment.this, REQUEST_CALL);
+        dialog.show(fm, DIALOG_CALL);
     }
 
     @Override
@@ -156,7 +180,7 @@ public class PhoneBookFragment extends ListFragment {
 
             if (convertView == null) {
                 convertView = getActivity().getLayoutInflater()
-                        .inflate(R.layout.list_item_bridge3, null);
+                        .inflate(R.layout.list_item_bridge4, null);
             }
 
             final Bridge b = getItem(position);
@@ -165,15 +189,33 @@ public class PhoneBookFragment extends ListFragment {
             bridgeNameView.setText(b.getBridgeName());
 
             TextView bridgeNumberView = (TextView)convertView.findViewById(R.id.bridge_card_number);
-            bridgeNumberView.setText(b.getBridgeNumber());
+            bridgeNumberView.setText("Bridge Number: " + b.getBridgeNumber());
 
             TextView bridgeHostCodeView = (TextView)convertView.findViewById(R.id.bridge_card_hostCode);
-            bridgeHostCodeView.setText(b.getHostCode());
+            bridgeHostCodeView.setText("Host Code: " + b.getHostCode() + b.getSecondTone());
 
             TextView bridgeParticipantCodeView = (TextView)convertView.findViewById(R.id.bridge_card_participantCode);
-            bridgeParticipantCodeView.setText(b.getParticipantCode());
+            bridgeParticipantCodeView.setText("Participant Code: " + b.getParticipantCode() + b.getFirstTone());
 
-            Button callButton = (Button)convertView.findViewById(R.id.bridge_card_callButton);
+            TextView bridgeCallOrder = (TextView)convertView.findViewById(R.id.bridge_call_order);
+            bridgeCallOrder.setText("Code Order: " +b.getCallOrder());
+
+            ImageView cardOverFlowMenu = (ImageView)convertView.findViewById(R.id.bridge_card_overflow);
+            cardOverFlowMenu.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    final int position = getListView().getPositionForView((LinearLayout)v.getParent());
+
+
+                    final Bridge b = (Bridge) getListView().getItemAtPosition(position);
+
+                    String loggy = "Position: " + position + " Bridge: " + b.getBridgeName();
+                    Log.d(TAG, loggy);
+                }
+            });
+
+
+            /*Button callButton = (Button)convertView.findViewById(R.id.bridge_card_callButton);
             callButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -181,12 +223,10 @@ public class PhoneBookFragment extends ListFragment {
                     dialog.setTargetFragment(PhoneBookFragment.this, REQUEST_CALL);
                     dialog.show(fm, DIALOG_CALL);
                 }
-            });
+            });*/
 
             Button editButton = (Button)convertView.findViewById(R.id.bridge_card_editButton);
             editButton.setOnClickListener(new View.OnClickListener() {
-
-                UUID bridgeId;
 
                 @Override
                 public void onClick(View v) {

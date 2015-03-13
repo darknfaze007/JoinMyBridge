@@ -30,8 +30,7 @@ public class BridgeFragment extends Fragment {
     private Spinner mFirstTone, mSecondTone, mCallOrder;
 
     private static final String DEFAULT_TONE = "#";
-    //private static final String DEFAULT_ORDER = "Participant Code First, Then Host Code";
-    private static final String DEFAULT_ORDER = "Host Code First, Then Participant Code";
+    private static final String DEFAULT_ORDER = "Participant Code First";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -144,10 +143,15 @@ public class BridgeFragment extends Fragment {
 
 
         mFirstTone = (Spinner)v.findViewById(R.id.bridgeFirstToneKey);
+
+        if (mBridge.getFirstTone() != null){
+            mFirstTone.setSelection(getSpinnerIndex(mFirstTone, mBridge.getFirstTone()));
+        }
+
         mFirstTone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mBridge.setFirstTone(DEFAULT_TONE);
+                mBridge.setFirstTone(parent.getItemAtPosition(position).toString());
             }
 
             @Override
@@ -157,10 +161,15 @@ public class BridgeFragment extends Fragment {
         });
 
         mSecondTone = (Spinner)v.findViewById(R.id.bridgeSecondToneKey);
+
+        if (mBridge.getSecondTone() != null){
+            mSecondTone.setSelection(getSpinnerIndex(mSecondTone, mBridge.getSecondTone()));
+        }
+
         mSecondTone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mBridge.setSecondTone(DEFAULT_TONE);
+                mBridge.setSecondTone(parent.getItemAtPosition(position).toString());
             }
 
             @Override
@@ -170,10 +179,15 @@ public class BridgeFragment extends Fragment {
         });
 
         mCallOrder = (Spinner)v.findViewById(R.id.callOrderSpinner);
+
+        if (mBridge.getCallOrder() != null){
+            mCallOrder.setSelection(getSpinnerIndex(mCallOrder, mBridge.getCallOrder()));
+        }
+
         mCallOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mBridge.setCallOrder(DEFAULT_ORDER);
+                mBridge.setCallOrder(parent.getItemAtPosition(position).toString());
             }
 
             @Override
@@ -193,6 +207,17 @@ public class BridgeFragment extends Fragment {
         fragment.setArguments(args);
 
         return fragment;
+    }
+
+    private int getSpinnerIndex(Spinner spinner, String tone) {
+        int index = 0;
+
+        for (int i=0; i < spinner.getCount(); i++) {
+            if (spinner.getItemAtPosition(i).equals(tone)) {
+                index = i;
+            }
+        }
+        return index;
     }
 
 

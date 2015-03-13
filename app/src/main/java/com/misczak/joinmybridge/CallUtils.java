@@ -14,7 +14,7 @@ public class CallUtils {
     private static final String ENCODED_STAR_SIGN = "*";
     private static final String TAG = "CallUtils";
 
-    private static final String HOST_FIRST="Host Code First, Then Participant Code";
+    private static final String HOST_FIRST="Host Code First";
 
     private String mBridgeNumber, mHostCode, mParticipantCode, mFirstTone, mSecondTone;
     private String mNumberToCall, log;

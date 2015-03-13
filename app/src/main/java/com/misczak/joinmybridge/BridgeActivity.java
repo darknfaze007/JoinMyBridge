@@ -27,8 +27,8 @@ public class BridgeActivity extends SingleFragmentActivity {
         if (toolbar != null) {
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            //toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
-            toolbar.setNavigationIcon(R.drawable.ic_settings_white_24dp);
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
+            //toolbar.setNavigationIcon(R.drawable.ic_settings_white_24dp);
         }
 
     }
