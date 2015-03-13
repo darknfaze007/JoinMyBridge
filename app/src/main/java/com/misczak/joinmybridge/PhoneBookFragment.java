@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -94,6 +95,7 @@ public class PhoneBookFragment extends ListFragment {
         }
     }
 
+
     @Override
     public void onListItemClick(ListView l, View v, int position, long id){
 
@@ -110,6 +112,42 @@ public class PhoneBookFragment extends ListFragment {
         CallDialogFragment dialog = CallDialogFragment.newInstance(b.getBridgeId());
         dialog.setTargetFragment(PhoneBookFragment.this, REQUEST_CALL);
         dialog.show(fm, DIALOG_CALL);
+    }
+
+    /*public void showCardOverFlowMenu(View v) {
+        PopupMenu popup = new PopupMenu(getActivity(), v);
+        MenuInflater inflater = popup.getMenuInflater();
+        inflater.inflate(R.menu.bridge_card_overflow, popup.getMenu());
+        popup.show();
+    }*/
+
+
+    //Responsible for creating menu options for overflow menu on each Bridge card
+    public void showCardOverFlowMenu(View v, Bridge b) {
+
+        final Bridge bridgeToDelete = b;
+
+        PopupMenu popup = new PopupMenu(getActivity(), v);
+        popup.setOnMenuItemClickListener(new android.support.v7.widget.PopupMenu.OnMenuItemClickListener(){
+
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.menu_item_delete_bridge:
+                        String loggy2 = "Deleting bridge: " + bridgeToDelete.getBridgeName();
+                        Log.d(TAG, loggy2);
+                        PhoneBook.get(getActivity()).deleteBridge(bridgeToDelete);
+                        ((BridgeAdapter)getListAdapter()).notifyDataSetChanged();
+                        PhoneBook.get(getActivity()).savePhoneBook();
+                        return true;
+                    default:
+                        return false;
+                }
+            }
+
+        });
+        popup.inflate(R.menu.bridge_card_overflow);
+        popup.show();
     }
 
     @Override
@@ -207,6 +245,9 @@ public class PhoneBookFragment extends ListFragment {
             cardOverFlowMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    showCardOverFlowMenu(v, b);
+
                     final int position = getListView().getPositionForView((LinearLayout)v.getParent());
 
 

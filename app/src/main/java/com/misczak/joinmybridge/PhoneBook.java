@@ -60,6 +60,8 @@ public class PhoneBook {
         mBridgeList.add(b);
     }
 
+    public void deleteBridge(Bridge b) { mBridgeList.remove(b); }
+
     public ArrayList<Bridge> getBridges(){
         return mBridgeList;
     }
