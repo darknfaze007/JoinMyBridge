@@ -96,7 +96,10 @@ public class PhoneBookFragment extends ListFragment {
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id){
-        Bridge b = ((BridgeAdapter)getListAdapter()).getItem(position);
+
+        //Really need to double check this. Was crashing on KitKat without the minus 1, but worked
+        //fine on Lollipop emulator
+        Bridge b = ((BridgeAdapter)getListAdapter()).getItem(position-1);
 
         /*Intent i = new Intent(getActivity(), BridgePagerActivity.class);
         i.putExtra(BridgeFragment.EXTRA_BRIDGE_ID, b.getBridgeId());
