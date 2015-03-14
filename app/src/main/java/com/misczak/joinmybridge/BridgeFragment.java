@@ -52,7 +52,7 @@ public class BridgeFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_bridge_list, menu);
+        inflater.inflate(R.menu.fragment_bridge, menu);
     }
 
     @Override
@@ -82,14 +82,15 @@ public class BridgeFragment extends Fragment {
         mBridgeName.setText(mBridge.getBridgeName());
         mBridgeName.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int after){
-                mBridge.setBridgeName(c.toString());
+                    mBridge.setBridgeName(c.toString());
             }
 
             public void beforeTextChanged(CharSequence c, int start, int count, int after) {
-                //Left blank for now
+
             }
 
             public void afterTextChanged(Editable c) {
+
             }
         });
 
@@ -98,7 +99,8 @@ public class BridgeFragment extends Fragment {
         mBridgeNumber.setText(mBridge.getBridgeNumber());
         mBridgeNumber.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int after){
-                mBridge.setBridgeNumber(c.toString());
+                    mBridge.setBridgeNumber(c.toString());
+
             }
 
             public void beforeTextChanged(CharSequence c, int start, int count, int after) {
@@ -114,7 +116,7 @@ public class BridgeFragment extends Fragment {
         mHostCode.setText(mBridge.getHostCode());
         mHostCode.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int after){
-                mBridge.setHostCode(c.toString());
+                    mBridge.setHostCode(c.toString());
             }
 
             public void beforeTextChanged(CharSequence c, int start, int count, int after) {
@@ -129,7 +131,7 @@ public class BridgeFragment extends Fragment {
         mParticipantCode = (EditText)v.findViewById(R.id.participant_code);
         mParticipantCode.setText(mBridge.getParticipantCode());
         mParticipantCode.addTextChangedListener(new TextWatcher() {
-            public void onTextChanged(CharSequence c, int start, int before, int after){
+            public void onTextChanged(CharSequence c, int start, int before, int after) {
                 mBridge.setParticipantCode(c.toString());
             }
 

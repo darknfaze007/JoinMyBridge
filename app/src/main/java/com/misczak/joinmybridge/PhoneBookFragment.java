@@ -77,7 +77,7 @@ public class PhoneBookFragment extends ListFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.fragment_bridge_list, menu);
+        inflater.inflate(R.menu.fragment_phonebook, menu);
     }
 
     @Override
@@ -284,7 +284,6 @@ public class PhoneBookFragment extends ListFragment {
 
             Button shareButton = (Button)convertView.findViewById(R.id.bridge_card_shareButton);
             shareButton.setTag(Integer.valueOf(position));
-
 
             return convertView;
         }

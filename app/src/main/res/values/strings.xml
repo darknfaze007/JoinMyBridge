@@ -11,6 +11,8 @@
     <string name="new_bridge">New Bridge</string>
     <string name="delete_bridge">Delete</string>
 
+    <string name="save_bridge">Save</string>
+
     <string name="call_option_title">Call Options</string>
 
 <!-- TODO: Remove or change this placeholder text -->
