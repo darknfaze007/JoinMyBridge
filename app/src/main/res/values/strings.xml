@@ -5,9 +5,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="call_picker_title">Dial In With:</string>
-    <string name="call_button">Call</string>
-    <string name="edit_button">Modify</string>
-    <string name="share_button">Share</string>
+    <string name="call_button">CALL</string>
+    <string name="modify_bridge">Modify</string>
+    <string name="share_button">SHARE</string>
     <string name="new_bridge">New Bridge</string>
     <string name="delete_bridge">Delete</string>
 

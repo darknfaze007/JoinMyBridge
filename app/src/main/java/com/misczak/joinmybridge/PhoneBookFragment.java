@@ -84,7 +84,7 @@ public class PhoneBookFragment extends ListFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_item_new_bridge:
+            case R.id.menu_item_settings:
                 Bridge bridge = new Bridge();
                 PhoneBook.get(getActivity()).addBridge(bridge);
                 Intent i = new Intent(getActivity(), BridgeActivity.class);
@@ -102,17 +102,17 @@ public class PhoneBookFragment extends ListFragment {
 
         //Really need to double check this. Was crashing on KitKat without the minus 1, but worked
         //fine on Lollipop emulator
-        Bridge b = ((BridgeAdapter)getListAdapter()).getItem(position-1);
+        //Bridge b = ((BridgeAdapter)getListAdapter()).getItem(position-1);
 
         /*Intent i = new Intent(getActivity(), BridgePagerActivity.class);
         i.putExtra(BridgeFragment.EXTRA_BRIDGE_ID, b.getBridgeId());
-        startActivity(i);*/
+        startActivity(i);
 
 
         FragmentManager fm = getActivity().getSupportFragmentManager();
         CallDialogFragment dialog = CallDialogFragment.newInstance(b.getBridgeId());
         dialog.setTargetFragment(PhoneBookFragment.this, REQUEST_CALL);
-        dialog.show(fm, DIALOG_CALL);
+        dialog.show(fm, DIALOG_CALL);*/
     }
 
     /*public void showCardOverFlowMenu(View v) {
@@ -126,7 +126,7 @@ public class PhoneBookFragment extends ListFragment {
     //Responsible for creating menu options for overflow menu on each Bridge card
     public void showCardOverFlowMenu(View v, Bridge b) {
 
-        final Bridge bridgeToDelete = b;
+        final Bridge bridgeCard = b;
 
         PopupMenu popup = new PopupMenu(getActivity(), v);
         popup.setOnMenuItemClickListener(new android.support.v7.widget.PopupMenu.OnMenuItemClickListener(){
@@ -134,13 +134,21 @@ public class PhoneBookFragment extends ListFragment {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
+
+                    case R.id.menu_item_modify_bridge:
+                        Intent i = new Intent(getActivity(), BridgeActivity.class);
+                        i.putExtra(BridgeFragment.EXTRA_BRIDGE_ID, bridgeCard.getBridgeId());
+                        startActivity(i);
+                        return true;
+
                     case R.id.menu_item_delete_bridge:
-                        String loggy2 = "Deleting bridge: " + bridgeToDelete.getBridgeName();
+                        String loggy2 = "Deleting bridge: " + bridgeCard.getBridgeName();
                         Log.d(TAG, loggy2);
-                        PhoneBook.get(getActivity()).deleteBridge(bridgeToDelete);
+                        PhoneBook.get(getActivity()).deleteBridge(bridgeCard);
                         ((BridgeAdapter)getListAdapter()).notifyDataSetChanged();
                         PhoneBook.get(getActivity()).savePhoneBook();
                         return true;
+
                     default:
                         return false;
                 }
@@ -273,7 +281,7 @@ public class PhoneBookFragment extends ListFragment {
             });
 
 
-            /*Button callButton = (Button)convertView.findViewById(R.id.bridge_card_callButton);
+            Button callButton = (Button)convertView.findViewById(R.id.bridge_card_callButton);
             callButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -281,9 +289,12 @@ public class PhoneBookFragment extends ListFragment {
                     dialog.setTargetFragment(PhoneBookFragment.this, REQUEST_CALL);
                     dialog.show(fm, DIALOG_CALL);
                 }
-            });*/
+            });
 
-            Button editButton = (Button)convertView.findViewById(R.id.bridge_card_editButton);
+            /*Typeface face=Typeface.createFromAsset(getActivity().getAssets(),"fonts/Roboto-Black.ttf");
+            callButton.setTypeface(face);*/
+
+            /*Button editButton = (Button)convertView.findViewById(R.id.bridge_card_editButton);
             editButton.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -294,7 +305,7 @@ public class PhoneBookFragment extends ListFragment {
                     startActivity(i);
 
                 }
-            });
+            });*/
 
             Button shareButton = (Button)convertView.findViewById(R.id.bridge_card_shareButton);
             shareButton.setTag(Integer.valueOf(position));

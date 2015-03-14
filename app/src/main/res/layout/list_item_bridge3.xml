@@ -102,7 +102,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/edit_button"
+            android:text="@string/modify_bridge"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:textSize="12sp"

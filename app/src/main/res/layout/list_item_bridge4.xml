@@ -113,18 +113,19 @@
             android:background="@color/colorDivider"/>
 
         <LinearLayout
+            android:id="@+id/cardButtonBar"
             style="?android:attr/buttonBarStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
+            android:layout_height="wrap_content"
+            android:divider="@null">
 
 
             <Button
-                android:id="@+id/bridge_card_editButton"
+                android:id="@+id/bridge_card_callButton"
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/edit_button"
+                android:text="@string/call_button"
                 android:focusable="false"
                 android:focusableInTouchMode="false"
                 android:textSize="14sp"
@@ -143,7 +144,7 @@
                 android:textSize="14sp"
                 android:padding="16dp"
                 android:textStyle="normal"
-                android:textColor="@color/colorPrimaryText"/>
+                android:textColor="@color/colorPrimaryDark"/>
 
         </LinearLayout>
 
