@@ -27,10 +27,10 @@ public class PhoneBookActivity extends SingleFragmentActivity {
 
             @Override
             public void onClick(View v) {
-                Bridge bridge = new Bridge();
-                PhoneBook.get(getApplicationContext()).addBridge(bridge);
+                //Bridge bridge = new Bridge();
+                //PhoneBook.get(getApplicationContext()).addBridge(bridge);
                 Intent i = new Intent(getApplicationContext(), BridgeActivity.class);
-                i.putExtra(BridgeFragment.EXTRA_BRIDGE_ID, bridge.getBridgeId());
+                //i.putExtra(BridgeFragment.EXTRA_BRIDGE_ID, bridge.getBridgeId());
                 startActivityForResult(i, 0);
             }
         });

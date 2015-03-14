@@ -38,6 +38,7 @@ public class PhoneBookFragment extends ListFragment {
     private String phoneNumber;
     private ArrayList<Bridge> mBridgeList;
     private static final String TAG = "PhoneBookFragment";
+    private static final String DEFAULT_FIELD = "None";
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
@@ -233,10 +234,23 @@ public class PhoneBookFragment extends ListFragment {
             bridgeNumberView.setText("Bridge Number: " + b.getBridgeNumber());
 
             TextView bridgeHostCodeView = (TextView)convertView.findViewById(R.id.bridge_card_hostCode);
-            bridgeHostCodeView.setText("Host Code: " + b.getHostCode() + b.getSecondTone());
+            if (!b.getHostCode().equals(DEFAULT_FIELD)) {
+                bridgeHostCodeView.setText("Host Code: " + b.getHostCode() + b.getSecondTone());
+            }
+            else {
+                bridgeHostCodeView.setText("Host Code: " + b.getHostCode());
+            }
+
 
             TextView bridgeParticipantCodeView = (TextView)convertView.findViewById(R.id.bridge_card_participantCode);
-            bridgeParticipantCodeView.setText("Participant Code: " + b.getParticipantCode() + b.getFirstTone());
+
+            if (!b.getParticipantCode().equals(DEFAULT_FIELD)) {
+                bridgeParticipantCodeView.setText("Participant Code: " + b.getParticipantCode() + b.getFirstTone());}
+            else {
+                bridgeParticipantCodeView.setText("Participant Code: " + b.getParticipantCode());
+            }
+
+
 
             TextView bridgeCallOrder = (TextView)convertView.findViewById(R.id.bridge_call_order);
             bridgeCallOrder.setText("Code Order: " +b.getCallOrder());

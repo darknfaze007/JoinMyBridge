@@ -1,7 +1,7 @@
 package com.misczak.joinmybridge;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,33 +20,46 @@ import java.util.UUID;
 /**
  * Created by misczak on 3/3/15.
  */
-public class BridgeFragment extends Fragment {
+public class BridgeFragment extends DialogFragment {
 
     public static final String EXTRA_BRIDGE_ID = "com.misczak.joinmybridge.bridge_id";
 
     private Bridge mBridge;
-    private String mBridgeNameString;
+    private String mBridgeNameString, mBridgeNumberString, mParticipantCodeString, mHostCodeString,
+            mFirstToneString, mSecondToneString, mCallOrderString;
     private EditText mBridgeName, mBridgeNumber, mParticipantCode, mHostCode;
     private Spinner mFirstTone, mSecondTone, mCallOrder;
+    private UUID mBridgeId;
 
     private static final String DEFAULT_TONE = "#";
     private static final String DEFAULT_ORDER = "Participant Code First";
+    private static final int REQUEST_WARNING = 0;
+    private static final String DIALOG_WARNING= "warning";
+    private static final String DEFAULT_FIELD = "None";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        UUID bridgeId = (UUID)getArguments().getSerializable(EXTRA_BRIDGE_ID);
-        mBridge = PhoneBook.get(getActivity()).getBridge(bridgeId);
 
-        mBridgeNameString = mBridge.getBridgeName();
+        mBridgeId = (UUID)getArguments().getSerializable(EXTRA_BRIDGE_ID);
 
-        if (mBridgeNameString != null) {
-            getActivity().setTitle(mBridgeNameString);
+        if (mBridgeId != null) {
+            mBridge = PhoneBook.get(getActivity()).getBridge(mBridgeId);
+
+
+            mBridgeNameString = mBridge.getBridgeName();
+            mBridgeNumberString = mBridge.getBridgeNumber();
+            mHostCodeString = mBridge.getHostCode();
+            mParticipantCodeString = mBridge.getParticipantCode();
+
+            getActivity().setTitle("Edit Bridge");
         }
         else {
             getActivity().setTitle("New Bridge");
         }
+
+
     }
 
     @Override
@@ -63,26 +76,32 @@ public class BridgeFragment extends Fragment {
                     NavUtils.navigateUpFromSameTask(getActivity());
                 }
                 return true;
+            case R.id.menu_item_save_bridge:
+                    saveBridge();
+                    if (NavUtils.getParentActivityName(getActivity()) != null) {
+                        NavUtils.navigateUpFromSameTask(getActivity());
+                    }
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        PhoneBook.get(getActivity()).savePhoneBook();
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_bridge, parent, false);
 
+
         mBridgeName = (EditText)v.findViewById(R.id.bridge_name);
-        mBridgeName.setText(mBridge.getBridgeName());
+        if (mBridgeId != null && !mBridge.getBridgeName().equals(DEFAULT_FIELD)) {
+            mBridgeName.setText(mBridge.getBridgeName());
+        }
         mBridgeName.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int after){
-                    mBridge.setBridgeName(c.toString());
+                    mBridgeNameString = c.toString();
+                    if (mBridgeNameString.equals("")) {
+                        mBridgeNameString = DEFAULT_FIELD;
+                    }
             }
 
             public void beforeTextChanged(CharSequence c, int start, int count, int after) {
@@ -96,10 +115,16 @@ public class BridgeFragment extends Fragment {
 
 
         mBridgeNumber = (EditText)v.findViewById(R.id.bridge_number);
-        mBridgeNumber.setText(mBridge.getBridgeNumber());
+        if (mBridgeId != null && !mBridge.getBridgeNumber().equals(DEFAULT_FIELD)) {
+
+            mBridgeNumber.setText(mBridge.getBridgeNumber());
+        }
         mBridgeNumber.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int after){
-                    mBridge.setBridgeNumber(c.toString());
+                    mBridgeNumberString = c.toString();
+                    if (mBridgeNumberString.equals("")) {
+                        mBridgeNumberString = DEFAULT_FIELD;
+                    }
 
             }
 
@@ -113,10 +138,15 @@ public class BridgeFragment extends Fragment {
 
 
         mHostCode = (EditText)v.findViewById(R.id.host_code);
-        mHostCode.setText(mBridge.getHostCode());
+        if (mBridgeId != null && !mBridge.getHostCode().equals(DEFAULT_FIELD)) {
+            mHostCode.setText(mBridge.getHostCode());
+        }
         mHostCode.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int after){
-                    mBridge.setHostCode(c.toString());
+                    mHostCodeString = c.toString();
+                    if (mHostCodeString.equals("")) {
+                        mHostCodeString = DEFAULT_FIELD;
+                    }
             }
 
             public void beforeTextChanged(CharSequence c, int start, int count, int after) {
@@ -129,10 +159,15 @@ public class BridgeFragment extends Fragment {
 
 
         mParticipantCode = (EditText)v.findViewById(R.id.participant_code);
-        mParticipantCode.setText(mBridge.getParticipantCode());
+        if (mBridgeId != null && !mBridge.getParticipantCode().equals(DEFAULT_FIELD)) {
+            mParticipantCode.setText(mBridge.getParticipantCode());
+        }
         mParticipantCode.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int after) {
-                mBridge.setParticipantCode(c.toString());
+                mParticipantCodeString = c.toString();
+                if (mParticipantCodeString.equals("")) {
+                    mParticipantCodeString = DEFAULT_FIELD;
+                }
             }
 
             public void beforeTextChanged(CharSequence c, int start, int count, int after) {
@@ -146,55 +181,55 @@ public class BridgeFragment extends Fragment {
 
         mFirstTone = (Spinner)v.findViewById(R.id.bridgeFirstToneKey);
 
-        if (mBridge.getFirstTone() != null){
+        if (mBridgeId != null && mBridge.getFirstTone() != null){
             mFirstTone.setSelection(getSpinnerIndex(mFirstTone, mBridge.getFirstTone()));
         }
 
         mFirstTone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mBridge.setFirstTone(parent.getItemAtPosition(position).toString());
+                mFirstToneString = parent.getItemAtPosition(position).toString();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mBridge.setFirstTone(DEFAULT_TONE);
+                mFirstToneString = DEFAULT_TONE;
             }
         });
 
         mSecondTone = (Spinner)v.findViewById(R.id.bridgeSecondToneKey);
 
-        if (mBridge.getSecondTone() != null){
+        if (mBridgeId != null && mBridge.getSecondTone() != null){
             mSecondTone.setSelection(getSpinnerIndex(mSecondTone, mBridge.getSecondTone()));
         }
 
         mSecondTone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mBridge.setSecondTone(parent.getItemAtPosition(position).toString());
+                mSecondToneString = parent.getItemAtPosition(position).toString();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mBridge.setSecondTone(DEFAULT_TONE);
+                mSecondToneString = DEFAULT_TONE;
             }
         });
 
         mCallOrder = (Spinner)v.findViewById(R.id.callOrderSpinner);
 
-        if (mBridge.getCallOrder() != null){
+        if (mBridgeId != null && mBridge.getCallOrder() != null){
             mCallOrder.setSelection(getSpinnerIndex(mCallOrder, mBridge.getCallOrder()));
         }
 
         mCallOrder.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                mBridge.setCallOrder(parent.getItemAtPosition(position).toString());
+                mCallOrderString = parent.getItemAtPosition(position).toString();
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mBridge.setCallOrder(DEFAULT_ORDER);
+                mCallOrderString = DEFAULT_ORDER;
             }
         });
 
@@ -220,6 +255,64 @@ public class BridgeFragment extends Fragment {
             }
         }
         return index;
+    }
+
+    private void saveBridge() {
+
+        Bridge b;
+
+        if (mBridgeId != null){
+            b = PhoneBook.get(getActivity()).getBridge(mBridgeId);
+        }
+        else {
+            b = new Bridge();
+            PhoneBook.get(getActivity()).addBridge(b);
+        }
+
+        if (mBridgeNameString != null) {
+            b.setBridgeName(mBridgeNameString);
+        }
+        else {
+            b.setBridgeName(DEFAULT_FIELD);
+        }
+
+        if (mBridgeNumberString != null) {
+            b.setBridgeNumber(mBridgeNumberString);
+        }
+        else {
+            b.setBridgeNumber(DEFAULT_FIELD);
+        }
+
+        if (mHostCodeString != null) {
+            b.setHostCode(mHostCodeString);
+        }
+        else {
+            b.setHostCode(DEFAULT_FIELD);
+        }
+
+        if (mParticipantCodeString != null) {
+            b.setParticipantCode(mParticipantCodeString);
+        }
+        else {
+            b.setParticipantCode(DEFAULT_FIELD);
+        }
+
+        b.setFirstTone(mFirstToneString);
+        b.setSecondTone(mSecondToneString);
+        b.setCallOrder(mCallOrderString);
+
+        PhoneBook.get(getActivity()).savePhoneBook();
+
+    }
+
+    private boolean validateBridgeData() {
+        if (mBridgeNameString == null || mBridgeNumberString == null ||
+                mHostCodeString == null || mParticipantCodeString == null) {
+            return false;
+        }
+        else {
+            return true;
+        }
     }
 
 
