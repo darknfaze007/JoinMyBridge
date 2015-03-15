@@ -1,18 +1,25 @@
 package com.misczak.joinmybridge;
 
 import android.app.Activity;
+import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.support.v7.widget.PopupMenu;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -34,11 +41,16 @@ public class PhoneBookFragment extends ListFragment {
     private static final String EXTRA_BRIDGE_ID = "bridgeId";
     private static final int REQUEST_CALL = 0;
     private final int DIVIDER_HEIGHT = 10;
+    private final String DEFAULT_FIELD = "None";
 
     private String phoneNumber;
     private ArrayList<Bridge> mBridgeList;
     private static final String TAG = "PhoneBookFragment";
-    private static final String DEFAULT_FIELD = "None";
+    private BridgeAdapter adapter;
+    private SearchView searchView;
+    private MenuItem searchItem;
+    private String filterString;
+    private int lastPosition = -1;
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
@@ -48,13 +60,9 @@ public class PhoneBookFragment extends ListFragment {
         getActivity().setTitle(R.string.phonebook_title);
         mBridgeList = PhoneBook.get(getActivity()).getBridges();
 
-        BridgeAdapter adapter = new BridgeAdapter(mBridgeList);
+        adapter = new BridgeAdapter(mBridgeList);
         setListAdapter(adapter);
-
-
     }
-
-
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -72,18 +80,44 @@ public class PhoneBookFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((BridgeAdapter)getListAdapter()).notifyDataSetChanged();
+        Log.d(TAG, "PhoneBook onResume");
+        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.fragment_phonebook, menu);
+
+        searchItem = menu.findItem(R.id.menu_item_search);
+        searchView = (SearchView)searchItem.getActionView();
+
+        SearchManager searchManager = (SearchManager)getActivity().getSystemService(Context.SEARCH_SERVICE);
+        ComponentName name = getActivity().getComponentName();
+        SearchableInfo searchInfo = searchManager.getSearchableInfo(name);
+
+        searchView.setSearchableInfo(searchInfo);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                filterString = s;
+                adapter.getFilter().filter(s);
+                return true;
+            }
+        });
+
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+
             case R.id.menu_item_settings:
                 Bridge bridge = new Bridge();
                 PhoneBook.get(getActivity()).addBridge(bridge);
@@ -127,8 +161,9 @@ public class PhoneBookFragment extends ListFragment {
     public void showCardOverFlowMenu(View v, Bridge b) {
 
         final Bridge bridgeCard = b;
+        final View view = v;
 
-        PopupMenu popup = new PopupMenu(getActivity(), v);
+        PopupMenu popup = new PopupMenu(getActivity(), view);
         popup.setOnMenuItemClickListener(new android.support.v7.widget.PopupMenu.OnMenuItemClickListener(){
 
             @Override
@@ -136,16 +171,30 @@ public class PhoneBookFragment extends ListFragment {
                 switch (item.getItemId()) {
 
                     case R.id.menu_item_modify_bridge:
+
                         Intent i = new Intent(getActivity(), BridgeActivity.class);
                         i.putExtra(BridgeFragment.EXTRA_BRIDGE_ID, bridgeCard.getBridgeId());
                         startActivity(i);
                         return true;
 
                     case R.id.menu_item_delete_bridge:
+
+
+
+
                         String loggy2 = "Deleting bridge: " + bridgeCard.getBridgeName();
                         Log.d(TAG, loggy2);
                         PhoneBook.get(getActivity()).deleteBridge(bridgeCard);
-                        ((BridgeAdapter)getListAdapter()).notifyDataSetChanged();
+                        mBridgeList.remove(bridgeCard);
+                        adapter.remove(bridgeCard);
+                        adapter.notifyDataSetChanged();
+
+
+                        //Will remove bridge that is being deleted from search filter view, if active
+                        if (searchView.isShown()) {
+                            adapter.getFilter().filter(filterString);
+                        }
+
                         PhoneBook.get(getActivity()).savePhoneBook();
                         return true;
 
@@ -171,7 +220,7 @@ public class PhoneBookFragment extends ListFragment {
             boolean[] options = data.getBooleanArrayExtra(EXTRA_CALL_OPTIONS);
             bridgeId = (UUID)data.getSerializableExtra(EXTRA_BRIDGE_ID);
 
-            Log.d("JOHNZZZ", "onActivityResult arr: " + Arrays.toString(options));
+            Log.d(TAG, " onActivityResult arr: " + Arrays.toString(options));
 
 
             CallUtils utils = new CallUtils();
@@ -219,10 +268,13 @@ public class PhoneBookFragment extends ListFragment {
     }
 
 
+
     private class BridgeAdapter extends ArrayAdapter<Bridge> {
+
 
         public BridgeAdapter(ArrayList<Bridge> bridgeList) {
             super(getActivity(), 0, bridgeList);
+
         }
 
         @Override
@@ -310,9 +362,12 @@ public class PhoneBookFragment extends ListFragment {
             Button shareButton = (Button)convertView.findViewById(R.id.bridge_card_shareButton);
             shareButton.setTag(Integer.valueOf(position));
 
+            Animation animation = AnimationUtils.loadAnimation(getContext(), (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
+            convertView.startAnimation(animation);
+            lastPosition = position;
+
             return convertView;
         }
-
 
     }
 

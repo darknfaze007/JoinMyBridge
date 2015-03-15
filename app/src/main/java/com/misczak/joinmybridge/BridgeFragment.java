@@ -5,6 +5,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,6 +37,8 @@ public class BridgeFragment extends DialogFragment {
     private static final int REQUEST_WARNING = 0;
     private static final String DIALOG_WARNING= "warning";
     private static final String DEFAULT_FIELD = "None";
+
+    private static final String TAG = "BridgeFragment";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -77,6 +80,7 @@ public class BridgeFragment extends DialogFragment {
                 }
                 return true;
             case R.id.menu_item_save_bridge:
+                    Log.d(TAG, "Saving bridge");
                     saveBridge();
                     if (NavUtils.getParentActivityName(getActivity()) != null) {
                         NavUtils.navigateUpFromSameTask(getActivity());
