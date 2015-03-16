@@ -6,8 +6,10 @@ import android.app.SearchableInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.support.v7.widget.PopupMenu;
@@ -37,9 +39,16 @@ import java.util.UUID;
 public class PhoneBookFragment extends ListFragment {
 
     private static final String DIALOG_CALL = "call";
+
+    private static final String EXTRA_BRIDGE_ID = "bridge_id";
     private static final String EXTRA_CALL_OPTIONS = "call_options";
-    private static final String EXTRA_BRIDGE_ID = "bridgeId";
+    private static final String EXTRA_BRIDGE_NUMBER = "bridgeNumber";
+    private static final String EXTRA_PARTICIPANT_CODE = "participantCode";
+    private static final String EXTRA_HOST_CODE = "hostCode";
+
+
     private static final int REQUEST_CALL = 0;
+    private static final int REQUEST_CONTACT = 1;
     private final int DIVIDER_HEIGHT = 10;
     private final String DEFAULT_FIELD = "None";
 
@@ -118,12 +127,11 @@ public class PhoneBookFragment extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
+            case R.id.menu_item_import:
+                Intent i = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
+                i.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+                startActivityForResult(i, REQUEST_CONTACT);
             case R.id.menu_item_settings:
-                Bridge bridge = new Bridge();
-                PhoneBook.get(getActivity()).addBridge(bridge);
-                Intent i = new Intent(getActivity(), BridgeActivity.class);
-                i.putExtra(BridgeFragment.EXTRA_BRIDGE_ID, bridge.getBridgeId());
-                startActivityForResult(i, 0);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -178,10 +186,6 @@ public class PhoneBookFragment extends ListFragment {
                         return true;
 
                     case R.id.menu_item_delete_bridge:
-
-
-
-
                         String loggy2 = "Deleting bridge: " + bridgeCard.getBridgeName();
                         Log.d(TAG, loggy2);
                         PhoneBook.get(getActivity()).deleteBridge(bridgeCard);
@@ -259,6 +263,56 @@ public class PhoneBookFragment extends ListFragment {
 
         }
 
+        if (requestCode == REQUEST_CONTACT) {
+            Uri contactUri = data.getData();
+
+            String[] queryFields = {ContactsContract.CommonDataKinds.Phone.NUMBER};
+
+            Cursor c = getActivity().getContentResolver()
+                    .query(contactUri, queryFields, null, null, null);
+
+            if (c.getCount() == 0) {
+                c.close();
+                return;
+            }
+
+            c.moveToFirst();
+            int phoneNumberColumn = c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+            String contactPhoneNumber = c.getString(phoneNumberColumn);
+            Log.d(TAG, contactPhoneNumber);
+
+            String delimiters = "[ ,x#*]+";
+            String[] bridgeComponents = contactPhoneNumber.split(delimiters);
+            int components = bridgeComponents.length;
+
+            Intent i = new Intent(getActivity(), BridgeActivity.class);
+
+            switch (components) {
+                case 1:
+                    Log.d(TAG, bridgeComponents[0]);
+                    i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[0]);
+                    break;
+                case 2:
+                    Log.d(TAG, bridgeComponents[0]);
+                    Log.d(TAG, bridgeComponents[1]);
+                    i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[0]);
+                    i.putExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE, bridgeComponents[1]);
+                    break;
+                case 3:
+                    Log.d(TAG, bridgeComponents[0]);
+                    Log.d(TAG, bridgeComponents[1]);
+                    Log.d(TAG, bridgeComponents[2]);
+                    i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[0]);
+                    i.putExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE, bridgeComponents[1]);
+                    i.putExtra(BridgeFragment.EXTRA_HOST_CODE, bridgeComponents[2]);
+                    break;
+                default:
+                    break;
+            }
+            startActivityForResult(i, 0);
+
+        }
+
     }
 
     private void placePhoneCall (String number) {
@@ -270,7 +324,6 @@ public class PhoneBookFragment extends ListFragment {
 
 
     private class BridgeAdapter extends ArrayAdapter<Bridge> {
-
 
         public BridgeAdapter(ArrayList<Bridge> bridgeList) {
             super(getActivity(), 0, bridgeList);
@@ -327,7 +380,7 @@ public class PhoneBookFragment extends ListFragment {
 
                     final Bridge b = (Bridge) getListView().getItemAtPosition(position);
 
-                    String loggy = "Position: " + position + " Bridge: " + b.getBridgeName();
+                    String loggy = "Overflow menu for Position: " + position + " Bridge: " + b.getBridgeName();
                     Log.d(TAG, loggy);
                 }
             });
@@ -360,7 +413,23 @@ public class PhoneBookFragment extends ListFragment {
             });*/
 
             Button shareButton = (Button)convertView.findViewById(R.id.bridge_card_shareButton);
-            shareButton.setTag(Integer.valueOf(position));
+            shareButton.setOnClickListener(new View.OnClickListener(){
+                public void onClick(View v) {
+                    Intent i = new Intent(Intent.ACTION_SEND);
+                    i.setType("text/plain");
+                    i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
+
+                    if (!b.getParticipantCode().equals(DEFAULT_FIELD)){
+                        i.putExtra(Intent.EXTRA_TEXT, "Dial into my bridge at: " + b.getBridgeNumber() + " \n Participant Code: " + b.getParticipantCode() + b.getFirstTone());
+                    }
+                    else {
+                        i.putExtra(Intent.EXTRA_TEXT, "Dial into my bridge at: " + b.getBridgeNumber());
+                    }
+
+                    i = Intent.createChooser(i, getString(R.string.send_bridge));
+                    startActivity(i);
+                }
+            });
 
             Animation animation = AnimationUtils.loadAnimation(getContext(), (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
             convertView.startAnimation(animation);

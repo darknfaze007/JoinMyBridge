@@ -24,6 +24,9 @@ import java.util.UUID;
 public class BridgeFragment extends DialogFragment {
 
     public static final String EXTRA_BRIDGE_ID = "com.misczak.joinmybridge.bridge_id";
+    public static final String EXTRA_BRIDGE_NUMBER = "com.misczak.joinmybridge.bridge_number";
+    public static final String EXTRA_PARTICIPANT_CODE = "com.misczak.joinmybridge.participant_code";
+    public static final String EXTRA_HOST_CODE = "com.misczak.joinmybridge.host_code";
 
     private Bridge mBridge;
     private String mBridgeNameString, mBridgeNumberString, mParticipantCodeString, mHostCodeString,
@@ -95,7 +98,6 @@ public class BridgeFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_bridge, parent, false);
 
-
         mBridgeName = (EditText)v.findViewById(R.id.bridge_name);
         if (mBridgeId != null && !mBridge.getBridgeName().equals(DEFAULT_FIELD)) {
             mBridgeName.setText(mBridge.getBridgeName());
@@ -122,6 +124,9 @@ public class BridgeFragment extends DialogFragment {
         if (mBridgeId != null && !mBridge.getBridgeNumber().equals(DEFAULT_FIELD)) {
 
             mBridgeNumber.setText(mBridge.getBridgeNumber());
+        } else if (getArguments().getSerializable(EXTRA_BRIDGE_NUMBER) != null){
+            mBridgeNumberString = (getArguments().getSerializable(EXTRA_BRIDGE_NUMBER).toString());
+            mBridgeNumber.setText(mBridgeNumberString);
         }
         mBridgeNumber.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int after){
@@ -144,7 +149,11 @@ public class BridgeFragment extends DialogFragment {
         mHostCode = (EditText)v.findViewById(R.id.host_code);
         if (mBridgeId != null && !mBridge.getHostCode().equals(DEFAULT_FIELD)) {
             mHostCode.setText(mBridge.getHostCode());
+        } else if (getArguments().getSerializable(EXTRA_HOST_CODE) != null){
+            mHostCodeString = getArguments().getSerializable(EXTRA_HOST_CODE).toString();
+            mHostCode.setText(mHostCodeString);
         }
+
         mHostCode.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int after){
                     mHostCodeString = c.toString();
@@ -165,7 +174,11 @@ public class BridgeFragment extends DialogFragment {
         mParticipantCode = (EditText)v.findViewById(R.id.participant_code);
         if (mBridgeId != null && !mBridge.getParticipantCode().equals(DEFAULT_FIELD)) {
             mParticipantCode.setText(mBridge.getParticipantCode());
+        } else if (getArguments().getSerializable(EXTRA_PARTICIPANT_CODE) != null){
+            mParticipantCodeString = getArguments().getSerializable(EXTRA_PARTICIPANT_CODE).toString();
+            mParticipantCode.setText(mParticipantCodeString);
         }
+
         mParticipantCode.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int after) {
                 mParticipantCodeString = c.toString();
@@ -240,9 +253,12 @@ public class BridgeFragment extends DialogFragment {
         return v;
     }
 
-    public static BridgeFragment newInstance(UUID bridgeId) {
+    public static BridgeFragment newInstance(UUID bridgeId, String bridgeNumber, String participantCode, String hostCode) {
         Bundle args = new Bundle();
         args.putSerializable(EXTRA_BRIDGE_ID, bridgeId);
+        args.putSerializable(EXTRA_BRIDGE_NUMBER, bridgeNumber);
+        args.putSerializable(EXTRA_PARTICIPANT_CODE, participantCode);
+        args.putSerializable(EXTRA_HOST_CODE, hostCode);
 
         BridgeFragment fragment = new BridgeFragment();
         fragment.setArguments(args);
@@ -265,41 +281,32 @@ public class BridgeFragment extends DialogFragment {
 
         Bridge b;
 
-        if (mBridgeId != null){
+        if (mBridgeId != null)
             b = PhoneBook.get(getActivity()).getBridge(mBridgeId);
-        }
         else {
             b = new Bridge();
             PhoneBook.get(getActivity()).addBridge(b);
         }
 
-        if (mBridgeNameString != null) {
+        if (mBridgeNameString != null)
             b.setBridgeName(mBridgeNameString);
-        }
-        else {
+        else
             b.setBridgeName(DEFAULT_FIELD);
-        }
 
-        if (mBridgeNumberString != null) {
+        if (mBridgeNumberString != null)
             b.setBridgeNumber(mBridgeNumberString);
-        }
-        else {
+        else
             b.setBridgeNumber(DEFAULT_FIELD);
-        }
 
-        if (mHostCodeString != null) {
+        if (mHostCodeString != null)
             b.setHostCode(mHostCodeString);
-        }
-        else {
+        else
             b.setHostCode(DEFAULT_FIELD);
-        }
 
-        if (mParticipantCodeString != null) {
+        if (mParticipantCodeString != null)
             b.setParticipantCode(mParticipantCodeString);
-        }
-        else {
+        else
             b.setParticipantCode(DEFAULT_FIELD);
-        }
 
         b.setFirstTone(mFirstToneString);
         b.setSecondTone(mSecondToneString);
