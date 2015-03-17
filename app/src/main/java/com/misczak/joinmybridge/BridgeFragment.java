@@ -36,10 +36,10 @@ public class BridgeFragment extends DialogFragment {
     private UUID mBridgeId;
 
     private static final String DEFAULT_TONE = "#";
-    private static final String DEFAULT_ORDER = "Participant Code First";
+    static final String DEFAULT_ORDER = "Participant Code First";
     private static final int REQUEST_WARNING = 0;
     private static final String DIALOG_WARNING= "warning";
-    private static final String DEFAULT_FIELD = "None";
+    static final String DEFAULT_FIELD = "None";
 
     private static final String TAG = "BridgeFragment";
 

@@ -18,7 +18,7 @@ import java.util.UUID;
 public class CallDialogFragment extends DialogFragment {
 
     private static final String EXTRA_CALL_OPTIONS = "call_options";
-    private static final String EXTRA_BRIDGE_ID = "bridgeId";
+    private static final String EXTRA_BRIDGE_ID = "bridge_id";
     private final boolean[] options = new boolean[2];
     private final int participantCodeIndex = 0;
     private final int hostCodeIndex = 1;

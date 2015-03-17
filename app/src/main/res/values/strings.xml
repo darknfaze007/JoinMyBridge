@@ -10,6 +10,7 @@
     <string name="call_picker_title">Dial In With:</string>
     <string name="call_button">CALL</string>
     <string name="modify_bridge">Modify</string>
+    <string name="export_bridge">Export to Contacts</string>
     <string name="share_button">SHARE</string>
     <string name="send_bridge">Send Bridge Info</string>
     <string name="share_subject">Join My Conference Call Bridge</string>

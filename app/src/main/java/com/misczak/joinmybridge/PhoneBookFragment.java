@@ -10,24 +10,27 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
+
+import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
+import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +42,6 @@ import java.util.UUID;
 public class PhoneBookFragment extends ListFragment {
 
     private static final String DIALOG_CALL = "call";
-
     private static final String EXTRA_BRIDGE_ID = "bridge_id";
     private static final String EXTRA_CALL_OPTIONS = "call_options";
     private static final String EXTRA_BRIDGE_NUMBER = "bridgeNumber";
@@ -50,7 +52,6 @@ public class PhoneBookFragment extends ListFragment {
     private static final int REQUEST_CALL = 0;
     private static final int REQUEST_CONTACT = 1;
     private final int DIVIDER_HEIGHT = 10;
-    private final String DEFAULT_FIELD = "None";
 
     private String phoneNumber;
     private ArrayList<Bridge> mBridgeList;
@@ -59,7 +60,9 @@ public class PhoneBookFragment extends ListFragment {
     private SearchView searchView;
     private MenuItem searchItem;
     private String filterString;
-    private int lastPosition = -1;
+    private DynamicListView listview;
+    private AlphaInAnimationAdapter animationAdapter;
+
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
@@ -69,21 +72,46 @@ public class PhoneBookFragment extends ListFragment {
         getActivity().setTitle(R.string.phonebook_title);
         mBridgeList = PhoneBook.get(getActivity()).getBridges();
 
-        adapter = new BridgeAdapter(mBridgeList);
-        setListAdapter(adapter);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        getListView().setDivider(null);
-        getListView().setDividerHeight(DIVIDER_HEIGHT);
-        getListView().setHeaderDividersEnabled(true);
-        getListView().setFooterDividersEnabled(true);
-        getListView().addHeaderView(new View(getActivity()));
-        getListView().addFooterView(new View(getActivity()));
+        listview = (DynamicListView) getActivity().findViewById(android.R.id.list);
 
+        listview.setDivider(null);
+        listview.setDividerHeight(DIVIDER_HEIGHT);
+        listview.setHeaderDividersEnabled(true);
+        listview.setFooterDividersEnabled(true);
+        listview.addHeaderView(new View(getActivity()));
+        listview.addFooterView(new View(getActivity()));
+
+        adapter = new BridgeAdapter(mBridgeList);
+
+        animationAdapter = new AlphaInAnimationAdapter(adapter);
+        animationAdapter.setAbsListView(listview);
+        listview.setAdapter(animationAdapter);
+
+        listview.enableSwipeToDismiss(
+                new OnDismissCallback() {
+                    @Override
+                    public void onDismiss(@NonNull final ViewGroup listView, @NonNull final int[] reverseSortedPositions) {
+
+                        for (int position : reverseSortedPositions){
+                            dismissBridge(adapter.getItem(position));
+                        }
+                    }
+                }
+        );
+
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.dynamic_lv, container, false);
+
+        return v;
     }
 
     @Override
@@ -138,33 +166,6 @@ public class PhoneBookFragment extends ListFragment {
         }
     }
 
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id){
-
-        //Really need to double check this. Was crashing on KitKat without the minus 1, but worked
-        //fine on Lollipop emulator
-        //Bridge b = ((BridgeAdapter)getListAdapter()).getItem(position-1);
-
-        /*Intent i = new Intent(getActivity(), BridgePagerActivity.class);
-        i.putExtra(BridgeFragment.EXTRA_BRIDGE_ID, b.getBridgeId());
-        startActivity(i);
-
-
-        FragmentManager fm = getActivity().getSupportFragmentManager();
-        CallDialogFragment dialog = CallDialogFragment.newInstance(b.getBridgeId());
-        dialog.setTargetFragment(PhoneBookFragment.this, REQUEST_CALL);
-        dialog.show(fm, DIALOG_CALL);*/
-    }
-
-    /*public void showCardOverFlowMenu(View v) {
-        PopupMenu popup = new PopupMenu(getActivity(), v);
-        MenuInflater inflater = popup.getMenuInflater();
-        inflater.inflate(R.menu.bridge_card_overflow, popup.getMenu());
-        popup.show();
-    }*/
-
-
     //Responsible for creating menu options for overflow menu on each Bridge card
     public void showCardOverFlowMenu(View v, Bridge b) {
 
@@ -176,31 +177,27 @@ public class PhoneBookFragment extends ListFragment {
 
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+
                 switch (item.getItemId()) {
 
                     case R.id.menu_item_modify_bridge:
 
-                        Intent i = new Intent(getActivity(), BridgeActivity.class);
-                        i.putExtra(BridgeFragment.EXTRA_BRIDGE_ID, bridgeCard.getBridgeId());
-                        startActivity(i);
+                        Intent modifyIntent = new Intent(getActivity(), BridgeActivity.class);
+                        modifyIntent.putExtra(BridgeFragment.EXTRA_BRIDGE_ID, bridgeCard.getBridgeId());
+                        startActivity(modifyIntent);
                         return true;
 
-                    case R.id.menu_item_delete_bridge:
-                        String loggy2 = "Deleting bridge: " + bridgeCard.getBridgeName();
-                        Log.d(TAG, loggy2);
-                        PhoneBook.get(getActivity()).deleteBridge(bridgeCard);
-                        mBridgeList.remove(bridgeCard);
-                        adapter.remove(bridgeCard);
-                        adapter.notifyDataSetChanged();
+                    case R.id.menu_item_export_bridge:
+                        Intent exportIntent = new Intent(Intent.ACTION_INSERT);
+                        exportIntent.setType(ContactsContract.Contacts.CONTENT_TYPE);
 
-
-                        //Will remove bridge that is being deleted from search filter view, if active
-                        if (searchView.isShown()) {
-                            adapter.getFilter().filter(filterString);
+                        if (!bridgeCard.getBridgeName().equals(BridgeFragment.DEFAULT_FIELD)) {
+                            exportIntent.putExtra(ContactsContract.Intents.Insert.NAME, bridgeCard.getBridgeName());
                         }
 
-                        PhoneBook.get(getActivity()).savePhoneBook();
-                        return true;
+                        exportIntent.putExtra(ContactsContract.Intents.Insert.PHONE, getNumberExtra(bridgeCard));
+                        getActivity().startActivity(exportIntent);
+
 
                     default:
                         return false;
@@ -232,34 +229,6 @@ public class PhoneBookFragment extends ListFragment {
             phoneNumber = utils.getCompleteNumber(bridgeId, mBridgeList, options[0], options[1]);
             placePhoneCall(phoneNumber);
 
-            //dial = new Intent(Intent.ACTION_CALL, Uri.parse(phoneNumber));
-            //startActivity(dial);
-
-            /*REPLACE ALL OF THIS, JUST FOR TESTING
-            if (options[0] == true && options[1] == true) {
-                Log.d("JOHNZZZ", "Call option 1");
-                dial = new Intent(Intent.ACTION_CALL, Uri.parse("tel:11111" + bridgeId.toString()));
-                startActivity(dial);
-
-            }
-            else if (options[0] == true && options[1] == false) {
-                Log.d("JOHNZZZ", "Call option 2");
-                dial = new Intent(Intent.ACTION_CALL, Uri.parse("tel:222222" + bridgeId.toString()));
-                startActivity(dial);
-
-            }
-            else if (options[0] == false && options[1] == true) {
-                Log.d("JOHNZZZ", "Call option 3");
-                dial = new Intent(Intent.ACTION_CALL, Uri.parse("tel:333333" + bridgeId.toString()));
-                startActivity(dial);
-
-            }
-            else {
-                Log.d("JOHNZZZ", "Call option 4");
-                dial = new Intent(Intent.ACTION_CALL, Uri.parse("tel:444444" + bridgeId.toString()));
-                startActivity(dial);
-
-            }*/
 
         }
 
@@ -321,6 +290,67 @@ public class PhoneBookFragment extends ListFragment {
         startActivity(dial);
     }
 
+    private void dismissBridge (Bridge b) {
+        PhoneBook.get(getActivity()).deleteBridge(b);
+        mBridgeList.remove(b);
+        adapter.remove(b);
+        adapter.notifyDataSetChanged();
+
+
+        //Will remove bridge that is being deleted from search filter view, if active
+        if (searchView.isShown()) {
+            adapter.getFilter().filter(filterString);
+        }
+
+        PhoneBook.get(getActivity()).savePhoneBook();
+
+    }
+
+    private String getNumberExtra (Bridge bridgeExtra) {
+
+        String numberExtra = "";
+
+        if (!bridgeExtra.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)
+                && !bridgeExtra.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)){
+            if (bridgeExtra.getCallOrder().equals(BridgeFragment.DEFAULT_ORDER)) {
+                numberExtra = bridgeExtra.getBridgeNumber()
+                        + ","
+                        + bridgeExtra.getParticipantCode()
+                        + bridgeExtra.getFirstTone()
+                        + ","
+                        + bridgeExtra.getHostCode()
+                        + bridgeExtra.getSecondTone();
+            }
+            else {
+                numberExtra = bridgeExtra.getBridgeNumber()
+                        + ","
+                        + bridgeExtra.getHostCode()
+                        + bridgeExtra.getSecondTone()
+                        + ","
+                        + bridgeExtra.getParticipantCode()
+                        + bridgeExtra.getFirstTone();
+            }
+        } else if (!bridgeExtra.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)
+                && bridgeExtra.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)) {
+
+                    numberExtra = bridgeExtra.getBridgeNumber()
+                        + ","
+                        + bridgeExtra.getParticipantCode()
+                        + bridgeExtra.getFirstTone();
+
+        } else if (bridgeExtra.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)
+                && !bridgeExtra.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)) {
+
+                    numberExtra = bridgeExtra.getBridgeNumber()
+                        + ","
+                        + bridgeExtra.getHostCode()
+                        + bridgeExtra.getSecondTone();
+
+        }
+
+        return numberExtra;
+    }
+
 
 
     private class BridgeAdapter extends ArrayAdapter<Bridge> {
@@ -347,7 +377,7 @@ public class PhoneBookFragment extends ListFragment {
             bridgeNumberView.setText("Bridge Number: " + b.getBridgeNumber());
 
             TextView bridgeHostCodeView = (TextView)convertView.findViewById(R.id.bridge_card_hostCode);
-            if (!b.getHostCode().equals(DEFAULT_FIELD)) {
+            if (!b.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)) {
                 bridgeHostCodeView.setText("Host Code: " + b.getHostCode() + b.getSecondTone());
             }
             else {
@@ -357,7 +387,7 @@ public class PhoneBookFragment extends ListFragment {
 
             TextView bridgeParticipantCodeView = (TextView)convertView.findViewById(R.id.bridge_card_participantCode);
 
-            if (!b.getParticipantCode().equals(DEFAULT_FIELD)) {
+            if (!b.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)) {
                 bridgeParticipantCodeView.setText("Participant Code: " + b.getParticipantCode() + b.getFirstTone());}
             else {
                 bridgeParticipantCodeView.setText("Participant Code: " + b.getParticipantCode());
@@ -396,22 +426,6 @@ public class PhoneBookFragment extends ListFragment {
                 }
             });
 
-            /*Typeface face=Typeface.createFromAsset(getActivity().getAssets(),"fonts/Roboto-Black.ttf");
-            callButton.setTypeface(face);*/
-
-            /*Button editButton = (Button)convertView.findViewById(R.id.bridge_card_editButton);
-            editButton.setOnClickListener(new View.OnClickListener() {
-
-                @Override
-                public void onClick(View v) {
-
-                    Intent i = new Intent(getActivity(), BridgeActivity.class);
-                    i.putExtra(BridgeFragment.EXTRA_BRIDGE_ID, b.getBridgeId());
-                    startActivity(i);
-
-                }
-            });*/
-
             Button shareButton = (Button)convertView.findViewById(R.id.bridge_card_shareButton);
             shareButton.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v) {
@@ -419,7 +433,7 @@ public class PhoneBookFragment extends ListFragment {
                     i.setType("text/plain");
                     i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
 
-                    if (!b.getParticipantCode().equals(DEFAULT_FIELD)){
+                    if (!b.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)){
                         i.putExtra(Intent.EXTRA_TEXT, "Dial into my bridge at: " + b.getBridgeNumber() + " \n Participant Code: " + b.getParticipantCode() + b.getFirstTone());
                     }
                     else {
@@ -431,13 +445,13 @@ public class PhoneBookFragment extends ListFragment {
                 }
             });
 
-            Animation animation = AnimationUtils.loadAnimation(getContext(), (position > lastPosition) ? R.anim.up_from_bottom : R.anim.down_from_top);
-            convertView.startAnimation(animation);
-            lastPosition = position;
-
             return convertView;
         }
 
+        @Override
+        public boolean hasStableIds() {
+            return true;
+        }
     }
 
 }

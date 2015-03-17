@@ -2,6 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menu_item_modify_bridge"
         android:title="@string/modify_bridge" />
-    <item android:id="@+id/menu_item_delete_bridge"
-        android:title="@string/delete_bridge" />
+    <item android:id="@+id/menu_item_export_bridge"
+        android:title="@string/export_bridge" />
 </menu>
