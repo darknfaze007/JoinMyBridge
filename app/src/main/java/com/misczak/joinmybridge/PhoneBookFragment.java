@@ -47,6 +47,7 @@ public class PhoneBookFragment extends ListFragment {
     private static final String EXTRA_BRIDGE_NUMBER = "bridgeNumber";
     private static final String EXTRA_PARTICIPANT_CODE = "participantCode";
     private static final String EXTRA_HOST_CODE = "hostCode";
+    private static final String SHARE_TEXT_TYPE = "text/plain";
 
 
     private static final int REQUEST_CALL = 0;
@@ -235,7 +236,8 @@ public class PhoneBookFragment extends ListFragment {
         if (requestCode == REQUEST_CONTACT) {
             Uri contactUri = data.getData();
 
-            String[] queryFields = {ContactsContract.CommonDataKinds.Phone.NUMBER};
+            String[] queryFields = {ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                                    ContactsContract.CommonDataKinds.Phone.NUMBER};
 
             Cursor c = getActivity().getContentResolver()
                     .query(contactUri, queryFields, null, null, null);
@@ -247,7 +249,10 @@ public class PhoneBookFragment extends ListFragment {
 
             c.moveToFirst();
             int phoneNumberColumn = c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+            int displayNameColumn = c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
             String contactPhoneNumber = c.getString(phoneNumberColumn);
+            String contactDisplayName = c.getString(displayNameColumn);
+            Log.d(TAG, contactDisplayName);
             Log.d(TAG, contactPhoneNumber);
 
             String delimiters = "[ ,x#*]+";
@@ -255,6 +260,8 @@ public class PhoneBookFragment extends ListFragment {
             int components = bridgeComponents.length;
 
             Intent i = new Intent(getActivity(), BridgeActivity.class);
+
+            i.putExtra(BridgeFragment.EXTRA_BRIDGE_NAME, contactDisplayName);
 
             switch (components) {
                 case 1:
@@ -430,7 +437,7 @@ public class PhoneBookFragment extends ListFragment {
             shareButton.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v) {
                     Intent i = new Intent(Intent.ACTION_SEND);
-                    i.setType("text/plain");
+                    i.setType(SHARE_TEXT_TYPE);
                     i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
 
                     if (!b.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)){

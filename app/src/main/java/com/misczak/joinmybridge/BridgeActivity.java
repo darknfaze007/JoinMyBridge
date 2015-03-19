@@ -18,11 +18,12 @@ public class BridgeActivity extends SingleFragmentActivity {
     @Override
     protected Fragment createFragment() {
         UUID bridgeId = (UUID)getIntent().getSerializableExtra(BridgeFragment.EXTRA_BRIDGE_ID);
+        String bridgeName = (String)getIntent().getSerializableExtra(BridgeFragment.EXTRA_BRIDGE_NAME);
         String bridgeNumber = (String)getIntent().getSerializableExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER);
         String participantCode = (String)getIntent().getSerializableExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE);
         String hostCode = (String)getIntent().getSerializableExtra(BridgeFragment.EXTRA_HOST_CODE);
 
-        return BridgeFragment.newInstance(bridgeId, bridgeNumber, participantCode, hostCode);
+        return BridgeFragment.newInstance(bridgeId, bridgeName, bridgeNumber, participantCode, hostCode);
     }
 
     @Override

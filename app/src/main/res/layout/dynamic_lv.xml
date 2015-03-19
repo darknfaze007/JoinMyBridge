@@ -11,7 +11,10 @@
     <TextView android:id="@id/android:empty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="no data" />
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:text="@string/empty_list"
+        android:textSize="20sp" />
 
 
 </LinearLayout>

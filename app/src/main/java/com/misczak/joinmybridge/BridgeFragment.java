@@ -27,6 +27,7 @@ public class BridgeFragment extends DialogFragment {
     public static final String EXTRA_BRIDGE_NUMBER = "com.misczak.joinmybridge.bridge_number";
     public static final String EXTRA_PARTICIPANT_CODE = "com.misczak.joinmybridge.participant_code";
     public static final String EXTRA_HOST_CODE = "com.misczak.joinmybridge.host_code";
+    public static final String EXTRA_BRIDGE_NAME = "com.misczak.joinmybridge.bridge_name";
 
     private Bridge mBridge;
     private String mBridgeNameString, mBridgeNumberString, mParticipantCodeString, mHostCodeString,
@@ -101,6 +102,9 @@ public class BridgeFragment extends DialogFragment {
         mBridgeName = (EditText)v.findViewById(R.id.bridge_name);
         if (mBridgeId != null && !mBridge.getBridgeName().equals(DEFAULT_FIELD)) {
             mBridgeName.setText(mBridge.getBridgeName());
+        } else if (getArguments().getSerializable(EXTRA_BRIDGE_NAME) != null) {
+            mBridgeNameString = (getArguments().getSerializable(EXTRA_BRIDGE_NAME)).toString();
+            mBridgeName.setText(mBridgeNameString);
         }
         mBridgeName.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int after){
@@ -122,12 +126,12 @@ public class BridgeFragment extends DialogFragment {
 
         mBridgeNumber = (EditText)v.findViewById(R.id.bridge_number);
         if (mBridgeId != null && !mBridge.getBridgeNumber().equals(DEFAULT_FIELD)) {
-
             mBridgeNumber.setText(mBridge.getBridgeNumber());
         } else if (getArguments().getSerializable(EXTRA_BRIDGE_NUMBER) != null){
             mBridgeNumberString = (getArguments().getSerializable(EXTRA_BRIDGE_NUMBER).toString());
             mBridgeNumber.setText(mBridgeNumberString);
         }
+
         mBridgeNumber.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int after){
                     mBridgeNumberString = c.toString();
@@ -253,9 +257,10 @@ public class BridgeFragment extends DialogFragment {
         return v;
     }
 
-    public static BridgeFragment newInstance(UUID bridgeId, String bridgeNumber, String participantCode, String hostCode) {
+    public static BridgeFragment newInstance(UUID bridgeId, String bridgeName, String bridgeNumber, String participantCode, String hostCode) {
         Bundle args = new Bundle();
         args.putSerializable(EXTRA_BRIDGE_ID, bridgeId);
+        args.putSerializable(EXTRA_BRIDGE_NAME, bridgeName);
         args.putSerializable(EXTRA_BRIDGE_NUMBER, bridgeNumber);
         args.putSerializable(EXTRA_PARTICIPANT_CODE, participantCode);
         args.putSerializable(EXTRA_HOST_CODE, hostCode);
