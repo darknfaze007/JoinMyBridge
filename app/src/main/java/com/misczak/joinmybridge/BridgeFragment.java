@@ -97,7 +97,7 @@ public class BridgeFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_bridge, parent, false);
+        View v = inflater.inflate(R.layout.fragment_bridge2, parent, false);
 
         mBridgeName = (EditText)v.findViewById(R.id.bridge_name);
         if (mBridgeId != null && !mBridge.getBridgeName().equals(DEFAULT_FIELD)) {

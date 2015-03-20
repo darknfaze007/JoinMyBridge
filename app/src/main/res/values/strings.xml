@@ -2,7 +2,6 @@
 <resources>
 
     <string name="app_name">Join My Bridge</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
     <string name="action_import">Import from Contacts</string>
@@ -37,8 +36,8 @@
     <string name="bridgeHostCodeLabel">Host Code</string>
 
 
-   <string name="bridgeFirstToneLabel">Participant Code Tone Key</string>
-    <string name="bridgeSecondToneLabel">Host Code Tone Key</string>
+   <string name="bridgeFirstToneLabel">Participant Key</string>
+    <string name="bridgeSecondToneLabel">Host Key</string>
 
     <string name="checkBoxHost">Use Host Code</string>
     <string name="checkBoxPIN">Use PIN Code</string>
