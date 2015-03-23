@@ -23,6 +23,7 @@ public class CallDialogFragment extends DialogFragment {
     private final int participantCodeIndex = 0;
     private final int hostCodeIndex = 1;
     private UUID mBridgeId;
+    private Bridge mBridge;
 
 
     public static CallDialogFragment newInstance(UUID bridgeId) {
@@ -44,23 +45,78 @@ public class CallDialogFragment extends DialogFragment {
 
          mBridgeId = (UUID)getArguments().getSerializable(EXTRA_BRIDGE_ID);
 
-         return new AlertDialog.Builder(getActivity())
-            .setTitle(R.string.call_picker_title)
-            .setMultiChoiceItems(R.array.call_options, null,
-                    new DialogInterface.OnMultiChoiceClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-                    options[which] = isChecked;
+         mBridge = PhoneBook.get(getActivity()).getBridge(mBridgeId);
+
+         if (!mBridge.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)
+                 & mBridge.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)){
+
+             return new AlertDialog.Builder(getActivity())
+                     .setTitle(R.string.call_picker_title)
+                     .setMultiChoiceItems(R.array.participant_only_call_options, null,
+                             new DialogInterface.OnMultiChoiceClickListener() {
+                                 @Override
+                                 public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                     options[which] = isChecked;
+                                 }
+                             })
+                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                         @Override
+                         public void onClick(DialogInterface dialog, int id) {
+                             options[hostCodeIndex] = false;
+                             sendResult(Activity.RESULT_OK, mBridgeId);
+                         }
+                     })
+                     .setNegativeButton(android.R.string.cancel, null)
+                     .create();
+
+         }
+
+         else if (mBridge.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)
+                 & !mBridge.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)){
+
+             return new AlertDialog.Builder(getActivity())
+                     .setTitle(R.string.call_picker_title)
+                     .setMultiChoiceItems(R.array.host_only_call_options, null,
+                             new DialogInterface.OnMultiChoiceClickListener() {
+                                 @Override
+                                 public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                     options[which] = isChecked;
+                                 }
+                             })
+                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                         @Override
+                         public void onClick(DialogInterface dialog, int id) {
+                             options[hostCodeIndex] = options[0];
+                             options[participantCodeIndex] = false;
+                             sendResult(Activity.RESULT_OK, mBridgeId);
+                         }
+                     })
+                     .setNegativeButton(android.R.string.cancel, null)
+                     .create();
+
+         } else {
+
+                return new AlertDialog.Builder(getActivity())
+                     .setTitle(R.string.call_picker_title)
+                     .setMultiChoiceItems(R.array.call_options, null,
+                             new DialogInterface.OnMultiChoiceClickListener() {
+                                 @Override
+                                 public void onClick(DialogInterface dialog, int which, boolean isChecked) {
+                                     options[which] = isChecked;
+                                 }
+                             })
+                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                         @Override
+                         public void onClick(DialogInterface dialog, int id) {
+                             sendResult(Activity.RESULT_OK, mBridgeId);
+                         }
+                     })
+                     .setNegativeButton(android.R.string.cancel, null)
+                     .create();
+
                 }
-            })
-            .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int id) {
-                    sendResult(Activity.RESULT_OK, mBridgeId);
-                }
-            })
-            .setNegativeButton(android.R.string.cancel, null)
-            .create();
+
+
      }
 
     private void sendResult(int resultCode, UUID bridgeId){

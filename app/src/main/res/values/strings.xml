@@ -25,6 +25,7 @@
 
 
     <string name="empty_list">No Bridges Saved</string>
+    <string name="deleted_bridge">Bridge Deleted</string>
 
 
     <string name="phonebook_title">PhoneBook</string>
@@ -65,14 +66,8 @@
     <string name="participantFirst">Participant Code First</string>
     <string name="hostFirst">Host Code First</string>
 
-    <string-array name="dtmf_tones">
-        <item>#</item>
-        <item>*</item>
-    </string-array>
+    <string name="uri_dial_button">Dial In</string>
+    <string name="uri_save_button">Dial In and Save Bridge</string>
 
-    <string-array name="call_order">
-        <item>@string/participantFirst</item>
-        <item>@string/hostFirst</item>
-    </string-array>
 
 </resources>

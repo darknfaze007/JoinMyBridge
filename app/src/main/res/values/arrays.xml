@@ -5,6 +5,22 @@
         <item>@string/bridgeHostCodeLabel</item>
     </string-array>
 
+    <string-array name="participant_only_call_options">
+        <item>@string/bridgeParticipantCodeLabel</item>
+    </string-array>
 
+    <string-array name="host_only_call_options">
+        <item>@string/bridgeHostCodeLabel</item>
+    </string-array>
+
+    <string-array name="dtmf_tones">
+        <item>#</item>
+        <item>*</item>
+    </string-array>
+
+    <string-array name="call_order">
+        <item>@string/participantFirst</item>
+        <item>@string/hostFirst</item>
+    </string-array>
 
 </resources>

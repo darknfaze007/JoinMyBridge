@@ -3,10 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#88888888"
+    android:background="@color/colorUndoView"
     android:gravity="center"
     android:orientation="horizontal"
     android:paddingRight="8dp"
+    android:layout_marginTop="8dp"
     tools:ignore="overdraw">
 
     <TextView
@@ -14,8 +15,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:gravity="center"
         android:padding="10dp"
-        android:text="Deleted"
+        android:text="@string/deleted_bridge"
         android:textColor="@android:color/white"
         android:textSize="16sp" />
 
@@ -32,6 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@null"
+        android:drawableLeft="@drawable/ic_undo_white_24dp"
         android:padding="10dp"
         android:paddingRight="8dp"
         android:text="Undo"

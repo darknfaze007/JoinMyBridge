@@ -3,5 +3,5 @@
     <item android:id="@+id/menu_item_modify_bridge"
         android:title="@string/modify_bridge" />
     <item android:id="@+id/menu_item_export_bridge"
-        android:title="@string/export_bridge" />
+        android:title="@string/export_bridge"/>
 </menu>

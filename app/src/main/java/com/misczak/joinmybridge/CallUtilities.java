@@ -8,7 +8,7 @@ import java.util.UUID;
 /**
  * Created by misczak on 3/11/15.
  */
-public class CallUtils {
+public class CallUtilities {
 
     private static final String ENCODED_POUND_SIGN = "%23";
     private static final String ENCODED_STAR_SIGN = "*";

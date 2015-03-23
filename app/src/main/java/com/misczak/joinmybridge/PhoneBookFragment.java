@@ -11,6 +11,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.support.v7.widget.PopupMenu;
@@ -31,6 +32,8 @@ import android.widget.TextView;
 import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.TimedUndoAdapter;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.UndoAdapter;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,7 +64,7 @@ public class PhoneBookFragment extends ListFragment {
     private SearchView searchView;
     private MenuItem searchItem;
     private String filterString;
-    private DynamicListView listview;
+    private DynamicListView listView;
     private AlphaInAnimationAdapter animationAdapter;
 
 
@@ -79,32 +82,22 @@ public class PhoneBookFragment extends ListFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        listview = (DynamicListView) getActivity().findViewById(android.R.id.list);
+        listView = (DynamicListView) getActivity().findViewById(android.R.id.list);
 
-        listview.setDivider(null);
-        listview.setDividerHeight(DIVIDER_HEIGHT);
-        listview.setHeaderDividersEnabled(true);
-        listview.setFooterDividersEnabled(true);
-        listview.addHeaderView(new View(getActivity()));
-        listview.addFooterView(new View(getActivity()));
+        listView.setDivider(null);
+        listView.setDividerHeight(DIVIDER_HEIGHT);
+        listView.setHeaderDividersEnabled(true);
+        listView.setFooterDividersEnabled(true);
+        listView.addHeaderView(new View(getActivity()));
+        listView.addFooterView(new View(getActivity()));
 
         adapter = new BridgeAdapter(mBridgeList);
 
-        animationAdapter = new AlphaInAnimationAdapter(adapter);
-        animationAdapter.setAbsListView(listview);
-        listview.setAdapter(animationAdapter);
-
-        listview.enableSwipeToDismiss(
-                new OnDismissCallback() {
-                    @Override
-                    public void onDismiss(@NonNull final ViewGroup listView, @NonNull final int[] reverseSortedPositions) {
-
-                        for (int position : reverseSortedPositions){
-                            dismissBridge(adapter.getItem(position));
-                        }
-                    }
-                }
-        );
+        TimedUndoAdapter timedUndoAdapter = new TimedUndoAdapter(adapter, getActivity(), new MyOnDismissCallback(adapter));
+        animationAdapter = new AlphaInAnimationAdapter(timedUndoAdapter);
+        animationAdapter.setAbsListView(listView);
+        listView.setAdapter(animationAdapter);
+        listView.enableSimpleSwipeUndo();
 
     }
 
@@ -225,7 +218,7 @@ public class PhoneBookFragment extends ListFragment {
             Log.d(TAG, " onActivityResult arr: " + Arrays.toString(options));
 
 
-            CallUtils utils = new CallUtils();
+            CallUtilities utils = new CallUtilities();
 
             phoneNumber = utils.getCompleteNumber(bridgeId, mBridgeList, options[0], options[1]);
             placePhoneCall(phoneNumber);
@@ -358,9 +351,23 @@ public class PhoneBookFragment extends ListFragment {
         return numberExtra;
     }
 
+    private class MyOnDismissCallback implements OnDismissCallback {
 
+        private final BridgeAdapter mAdapter;
 
-    private class BridgeAdapter extends ArrayAdapter<Bridge> {
+        MyOnDismissCallback(final BridgeAdapter adapter) {
+            mAdapter = adapter;
+        }
+
+        @Override
+        public void onDismiss(@NonNull final ViewGroup listView, @NonNull final int[] reverseSortedPositions) {
+            for (int position : reverseSortedPositions) {
+                dismissBridge(mAdapter.getItem(position));
+            }
+        }
+    }
+
+    private class BridgeAdapter extends ArrayAdapter<Bridge> implements UndoAdapter {
 
         public BridgeAdapter(ArrayList<Bridge> bridgeList) {
             super(getActivity(), 0, bridgeList);
@@ -406,6 +413,7 @@ public class PhoneBookFragment extends ListFragment {
             bridgeCallOrder.setText("Code Order: " +b.getCallOrder());
 
             ImageView cardOverFlowMenu = (ImageView)convertView.findViewById(R.id.bridge_card_overflow);
+
             cardOverFlowMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -426,10 +434,23 @@ public class PhoneBookFragment extends ListFragment {
             Button callButton = (Button)convertView.findViewById(R.id.bridge_card_callButton);
             callButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
-                    FragmentManager fm = getActivity().getSupportFragmentManager();
-                    CallDialogFragment dialog = CallDialogFragment.newInstance(b.getBridgeId());
-                    dialog.setTargetFragment(PhoneBookFragment.this, REQUEST_CALL);
-                    dialog.show(fm, DIALOG_CALL);
+
+                    if (b.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)
+                            && b.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)) {
+
+                        CallUtilities utils = new CallUtilities();
+
+                        phoneNumber = utils.getCompleteNumber(b.getBridgeId(), mBridgeList, false, false);
+                        placePhoneCall(phoneNumber);
+
+                    } else {
+                        FragmentManager fm = getActivity().getSupportFragmentManager();
+                        CallDialogFragment dialog = CallDialogFragment.newInstance(b.getBridgeId());
+                        dialog.setTargetFragment(PhoneBookFragment.this, REQUEST_CALL);
+                        dialog.show(fm, DIALOG_CALL);
+                    }
+
+
                 }
             });
 
@@ -458,6 +479,22 @@ public class PhoneBookFragment extends ListFragment {
         @Override
         public boolean hasStableIds() {
             return true;
+        }
+
+        @NonNull
+        @Override
+        public View getUndoView(int i, @Nullable View convertView, @NonNull ViewGroup viewGroup) {
+            View view = convertView;
+            if (view == null) {
+                view = LayoutInflater.from(getActivity()).inflate(R.layout.undo_row, viewGroup, false);
+            }
+            return view;
+        }
+
+        @NonNull
+        @Override
+        public View getUndoClickView(@NonNull View view) {
+            return view.findViewById(R.id.undo_row_undobutton);
         }
     }
 
