@@ -32,6 +32,7 @@ import android.widget.TextView;
 import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.SimpleSwipeUndoAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.TimedUndoAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.UndoAdapter;
 
@@ -93,8 +94,10 @@ public class PhoneBookFragment extends ListFragment {
 
         adapter = new BridgeAdapter(mBridgeList);
 
-        TimedUndoAdapter timedUndoAdapter = new TimedUndoAdapter(adapter, getActivity(), new MyOnDismissCallback(adapter));
-        animationAdapter = new AlphaInAnimationAdapter(timedUndoAdapter);
+        //TimedUndoAdapter timedUndoAdapter = new TimedUndoAdapter(adapter, getActivity(), new MyOnDismissCallback(adapter));
+        SimpleSwipeUndoAdapter swipeUndoAdapter = new SimpleSwipeUndoAdapter(adapter, getActivity(), new MyOnDismissCallback(adapter));
+        //animationAdapter = new AlphaInAnimationAdapter(timedUndoAdapter);
+        animationAdapter = new AlphaInAnimationAdapter(swipeUndoAdapter);
         animationAdapter.setAbsListView(listView);
         listView.setAdapter(animationAdapter);
         listView.enableSimpleSwipeUndo();

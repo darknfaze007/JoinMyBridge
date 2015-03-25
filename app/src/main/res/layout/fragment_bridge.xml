@@ -70,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/dtmf_tones"
-        android:prompt="@string/dtmf_prompt" />
+        android:prompt="@string/participant_tone_prompt" />
 
     <TextView
         android:layout_width="match_parent"
@@ -84,7 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:entries="@array/dtmf_tones"
-        android:prompt="@string/dtmf_prompt" />
+        android:prompt="@string/host_tone_prompt" />
 
     <TextView
         android:layout_width="match_parent"

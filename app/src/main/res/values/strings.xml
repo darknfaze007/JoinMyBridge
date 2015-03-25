@@ -58,8 +58,9 @@
     <string name="host_code_hint">Host Code</string>
 
 
-    <string name="dtmf_prompt">Tone Key</string>
-    <string name="call_order_prompt"></string>
+    <string name="participant_tone_prompt">Participant Code Tone</string>
+    <string name="host_tone_prompt">Host Code Tone</string>
+    <string name="call_order_prompt">Dial Code Order</string>
 
     <string name="callOrderLabel">Dial Code Order (for Hosting Calls)</string>
 

@@ -26,14 +26,6 @@
             android:label="Join My Bridge"
             android:parentActivityName="com.misczak.joinmybridge.PhoneBookActivity">
         </activity>
-        <activity android:name="BridgeUriActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="joinmybridge" android:path="*" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>

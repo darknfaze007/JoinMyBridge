@@ -12,7 +12,7 @@ public class CallUtilities {
 
     private static final String ENCODED_POUND_SIGN = "%23";
     private static final String ENCODED_STAR_SIGN = "*";
-    private static final String TAG = "CallUtils";
+    private static final String TAG = "CallUtilities";
 
     private static final String HOST_FIRST="Host Code First";
 
@@ -61,7 +61,7 @@ public class CallUtilities {
     private String getNumberWithParticipant(UUID bridgeId) {
         return "tel:"
                 + mBridge.getBridgeNumber().trim()
-                + ","
+                + ",,"
                 + mBridge.getParticipantCode().trim()
                 + encodeToneString(mBridge.getFirstTone().toString());
 
@@ -70,7 +70,7 @@ public class CallUtilities {
     private String getNumberWithHost (UUID bridgeId) {
         return "tel:"
                 + mBridge.getBridgeNumber().trim()
-                + ","
+                + ",,"
                 + mBridge.getHostCode().trim()
                 + encodeToneString(mBridge.getSecondTone().toString());
     }
@@ -80,19 +80,19 @@ public class CallUtilities {
         if (mBridge.getCallOrder().equals(HOST_FIRST)) {
             return "tel:"
                     + mBridge.getBridgeNumber().trim()
-                    + ","
+                    + ",,"
                     + mBridge.getHostCode().trim()
                     + encodeToneString(mBridge.getSecondTone().toString())
-                    + ","
+                    + ",,"
                     + mBridge.getParticipantCode().trim()
                     + encodeToneString(mBridge.getFirstTone().toString());
         } else {
             return "tel:"
                     + mBridge.getBridgeNumber().trim()
-                    + ","
+                    + ",,"
                     + mBridge.getParticipantCode().trim()
                     + encodeToneString(mBridge.getFirstTone().toString())
-                    + ","
+                    + ",,"
                     + mBridge.getHostCode().trim()
                     + encodeToneString(mBridge.getSecondTone().toString());
         }

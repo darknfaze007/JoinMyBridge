@@ -93,7 +93,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/dtmf_tones"
-                android:prompt="@string/dtmf_prompt"
+                android:prompt="@string/participant_tone_prompt"
                 android:layout_below="@+id/bridgeFirstToneLabel"
                 android:layout_alignParentStart="true"
                 android:layout_marginLeft="-10dp"/>
@@ -126,7 +126,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/bridgeSecondToneLabel"
                 android:entries="@array/dtmf_tones"
-                android:prompt="@string/dtmf_prompt"/>
+                android:prompt="@string/host_tone_prompt"/>
 
             <View
                 android:layout_width="fill_parent"
