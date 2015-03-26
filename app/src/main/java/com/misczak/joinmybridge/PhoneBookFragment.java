@@ -33,7 +33,6 @@ import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.SimpleSwipeUndoAdapter;
-import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.TimedUndoAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.UndoAdapter;
 
 import java.util.ArrayList;
@@ -52,6 +51,7 @@ public class PhoneBookFragment extends ListFragment {
     private static final String EXTRA_PARTICIPANT_CODE = "participantCode";
     private static final String EXTRA_HOST_CODE = "hostCode";
     private static final String SHARE_TEXT_TYPE = "text/plain";
+    private static final String PAUSE_TONE = ",,";
 
 
     private static final int REQUEST_CALL = 0;
@@ -317,19 +317,19 @@ public class PhoneBookFragment extends ListFragment {
                 && !bridgeExtra.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)){
             if (bridgeExtra.getCallOrder().equals(BridgeFragment.DEFAULT_ORDER)) {
                 numberExtra = bridgeExtra.getBridgeNumber()
-                        + ","
+                        + PAUSE_TONE
                         + bridgeExtra.getParticipantCode()
                         + bridgeExtra.getFirstTone()
-                        + ","
+                        + PAUSE_TONE
                         + bridgeExtra.getHostCode()
                         + bridgeExtra.getSecondTone();
             }
             else {
                 numberExtra = bridgeExtra.getBridgeNumber()
-                        + ","
+                        + PAUSE_TONE
                         + bridgeExtra.getHostCode()
                         + bridgeExtra.getSecondTone()
-                        + ","
+                        + PAUSE_TONE
                         + bridgeExtra.getParticipantCode()
                         + bridgeExtra.getFirstTone();
             }
@@ -337,7 +337,7 @@ public class PhoneBookFragment extends ListFragment {
                 && bridgeExtra.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)) {
 
                     numberExtra = bridgeExtra.getBridgeNumber()
-                        + ","
+                        + PAUSE_TONE
                         + bridgeExtra.getParticipantCode()
                         + bridgeExtra.getFirstTone();
 
@@ -345,7 +345,7 @@ public class PhoneBookFragment extends ListFragment {
                 && !bridgeExtra.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)) {
 
                     numberExtra = bridgeExtra.getBridgeNumber()
-                        + ","
+                        + PAUSE_TONE
                         + bridgeExtra.getHostCode()
                         + bridgeExtra.getSecondTone();
 

@@ -33,19 +33,6 @@ public class PhoneBook {
             mBridgeList = new ArrayList<Bridge>();
             Log.e(TAG, "Error loading PhoneBook: ", e);
         }
-
-
-        //mBridgeList = new ArrayList<Bridge>();
-        /*for (int i = 0; i < 100; i++) {
-            Bridge b = new Bridge();
-            b.setBridgeName("Bridge #" + i);
-            b.setBridgeNumber(i + "");
-            b.setHostCode(i + "");
-            b.setParticipantCode(i + "");
-            b.setFirstTone("#");
-            b.setSecondTone("#");
-            mBridgeList.add(b);
-        }*/
     }
 
     public static PhoneBook get(Context c){
