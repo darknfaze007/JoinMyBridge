@@ -16,6 +16,10 @@
     <string-array name="dtmf_tones">
         <item>#</item>
         <item>*</item>
+        <item>#,,*</item>
+        <item>*,,*</item>
+        <item>*,,#</item>
+        <item>#,,#</item>
     </string-array>
 
     <string-array name="call_order">

@@ -12,6 +12,12 @@ public class CallUtilities {
 
     private static final String ENCODED_POUND_SIGN = "%23";
     private static final String ENCODED_STAR_SIGN = "*";
+    private static final String ENCODED_POUND_PAUSE_STAR = "%23%2C%2C*";
+    private static final String ENCODED_STAR_PAUSE_STAR = "*%2C%2C*";
+    private static final String ENCODED_STAR_PAUSE_POUND = "*%2C%2C%23";
+    private static final String ENCODED_POUND_PAUSE_POUND = "%23%2C%2C%23";
+    private static final String[] toneArray = {"#", "*", "#,,*", "*,,*", "*,,#", "#,,#"};
+
     private static final String PAUSE_TONE =",,";
     private static final String TAG = "CallUtilities";
 
@@ -106,12 +112,40 @@ public class CallUtilities {
 
 
     private String encodeToneString(String tone) {
-        if (tone.equals("#")) {
+
+        int tonePosition = 0;
+
+        for (int i = 0; i < toneArray.length; i++){
+            if (tone.equals(toneArray[i])){
+                tonePosition = i;
+                break;
+            }
+        }
+        Log.d(TAG, "Tone Code is " + tonePosition);
+
+        switch (tonePosition){
+            case 0:
+                return ENCODED_POUND_SIGN;
+            case 1:
+                return ENCODED_STAR_SIGN;
+            case 2:
+                return ENCODED_POUND_PAUSE_STAR;
+            case 3:
+                return ENCODED_STAR_PAUSE_STAR;
+            case 4:
+                return ENCODED_STAR_PAUSE_POUND;
+            case 5:
+                return ENCODED_POUND_PAUSE_POUND;
+            default:
+                return tone;
+        }
+
+        /*if (tone.equals("#")) {
             return ENCODED_POUND_SIGN;
         } else if (tone.equals("*")) {
             return ENCODED_STAR_SIGN;
         } else {
             return tone;
-        }
+        }*/
     }
 }
