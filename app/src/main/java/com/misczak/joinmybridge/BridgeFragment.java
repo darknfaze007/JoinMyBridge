@@ -16,6 +16,8 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import com.gc.materialdesign.views.Slider;
+
 import java.util.UUID;
 
 /**
@@ -32,11 +34,14 @@ public class BridgeFragment extends DialogFragment {
     private Bridge mBridge;
     private String mBridgeNameString, mBridgeNumberString, mParticipantCodeString, mHostCodeString,
             mFirstToneString, mSecondToneString, mCallOrderString;
+    private int mDialingPauseNumber;
     private EditText mBridgeName, mBridgeNumber, mParticipantCode, mHostCode;
     private Spinner mFirstTone, mSecondTone, mCallOrder;
+    private Slider mDialingPause;
     private UUID mBridgeId;
 
     private static final String DEFAULT_TONE = "#";
+    private static final int DEFAULT_PAUSE = 2;
     static final String DEFAULT_ORDER = "Participant Code First";
     private static final int REQUEST_WARNING = 0;
     private static final String DIALOG_WARNING= "warning";
@@ -254,6 +259,20 @@ public class BridgeFragment extends DialogFragment {
             }
         });
 
+
+        mDialingPause = (Slider)v.findViewById(R.id.pauseSlider);
+        if (mBridgeId != null && (Integer)mBridge.getDialingPause() != null) {
+            mDialingPause.setValue(mBridge.getDialingPause());
+            mDialingPauseNumber = mBridge.getDialingPause();
+        }
+        mDialingPause.setOnValueChangedListener(new Slider.OnValueChangedListener() {
+            @Override
+            public void onValueChanged(int i) {
+                mDialingPauseNumber = i;
+            }
+        });
+
+
         return v;
     }
 
@@ -312,6 +331,13 @@ public class BridgeFragment extends DialogFragment {
             b.setParticipantCode(mParticipantCodeString);
         else
             b.setParticipantCode(DEFAULT_FIELD);
+
+        if ((Integer)mDialingPauseNumber != null) {
+            b.setDialingPause(mDialingPauseNumber);
+        }
+        else {
+            b.setDialingPause(DEFAULT_PAUSE);
+        }
 
         b.setFirstTone(mFirstToneString);
         b.setSecondTone(mSecondToneString);

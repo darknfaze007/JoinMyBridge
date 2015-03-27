@@ -18,6 +18,7 @@ public class Bridge {
     private String mFirstTone;
     private String mSecondTone;
     private String mCallOrder;
+    private int mDialingPause;
 
     private static final String JSON_ID = "id";
     private static final String JSON_NAME = "title";
@@ -27,6 +28,7 @@ public class Bridge {
     private static final String JSON_FIRSTTONE = "firsttone";
     private static final String JSON_SECONDTONE = "secondtone";
     private static final String JSON_CALLORDER = "callorder";
+    private static final String JSON_DIALINGPAUSE = "dialingpause";
 
     /*
     protected static final String NAME_PREFIX = "Name_";
@@ -48,6 +50,7 @@ public class Bridge {
         mFirstTone = json.getString(JSON_FIRSTTONE);
         mSecondTone = json.getString(JSON_SECONDTONE);
         mCallOrder = json.getString(JSON_CALLORDER);
+        mDialingPause = json.getInt(JSON_DIALINGPAUSE);
     }
 
 
@@ -111,6 +114,10 @@ public class Bridge {
 
     public void setCallOrder(String callOrder) { this.mCallOrder = callOrder; }
 
+    public int getDialingPause() { return mDialingPause; }
+
+    public void setDialingPause(int dialingPause) {this.mDialingPause = dialingPause; }
+
 
     public JSONObject toJSON() throws JSONException {
         JSONObject json = new JSONObject();
@@ -122,6 +129,7 @@ public class Bridge {
         json.put(JSON_FIRSTTONE, mFirstTone.toString());
         json.put(JSON_SECONDTONE, mSecondTone.toString());
         json.put(JSON_CALLORDER, mCallOrder.toString());
+        json.put(JSON_DIALINGPAUSE, mDialingPause);
 
         return json;
     }

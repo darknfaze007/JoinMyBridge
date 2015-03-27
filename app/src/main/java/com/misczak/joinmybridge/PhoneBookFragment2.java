@@ -33,7 +33,6 @@ import android.widget.Toast;
 import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
 import com.nhaarman.listviewanimations.itemmanipulation.dragdrop.OnItemMovedListener;
-import com.nhaarman.listviewanimations.itemmanipulation.dragdrop.TouchViewDraggableManager;
 import com.nhaarman.listviewanimations.itemmanipulation.expandablelistitem.ExpandableListItemAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.SimpleSwipeUndoAdapter;
@@ -107,10 +106,10 @@ public class PhoneBookFragment2 extends ListFragment {
         listView.setAdapter(animationAdapter);
         listView.enableSimpleSwipeUndo();
 
-        listView.enableDragAndDrop();
+        /*listView.enableDragAndDrop();
         listView.setDraggableManager(new TouchViewDraggableManager(R.id.draganddrop_grip));
         listView.setOnItemMovedListener(new MyOnItemMovedListener(adapter));
-        listView.setOnItemLongClickListener(new MyOnItemLongClickListener(listView));
+        listView.setOnItemLongClickListener(new MyOnItemLongClickListener(listView));*/
 
     }
 

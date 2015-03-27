@@ -18,7 +18,6 @@ public class CallUtilities {
     private static final String ENCODED_POUND_PAUSE_POUND = "%23%2C%2C%23";
     private static final String[] toneArray = {"#", "*", "#,,*", "*,,*", "*,,#", "#,,#"};
 
-    private static final String PAUSE_TONE =",,";
     private static final String TAG = "CallUtilities";
 
     private static final String HOST_FIRST="Host Code First";
@@ -27,6 +26,7 @@ public class CallUtilities {
     private String mNumberToCall, log;
     private ArrayList<Bridge> mBridgeList;
     private Bridge mBridge;
+    private String mPauseTone;
 
 
     public String getCompleteNumber (UUID bridgeId, ArrayList<Bridge> bridgeList, boolean dialWithParticipant, boolean dialWithHost) {
@@ -39,6 +39,10 @@ public class CallUtilities {
                 mBridge = b;
             }
         }
+
+        mPauseTone = getPauseTone(mBridge.getDialingPause());
+        Log.d(TAG, mPauseTone);
+
 
         if (dialWithParticipant == true && dialWithHost == true){
             mNumberToCall = getNumberWithBoth(bridgeId);
@@ -68,7 +72,7 @@ public class CallUtilities {
     private String getNumberWithParticipant(UUID bridgeId) {
         return "tel:"
                 + mBridge.getBridgeNumber().trim()
-                + PAUSE_TONE
+                + mPauseTone
                 + mBridge.getParticipantCode().trim()
                 + encodeToneString(mBridge.getFirstTone().toString());
 
@@ -77,7 +81,7 @@ public class CallUtilities {
     private String getNumberWithHost (UUID bridgeId) {
         return "tel:"
                 + mBridge.getBridgeNumber().trim()
-                + PAUSE_TONE
+                + mPauseTone
                 + mBridge.getHostCode().trim()
                 + encodeToneString(mBridge.getSecondTone().toString());
     }
@@ -87,19 +91,19 @@ public class CallUtilities {
         if (mBridge.getCallOrder().equals(HOST_FIRST)) {
             return "tel:"
                     + mBridge.getBridgeNumber().trim()
-                    + PAUSE_TONE
+                    + mPauseTone
                     + mBridge.getHostCode().trim()
                     + encodeToneString(mBridge.getSecondTone().toString())
-                    + PAUSE_TONE
+                    + mPauseTone
                     + mBridge.getParticipantCode().trim()
                     + encodeToneString(mBridge.getFirstTone().toString());
         } else {
             return "tel:"
                     + mBridge.getBridgeNumber().trim()
-                    + PAUSE_TONE
+                    + mPauseTone
                     + mBridge.getParticipantCode().trim()
                     + encodeToneString(mBridge.getFirstTone().toString())
-                    + PAUSE_TONE
+                    + mPauseTone
                     + mBridge.getHostCode().trim()
                     + encodeToneString(mBridge.getSecondTone().toString());
         }
@@ -147,5 +151,55 @@ public class CallUtilities {
         } else {
             return tone;
         }*/
+    }
+
+    protected String getPauseTone(int pauseLength) {
+
+        switch (pauseLength) {
+            case 0:
+                mPauseTone = "";
+                break;
+            case 1:
+                mPauseTone = ",";
+                break;
+            case 2:
+                mPauseTone = ",,";
+                break;
+            case 3:
+                mPauseTone = ",,,";
+                break;
+            case 4:
+                mPauseTone = ",,,,";
+                break;
+            case 5:
+                mPauseTone = ",,,,,";
+                break;
+            case 6:
+                mPauseTone = ",,,,,,";
+                break;
+            case 7:
+                mPauseTone = ",,,,,,,";
+                break;
+            case 8:
+                mPauseTone = ",,,,,,,,";
+                break;
+            case 9:
+                mPauseTone = ",,,,,,,,,";
+                break;
+            case 10:
+                mPauseTone = ",,,,,,,,,,";
+                break;
+            case 11:
+                mPauseTone = ",,,,,,,,,,,";
+                break;
+            case 12:
+                mPauseTone = ",,,,,,,,,,,,";
+                break;
+            default:
+                mPauseTone = ",,";
+                break;
+        }
+
+        return mPauseTone;
     }
 }

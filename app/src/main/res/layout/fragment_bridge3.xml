@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:materialdesign="http://schemas.android.com/apk/res-auto"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@color/colorTextIcons">
@@ -116,9 +117,27 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/pauseSliderLabel"
+            android:text="@string/pauseSliderLabel"/>
+
+        <com.gc.materialdesign.views.Slider
+            android:id="@+id/pauseSlider"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
+            android:layout_below="@id/pauseSliderLabel"
+            android:paddingBottom="16dp"
+            materialdesign:max="12"
+            materialdesign:min="0"
+            materialdesign:showNumberIndicator="true"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:id="@+id/callOrderLabel"
             android:labelFor="@id/callOrderSpinner"
-            android:text="@string/callOrderLabel"/>
+            android:text="@string/callOrderLabel"
+            android:layout_below="@id/pauseSlider"/>
 
         <Spinner
             android:id="@+id/callOrderSpinner"

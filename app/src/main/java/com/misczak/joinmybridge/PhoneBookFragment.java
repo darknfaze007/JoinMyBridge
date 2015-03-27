@@ -27,12 +27,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.widget.Button;
 import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
 import com.nhaarman.listviewanimations.itemmanipulation.dragdrop.OnItemMovedListener;
@@ -56,7 +56,6 @@ public class PhoneBookFragment extends ListFragment {
     private static final String EXTRA_PARTICIPANT_CODE = "participantCode";
     private static final String EXTRA_HOST_CODE = "hostCode";
     private static final String SHARE_TEXT_TYPE = "text/plain";
-    private static final String PAUSE_TONE = ",,";
     static final String PREFERENCE_DIALER = "pref_dialer";
 
     private static final int REQUEST_CALL = 0;
@@ -73,6 +72,8 @@ public class PhoneBookFragment extends ListFragment {
     private DynamicListView listView;
     private AlphaInAnimationAdapter animationAdapter;
     private boolean customDialer;
+    private String pauseTone;
+    private int pauseLength;
 
 
     @Override
@@ -375,23 +376,30 @@ public class PhoneBookFragment extends ListFragment {
 
         String numberExtra = "";
 
+        pauseLength = bridgeExtra.getDialingPause();
+        CallUtilities callUtils = new CallUtilities();
+        pauseTone = callUtils.getPauseTone(pauseLength);
+        Log.d(TAG, "Phonebook pause tone " + pauseTone);
+
+
+
         if (!bridgeExtra.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)
                 && !bridgeExtra.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)){
             if (bridgeExtra.getCallOrder().equals(BridgeFragment.DEFAULT_ORDER)) {
                 numberExtra = bridgeExtra.getBridgeNumber()
-                        + PAUSE_TONE
+                        + pauseTone
                         + bridgeExtra.getParticipantCode()
                         + bridgeExtra.getFirstTone()
-                        + PAUSE_TONE
+                        + pauseTone
                         + bridgeExtra.getHostCode()
                         + bridgeExtra.getSecondTone();
             }
             else {
                 numberExtra = bridgeExtra.getBridgeNumber()
-                        + PAUSE_TONE
+                        + pauseTone
                         + bridgeExtra.getHostCode()
                         + bridgeExtra.getSecondTone()
-                        + PAUSE_TONE
+                        + pauseTone
                         + bridgeExtra.getParticipantCode()
                         + bridgeExtra.getFirstTone();
             }
@@ -399,7 +407,7 @@ public class PhoneBookFragment extends ListFragment {
                 && bridgeExtra.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)) {
 
                     numberExtra = bridgeExtra.getBridgeNumber()
-                        + PAUSE_TONE
+                        + pauseTone
                         + bridgeExtra.getParticipantCode()
                         + bridgeExtra.getFirstTone();
 
@@ -407,7 +415,7 @@ public class PhoneBookFragment extends ListFragment {
                 && !bridgeExtra.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)) {
 
                     numberExtra = bridgeExtra.getBridgeNumber()
-                        + PAUSE_TONE
+                        + pauseTone
                         + bridgeExtra.getHostCode()
                         + bridgeExtra.getSecondTone();
 
