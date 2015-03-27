@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        android:title="@string/behavior_settings"
+        android:key="pref_key_behavior_settings">
+
+        <SwitchPreference
+            android:id="@+id/pref_dialer_switch"
+            android:key="pref_dialer"
+            android:title="@string/pref_dialer_title"
+            android:summary="@string/pref_dialer_summary"
+            android:defaultValue="false" />
+
+        </PreferenceCategory>
+</PreferenceScreen>

@@ -11,6 +11,7 @@
     android:descendantFocusability="beforeDescendants">
 
     <LinearLayout
+        android:id="@+id/bridge_card"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -162,8 +163,6 @@
 
             </LinearLayout>
 
-
-
         </LinearLayout>
 
         <View
@@ -207,7 +206,6 @@
                 android:textColor="@color/colorPrimaryDark"/>
 
         </LinearLayout>
-
 
     </LinearLayout>
 

@@ -6,9 +6,11 @@ import android.app.SearchableInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,14 +25,17 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
+import com.nhaarman.listviewanimations.itemmanipulation.dragdrop.OnItemMovedListener;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.SimpleSwipeUndoAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.UndoAdapter;
@@ -52,7 +57,7 @@ public class PhoneBookFragment extends ListFragment {
     private static final String EXTRA_HOST_CODE = "hostCode";
     private static final String SHARE_TEXT_TYPE = "text/plain";
     private static final String PAUSE_TONE = ",,";
-
+    static final String PREFERENCE_DIALER = "pref_dialer";
 
     private static final int REQUEST_CALL = 0;
     private static final int REQUEST_CONTACT = 1;
@@ -67,12 +72,12 @@ public class PhoneBookFragment extends ListFragment {
     private String filterString;
     private DynamicListView listView;
     private AlphaInAnimationAdapter animationAdapter;
+    private boolean customDialer;
 
 
     @Override
     public void onCreate (Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setHasOptionsMenu(true);
         getActivity().setTitle(R.string.phonebook_title);
         mBridgeList = PhoneBook.get(getActivity()).getBridges();
@@ -102,6 +107,47 @@ public class PhoneBookFragment extends ListFragment {
         listView.setAdapter(animationAdapter);
         listView.enableSimpleSwipeUndo();
 
+        /*
+        listView.enableDragAndDrop();
+        listView.setDraggableManager(new TouchViewDraggableManager(R.id.draganddrop_grip));
+        listView.setOnItemMovedListener(new MyOnItemMovedListener(adapter));
+        listView.setOnItemLongClickListener(new MyOnItemLongClickListener(listView));
+        */
+
+    }
+
+    private static class MyOnItemLongClickListener implements AdapterView.OnItemLongClickListener {
+        private final DynamicListView mListView;
+
+        MyOnItemLongClickListener(final DynamicListView listView) {
+            mListView = listView;
+        }
+
+        @Override
+        public boolean onItemLongClick(final AdapterView<?> parent, final View view, final int position, final long id) {
+            if (mListView != null) {
+                mListView.startDragging(position - mListView.getHeaderViewsCount());
+            }
+
+            return true;
+        }
+    }
+
+    private static class MyOnItemMovedListener implements OnItemMovedListener {
+        private final BridgeAdapter mAdapter;
+
+        private Toast mToast;
+
+        MyOnItemMovedListener(final BridgeAdapter adapter) {
+            mAdapter = adapter;
+        }
+
+        @Override
+        public void onItemMoved(final int originalPosition, final int newPosition) {
+            if (mToast != null) {
+                mToast.cancel();
+            }
+        }
     }
 
     @Override
@@ -116,6 +162,11 @@ public class PhoneBookFragment extends ListFragment {
         super.onResume();
         Log.d(TAG, "PhoneBook onResume");
         adapter.notifyDataSetChanged();
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        customDialer = preferences.getBoolean(PREFERENCE_DIALER, false);
+        Log.d(TAG, customDialer + "");
+
     }
 
     @Override
@@ -153,10 +204,13 @@ public class PhoneBookFragment extends ListFragment {
         switch (item.getItemId()) {
 
             case R.id.menu_item_import:
-                Intent i = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
-                i.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-                startActivityForResult(i, REQUEST_CONTACT);
+                Intent importIntent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
+                importIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+                startActivityForResult(importIntent, REQUEST_CONTACT);
+                return true;
             case R.id.menu_item_settings:
+                Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(settingsIntent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -289,7 +343,15 @@ public class PhoneBookFragment extends ListFragment {
 
     private void placePhoneCall (String number) {
 
-        Intent dial = new Intent(Intent.ACTION_CALL, Uri.parse(number));
+        Intent dial;
+
+        if(customDialer == false) {
+            dial = new Intent(Intent.ACTION_CALL, Uri.parse(number));
+        }
+        else {
+            dial = new Intent(Intent.ACTION_DIAL, Uri.parse(number));
+        }
+
         startActivity(dial);
     }
 
@@ -372,8 +434,12 @@ public class PhoneBookFragment extends ListFragment {
 
     private class BridgeAdapter extends ArrayAdapter<Bridge> implements UndoAdapter {
 
+        ArrayList<Bridge> mList;
+
         public BridgeAdapter(ArrayList<Bridge> bridgeList) {
             super(getActivity(), 0, bridgeList);
+
+            mList = bridgeList;
 
         }
 
@@ -405,7 +471,8 @@ public class PhoneBookFragment extends ListFragment {
             TextView bridgeParticipantCodeView = (TextView)convertView.findViewById(R.id.bridge_card_participantCode);
 
             if (!b.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)) {
-                bridgeParticipantCodeView.setText("Participant Code: " + b.getParticipantCode() + b.getFirstTone());}
+                bridgeParticipantCodeView.setText("Participant Code: " + b.getParticipantCode() + b.getFirstTone());
+            }
             else {
                 bridgeParticipantCodeView.setText("Participant Code: " + b.getParticipantCode());
             }
@@ -499,6 +566,7 @@ public class PhoneBookFragment extends ListFragment {
         public View getUndoClickView(@NonNull View view) {
             return view.findViewById(R.id.undo_row_undobutton);
         }
+
     }
 
 }

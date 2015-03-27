@@ -26,6 +26,11 @@
             android:label="Join My Bridge"
             android:parentActivityName="com.misczak.joinmybridge.PhoneBookActivity">
         </activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Join My Bridge"
+            android:parentActivityName="com.misczak.joinmybridge.PhoneBookActivity">
+        </activity>
     </application>
 
 </manifest>
