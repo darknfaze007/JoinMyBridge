@@ -91,6 +91,9 @@ public class PhoneBookFragment extends ListFragment {
 
         listView = (DynamicListView) getActivity().findViewById(android.R.id.list);
 
+
+        //Set up the List View to not show lines between cards
+
         listView.setDivider(null);
         listView.setDividerHeight(DIVIDER_HEIGHT);
         listView.setHeaderDividersEnabled(true);
@@ -116,6 +119,9 @@ public class PhoneBookFragment extends ListFragment {
         */
 
     }
+
+
+
 
     private static class MyOnItemLongClickListener implements AdapterView.OnItemLongClickListener {
         private final DynamicListView mListView;
@@ -159,6 +165,8 @@ public class PhoneBookFragment extends ListFragment {
     }
 
     @Override
+
+
     public void onResume() {
         super.onResume();
         Log.d(TAG, "PhoneBook onResume");
@@ -284,6 +292,8 @@ public class PhoneBookFragment extends ListFragment {
 
         }
 
+
+        //Read the selected data from the contacts application
         if (requestCode == REQUEST_CONTACT) {
             Uri contactUri = data.getData();
 
@@ -356,6 +366,8 @@ public class PhoneBookFragment extends ListFragment {
         startActivity(dial);
     }
 
+
+
     private void dismissBridge (Bridge b) {
         PhoneBook.get(getActivity()).deleteBridge(b);
         mBridgeList.remove(b);
@@ -372,6 +384,8 @@ public class PhoneBookFragment extends ListFragment {
 
     }
 
+
+    //Used to create the extra for the Intent to create a new contact with bridge information
     private String getNumberExtra (Bridge bridgeExtra) {
 
         String numberExtra = "";
@@ -424,6 +438,7 @@ public class PhoneBookFragment extends ListFragment {
         return numberExtra;
     }
 
+    //Handle the act of dismissing a bridge through the swipe gesture
     private class MyOnDismissCallback implements OnDismissCallback {
 
         private final BridgeAdapter mAdapter;
@@ -439,6 +454,7 @@ public class PhoneBookFragment extends ListFragment {
             }
         }
     }
+
 
     private class BridgeAdapter extends ArrayAdapter<Bridge> implements UndoAdapter {
 
@@ -554,11 +570,14 @@ public class PhoneBookFragment extends ListFragment {
             return convertView;
         }
 
+
+        //Required for some advanced ListView animations
         @Override
         public boolean hasStableIds() {
             return true;
         }
 
+        //Fetches the view displayed when a user dismisses a bridge
         @NonNull
         @Override
         public View getUndoView(int i, @Nullable View convertView, @NonNull ViewGroup viewGroup) {

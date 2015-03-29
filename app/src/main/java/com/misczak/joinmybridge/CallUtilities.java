@@ -155,7 +155,9 @@ public class CallUtilities {
 
     protected String getPauseTone(int pauseLength) {
 
-        switch (pauseLength) {
+        mPauseTone ="";
+
+        /*switch (pauseLength) {
             case 0:
                 mPauseTone = "";
                 break;
@@ -198,6 +200,11 @@ public class CallUtilities {
             default:
                 mPauseTone = ",,";
                 break;
+        }*/
+
+
+        for (int i = 1; i <= pauseLength; i++) {
+            mPauseTone += ",";
         }
 
         return mPauseTone;

@@ -111,6 +111,8 @@ public class BridgeFragment extends DialogFragment {
             mBridgeNameString = (getArguments().getSerializable(EXTRA_BRIDGE_NAME)).toString();
             mBridgeName.setText(mBridgeNameString);
         }
+
+
         mBridgeName.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence c, int start, int before, int after){
                     mBridgeNameString = c.toString();
