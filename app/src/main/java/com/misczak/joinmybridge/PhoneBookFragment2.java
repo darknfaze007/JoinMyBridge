@@ -195,7 +195,7 @@ public class PhoneBookFragment2 extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            case R.id.menu_item_import:
+            case R.id.menu_item_import_contacts:
                 Intent i = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
                 i.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
                 startActivityForResult(i, REQUEST_CONTACT);

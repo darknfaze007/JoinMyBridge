@@ -6,9 +6,12 @@
         android:title="@string/action_search"
         app:showAsAction="always|collapseActionView"
         app:actionViewClass="android.support.v7.widget.SearchView"/>
-    <item android:id="@+id/menu_item_import"
+    <item android:id="@+id/menu_item_import_contacts"
         android:icon="@drawable/ic_get_app_white_24dp"
-        android:title="@string/action_import"
+        android:title="@string/action_import_contacts"
+        app:showAsAction="never" />
+    <item android:id="@+id/menu_item_import_calendar"
+        android:title="@string/action_import_calendar"
         app:showAsAction="never" />
     <item android:id="@+id/menu_item_settings"
         android:icon="@drawable/ic_settings_white_24dp"

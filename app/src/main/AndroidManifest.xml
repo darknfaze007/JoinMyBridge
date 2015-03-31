@@ -3,6 +3,7 @@
     package="com.misczak.joinmybridge" >
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_CALENDAR" />
 
     <application
         android:allowBackup="true"
@@ -31,6 +32,14 @@
             android:label="Join My Bridge"
             android:parentActivityName="com.misczak.joinmybridge.PhoneBookActivity">
         </activity>
+        <activity android:name=".CalendarActivity"
+            android:label="Join My Bridge"
+            android:parentActivityName="com.misczak.joinmybridge.PhoneBookActivity">
+        </activity>
+        <activity android:name=".EventActivity"
+            android:label="Join My Bridge"
+            android:parentActivityName="com.misczak.joinmybridge.CalendarActivity">
+            </activity>
     </application>
 
 </manifest>

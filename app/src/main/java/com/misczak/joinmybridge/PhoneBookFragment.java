@@ -212,10 +212,14 @@ public class PhoneBookFragment extends ListFragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
 
-            case R.id.menu_item_import:
-                Intent importIntent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
-                importIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
-                startActivityForResult(importIntent, REQUEST_CONTACT);
+            case R.id.menu_item_import_contacts:
+                Intent importContactIntent = new Intent(Intent.ACTION_PICK, Uri.parse("content://contacts"));
+                importContactIntent.setType(ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE);
+                startActivityForResult(importContactIntent, REQUEST_CONTACT);
+                return true;
+            case R.id.menu_item_import_calendar:
+                Intent importCalendarIntent = new Intent(getActivity(), CalendarActivity.class);
+                startActivity(importCalendarIntent);
                 return true;
             case R.id.menu_item_settings:
                 Intent settingsIntent = new Intent(getActivity(), SettingsActivity.class);
