@@ -1,5 +1,6 @@
 package com.misczak.joinmybridge;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -10,10 +11,17 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.SearchView;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by misczak on 3/30/15.
@@ -35,6 +43,8 @@ public class EventFragment extends ListFragment
     String mCurFilter;
 
     long mCalendarId;
+
+    private String filterString;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +71,31 @@ public class EventFragment extends ListFragment
         setListShown(false);
 
         getLoaderManager().initLoader(0, null, this);
+    }
+
+    public static class MySearchView extends SearchView {
+        public MySearchView(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void onActionViewCollapsed() {
+            setQuery("", false);
+            super.onActionViewCollapsed();
+        }
+    }
+
+    @Override
+    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
+        MenuItem item = menu.add("Search");
+        item.setIcon(R.drawable.ic_search_white_24dp);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM |
+                MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        mSearchView = new MySearchView(getActivity());
+        mSearchView.setOnQueryTextListener(this);
+        mSearchView.setOnCloseListener(this);
+        mSearchView.setIconifiedByDefault(true);
+        item.setActionView(mSearchView);
     }
 
 
@@ -117,27 +152,31 @@ public class EventFragment extends ListFragment
     static final String[] EVENTS_SUMMARY_PROJECTION = new String[] {
             CalendarContract.Events._ID,
             CalendarContract.Events.TITLE,
-            CalendarContract.Events.EVENT_LOCATION
+            CalendarContract.Events.EVENT_LOCATION,
+            CalendarContract.Events.DTSTART
     };
 
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri baseUri;
-        if (mCurFilter != null) {
+        /*if (mCurFilter != null) {
             baseUri = Uri.withAppendedPath(CalendarContract.Events.CONTENT_URI,
                     Uri.encode(mCurFilter));
-        } else {
+        } else {*/
             baseUri = CalendarContract.Events.CONTENT_URI;
-        }
+        //}
 
-
-        String select = "((" + CalendarContract.Calendars.CALENDAR_DISPLAY_NAME + " NOTNULL))";
+        //Set the before boundary for events to select bridges from.
+        Date cDate = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(cDate);
+        long nowTime = calendar.getTimeInMillis();
 
         return new CursorLoader(getActivity(), baseUri,
                 EVENTS_SUMMARY_PROJECTION,
-                "calendar_id=" + mCalendarId, null,
-                CalendarContract.Events.TITLE + " COLLATE LOCALIZED ASC");
+                "calendar_id=" + mCalendarId + " AND dtstart >=" + nowTime, null,
+                CalendarContract.Events.DTSTART + " COLLATE LOCALIZED ASC");
 
     }
 
@@ -163,17 +202,41 @@ public class EventFragment extends ListFragment
 
     @Override
     public boolean onClose() {
-        return false;
+
+        if (!TextUtils.isEmpty(mSearchView.getQuery())) {
+            mSearchView.setQuery(null, true);
+        }
+
+        return true;
     }
 
     @Override
-    public boolean onQueryTextSubmit(String s) {
-        return false;
+    public boolean onQueryTextSubmit(String query) {
+        return true;
     }
 
     @Override
-    public boolean onQueryTextChange(String s) {
-        return false;
+    public boolean onQueryTextChange(String newText) {
+
+        String newFilter = !TextUtils.isEmpty(newText) ? newText : null;
+
+        /*if (mCurFilter == null && newFilter == null) {
+            return true;
+        }
+
+        if (mCurFilter != null && mCurFilter.equals(newFilter)) {
+            return true;
+        }
+
+        mCurFilter = newFilter;
+        getLoaderManager().restartLoader(0, null, this);*/
+
+
+        filterString = newFilter;
+        mAdapter.getFilter().filter(filterString);
+        mAdapter.notifyDataSetChanged();
+        return true;
+
     }
 
 
