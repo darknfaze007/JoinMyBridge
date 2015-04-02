@@ -117,31 +117,69 @@ public class EventFragment extends ListFragment
         String delimiters = "[ ,x#*]+";
         String[] bridgeComponents = eventLocation.split(delimiters);
         int components = bridgeComponents.length;
+        Log.d(TAG, "bridge components #" + components);
 
         Intent i = new Intent(getActivity(), BridgeActivity.class);
 
         i.putExtra(BridgeFragment.EXTRA_BRIDGE_NAME, eventName);
 
+        int finalLoop = 0;
+
+        for (int loop = 0; loop < components; loop++) {
+            if (!Character.isDigit(bridgeComponents[loop].charAt(0))){
+                continue;
+            }
+            else{
+                finalLoop = loop;
+                break;
+            }
+        }
+
+        Log.d(TAG, "position of first number " + finalLoop);
+
         switch (components) {
             case 1:
                 Log.d(TAG, bridgeComponents[0]);
-                i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[0]);
+                i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[finalLoop]);
                 break;
             case 2:
                 Log.d(TAG, bridgeComponents[0]);
                 Log.d(TAG, bridgeComponents[1]);
-                i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[0]);
-                i.putExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE, bridgeComponents[1]);
+                i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[finalLoop]);
+                i.putExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE, bridgeComponents[finalLoop+1]);
                 break;
             case 3:
+                Log.d(TAG, "Case 3");
                 Log.d(TAG, bridgeComponents[0]);
                 Log.d(TAG, bridgeComponents[1]);
                 Log.d(TAG, bridgeComponents[2]);
-                i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[0]);
-                i.putExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE, bridgeComponents[1]);
-                i.putExtra(BridgeFragment.EXTRA_HOST_CODE, bridgeComponents[2]);
+                i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[finalLoop]);
+                i.putExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE, bridgeComponents[finalLoop+1]);
+                i.putExtra(BridgeFragment.EXTRA_HOST_CODE, bridgeComponents[finalLoop+2]);
                 break;
             default:
+                Log.d(TAG, "Case default");
+                Log.d(TAG, bridgeComponents[0]);
+                Log.d(TAG, bridgeComponents[1]);
+                Log.d(TAG, bridgeComponents[2]);
+                Log.d(TAG, bridgeComponents[finalLoop]);
+                //Log.d(TAG, bridgeComponents[finalLoop+1]);
+                //Log.d(TAG, bridgeComponents[finalLoop+2]);
+
+
+
+                if (finalLoop < components) {
+                    i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[finalLoop]);
+                }
+
+                if (finalLoop + 1 < components && Character.isDigit(bridgeComponents[finalLoop+1].charAt(0))) {
+                    i.putExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE, bridgeComponents[finalLoop+1]);
+                }
+
+                if (finalLoop + 2 < components && Character.isDigit(bridgeComponents[finalLoop+2].charAt(0))) {
+                   i.putExtra(BridgeFragment.EXTRA_HOST_CODE, bridgeComponents[finalLoop+2]);
+                }
+
                 break;
         }
         startActivityForResult(i, 0);
