@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.SearchView;
@@ -73,6 +74,20 @@ public class EventFragment extends ListFragment
         getLoaderManager().initLoader(0, null, this);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (NavUtils.getParentActivityName(getActivity()) != null) {
+                    NavUtils.navigateUpFromSameTask(getActivity());
+                }
+                return true;
+            default:
+                return true;
+
+        }
+    }
+
     public static class MySearchView extends SearchView {
         public MySearchView(Context context) {
             super(context);
@@ -108,6 +123,10 @@ public class EventFragment extends ListFragment
         String eventId = listItemCursor.getString(listItemCursor.getColumnIndex(ID_COLUMN));
         String eventName = listItemCursor.getString(listItemCursor.getColumnIndex(TITLE_COLUMN));
         String eventLocation = listItemCursor.getString(listItemCursor.getColumnIndex(LOCATION_COLUMN));
+
+        if (eventName.length() > BridgeFragment.MAX_NAME_LENGTH){
+            eventName = eventName.substring(0, BridgeFragment.MAX_NAME_LENGTH);
+        }
 
         Log.d(TAG, "Event ID " + eventId);
         Log.d(TAG, "Event Title" + eventName);
@@ -159,27 +178,19 @@ public class EventFragment extends ListFragment
                 break;
             default:
                 Log.d(TAG, "Case default");
-                Log.d(TAG, bridgeComponents[0]);
-                Log.d(TAG, bridgeComponents[1]);
-                Log.d(TAG, bridgeComponents[2]);
-                Log.d(TAG, bridgeComponents[finalLoop]);
-                //Log.d(TAG, bridgeComponents[finalLoop+1]);
-                //Log.d(TAG, bridgeComponents[finalLoop+2]);
-
-
 
                 if (finalLoop < components) {
+                    Log.d(TAG, bridgeComponents[finalLoop]);
                     i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[finalLoop]);
                 }
-
                 if (finalLoop + 1 < components && Character.isDigit(bridgeComponents[finalLoop+1].charAt(0))) {
+                    Log.d(TAG, bridgeComponents[finalLoop+1]);
                     i.putExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE, bridgeComponents[finalLoop+1]);
                 }
-
                 if (finalLoop + 2 < components && Character.isDigit(bridgeComponents[finalLoop+2].charAt(0))) {
-                   i.putExtra(BridgeFragment.EXTRA_HOST_CODE, bridgeComponents[finalLoop+2]);
+                    Log.d(TAG, bridgeComponents[finalLoop+2]);
+                    i.putExtra(BridgeFragment.EXTRA_HOST_CODE, bridgeComponents[finalLoop+2]);
                 }
-
                 break;
         }
         startActivityForResult(i, 0);

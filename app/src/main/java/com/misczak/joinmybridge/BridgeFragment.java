@@ -42,6 +42,7 @@ public class BridgeFragment extends DialogFragment {
 
     private static final String DEFAULT_TONE = "#";
     private static final int DEFAULT_PAUSE = 2;
+    static final int MAX_NAME_LENGTH = 20;
     static final String DEFAULT_ORDER = "Participant Code First";
     private static final int REQUEST_WARNING = 0;
     private static final String DIALOG_WARNING= "warning";
@@ -59,8 +60,12 @@ public class BridgeFragment extends DialogFragment {
         if (mBridgeId != null) {
             mBridge = PhoneBook.get(getActivity()).getBridge(mBridgeId);
 
-
             mBridgeNameString = mBridge.getBridgeName();
+            if (mBridgeNameString.length() > MAX_NAME_LENGTH) {
+                mBridgeNameString = mBridgeNameString.substring(0,MAX_NAME_LENGTH);
+            }
+
+
             mBridgeNumberString = mBridge.getBridgeNumber();
             mHostCodeString = mBridge.getHostCode();
             mParticipantCodeString = mBridge.getParticipantCode();
@@ -108,7 +113,13 @@ public class BridgeFragment extends DialogFragment {
         if (mBridgeId != null && !mBridge.getBridgeName().equals(DEFAULT_FIELD)) {
             mBridgeName.setText(mBridge.getBridgeName());
         } else if (getArguments().getSerializable(EXTRA_BRIDGE_NAME) != null) {
+
             mBridgeNameString = (getArguments().getSerializable(EXTRA_BRIDGE_NAME)).toString();
+
+            if (mBridgeNameString.length() > MAX_NAME_LENGTH) {
+                mBridgeNameString = mBridgeNameString.substring(0,MAX_NAME_LENGTH);
+            }
+
             mBridgeName.setText(mBridgeNameString);
         }
 

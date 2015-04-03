@@ -33,11 +33,11 @@
             android:parentActivityName="com.misczak.joinmybridge.PhoneBookActivity">
         </activity>
         <activity android:name=".CalendarActivity"
-            android:label="Join My Bridge"
+            android:label="Calendars"
             android:parentActivityName="com.misczak.joinmybridge.PhoneBookActivity">
         </activity>
         <activity android:name=".EventActivity"
-            android:label="Join My Bridge"
+            android:label="Events"
             android:parentActivityName="com.misczak.joinmybridge.CalendarActivity">
             </activity>
     </application>
