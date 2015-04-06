@@ -12,6 +12,8 @@ import com.melnykov.fab.FloatingActionButton;
  */
 public class PhoneBookActivity extends SingleFragmentActivity {
 
+    private static final int REQUEST_NEW = 2;
+
     @Override
     protected Fragment createFragment() {
         return new PhoneBookFragment();
@@ -23,7 +25,7 @@ public class PhoneBookActivity extends SingleFragmentActivity {
         super.onCreate(savedInstanceState);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener(){
+        fab.setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -31,12 +33,12 @@ public class PhoneBookActivity extends SingleFragmentActivity {
                 //PhoneBook.get(getApplicationContext()).addBridge(bridge);
                 Intent i = new Intent(getApplicationContext(), BridgeActivity.class);
                 //i.putExtra(BridgeFragment.EXTRA_BRIDGE_ID, bridge.getBridgeId());
-                startActivityForResult(i, 0);
+                startActivityForResult(i, REQUEST_NEW);
             }
         });
 
 
-
     }
+
 
 }

@@ -27,12 +27,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import android.widget.Button;
 import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
 import com.nhaarman.listviewanimations.itemmanipulation.dragdrop.OnItemMovedListener;
@@ -70,6 +70,7 @@ public class PhoneBookFragment extends ListFragment {
     private MenuItem searchItem;
     private String filterString;
     private DynamicListView listView;
+    private SimpleSwipeUndoAdapter swipeUndoAdapter;
     private AlphaInAnimationAdapter animationAdapter;
     private boolean customDialer;
     private String pauseTone;
@@ -101,15 +102,8 @@ public class PhoneBookFragment extends ListFragment {
         listView.addHeaderView(new View(getActivity()));
         listView.addFooterView(new View(getActivity()));
 
-        adapter = new BridgeAdapter(mBridgeList);
 
-        //TimedUndoAdapter timedUndoAdapter = new TimedUndoAdapter(adapter, getActivity(), new MyOnDismissCallback(adapter));
-        SimpleSwipeUndoAdapter swipeUndoAdapter = new SimpleSwipeUndoAdapter(adapter, getActivity(), new MyOnDismissCallback(adapter));
-        //animationAdapter = new AlphaInAnimationAdapter(timedUndoAdapter);
-        animationAdapter = new AlphaInAnimationAdapter(swipeUndoAdapter);
-        animationAdapter.setAbsListView(listView);
-        listView.setAdapter(animationAdapter);
-        listView.enableSimpleSwipeUndo();
+        buildAdapter(mBridgeList);
 
         /*
         listView.enableDragAndDrop();
@@ -117,6 +111,18 @@ public class PhoneBookFragment extends ListFragment {
         listView.setOnItemMovedListener(new MyOnItemMovedListener(adapter));
         listView.setOnItemLongClickListener(new MyOnItemLongClickListener(listView));
         */
+
+    }
+
+    private void buildAdapter(ArrayList<Bridge> bridgeList) {
+
+        adapter = new BridgeAdapter(bridgeList);
+        swipeUndoAdapter = new SimpleSwipeUndoAdapter(adapter, getActivity(), new MyOnDismissCallback(adapter));
+        animationAdapter = new AlphaInAnimationAdapter(swipeUndoAdapter);
+        animationAdapter.setAbsListView(listView);
+        listView.setAdapter(animationAdapter);
+        listView.enableSimpleSwipeUndo();
+        adapter.notifyDataSetChanged();
 
     }
 
@@ -169,8 +175,9 @@ public class PhoneBookFragment extends ListFragment {
 
     public void onResume() {
         super.onResume();
+        buildAdapter(mBridgeList);
+
         Log.d(TAG, "PhoneBook onResume");
-        adapter.notifyDataSetChanged();
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         customDialer = preferences.getBoolean(PREFERENCE_DIALER, false);
@@ -181,6 +188,7 @@ public class PhoneBookFragment extends ListFragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+
         inflater.inflate(R.menu.fragment_phonebook, menu);
 
         searchItem = menu.findItem(R.id.menu_item_search);
@@ -193,6 +201,7 @@ public class PhoneBookFragment extends ListFragment {
         searchView.setSearchableInfo(searchInfo);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             public boolean onQueryTextSubmit(String s) {
                 return false;
@@ -200,9 +209,19 @@ public class PhoneBookFragment extends ListFragment {
 
             @Override
             public boolean onQueryTextChange(String s) {
+
                 filterString = s;
                 adapter.getFilter().filter(s);
                 return true;
+            }
+        });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+
+            @Override
+            public boolean onClose() {
+                adapter.notifyDataSetChanged();
+                return false;
             }
         });
 
@@ -276,6 +295,8 @@ public class PhoneBookFragment extends ListFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        Log.d(TAG, "onActivityResult");
+        listView.invalidateViews();
 
         UUID bridgeId;
 
@@ -302,7 +323,7 @@ public class PhoneBookFragment extends ListFragment {
             Uri contactUri = data.getData();
 
             String[] queryFields = {ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
-                                    ContactsContract.CommonDataKinds.Phone.NUMBER};
+                    ContactsContract.CommonDataKinds.Phone.NUMBER};
 
             Cursor c = getActivity().getContentResolver()
                     .query(contactUri, queryFields, null, null, null);
@@ -377,11 +398,15 @@ public class PhoneBookFragment extends ListFragment {
         mBridgeList.remove(b);
         adapter.remove(b);
         adapter.notifyDataSetChanged();
-
+        animationAdapter.notifyDataSetChanged();
 
         //Will remove bridge that is being deleted from search filter view, if active
         if (searchView.isShown()) {
+            Log.d(TAG, "searchView shown");
             adapter.getFilter().filter(filterString);
+        } else {
+            Log.d(TAG, "searchView NOT shown");
+            adapter.getFilter().filter("");
         }
 
         PhoneBook.get(getActivity()).savePhoneBook();
@@ -424,18 +449,18 @@ public class PhoneBookFragment extends ListFragment {
         } else if (!bridgeExtra.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)
                 && bridgeExtra.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)) {
 
-                    numberExtra = bridgeExtra.getBridgeNumber()
-                        + pauseTone
-                        + bridgeExtra.getParticipantCode()
-                        + bridgeExtra.getFirstTone();
+            numberExtra = bridgeExtra.getBridgeNumber()
+                    + pauseTone
+                    + bridgeExtra.getParticipantCode()
+                    + bridgeExtra.getFirstTone();
 
         } else if (bridgeExtra.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)
                 && !bridgeExtra.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)) {
 
-                    numberExtra = bridgeExtra.getBridgeNumber()
-                        + pauseTone
-                        + bridgeExtra.getHostCode()
-                        + bridgeExtra.getSecondTone();
+            numberExtra = bridgeExtra.getBridgeNumber()
+                    + pauseTone
+                    + bridgeExtra.getHostCode()
+                    + bridgeExtra.getSecondTone();
 
         }
 
@@ -474,45 +499,51 @@ public class PhoneBookFragment extends ListFragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
 
+            ViewHolder holder = null;
+
             if (convertView == null) {
                 convertView = getActivity().getLayoutInflater()
-                        .inflate(R.layout.list_item_bridge4, null);
+                        .inflate(R.layout.list_item_bridge, null);
+                holder = new ViewHolder();
+
+                holder.bridgeName = (TextView)convertView.findViewById(R.id.bridge_card_name);
+                holder.bridgeNumber = (TextView)convertView.findViewById(R.id.bridge_card_number);
+                holder.bridgeParticipant = (TextView)convertView.findViewById(R.id.bridge_card_participantCode);
+                holder.bridgeHost = (TextView)convertView.findViewById(R.id.bridge_card_hostCode);
+                holder.bridgeOrder = (TextView)convertView.findViewById(R.id.bridge_call_order);
+                holder.callButton = (Button)convertView.findViewById(R.id.bridge_card_callButton);
+                holder.shareButton = (Button)convertView.findViewById(R.id.bridge_card_shareButton);
+                holder.overFlow = (ImageView)convertView.findViewById(R.id.bridge_card_overflow);
+
+                convertView.setTag(holder);
+            } else {
+                holder = (ViewHolder)convertView.getTag();
             }
 
             final Bridge b = getItem(position);
 
-            TextView bridgeNameView = (TextView)convertView.findViewById(R.id.bridge_card_name);
-            bridgeNameView.setText(b.getBridgeName());
+            holder.bridgeName.setText(b.getBridgeName());
 
-            TextView bridgeNumberView = (TextView)convertView.findViewById(R.id.bridge_card_number);
-            bridgeNumberView.setText("Bridge Number: " + b.getBridgeNumber());
+            holder.bridgeNumber.setText("Bridge Number: " + b.getBridgeNumber());
 
-            TextView bridgeHostCodeView = (TextView)convertView.findViewById(R.id.bridge_card_hostCode);
             if (!b.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)) {
-                bridgeHostCodeView.setText("Host Code: " + b.getHostCode() + b.getSecondTone());
+                holder.bridgeHost.setText("Host Code: " + b.getHostCode() + b.getSecondTone());
             }
             else {
-                bridgeHostCodeView.setText("Host Code: " + b.getHostCode());
+                holder.bridgeHost.setText("Host Code: " + b.getHostCode());
             }
 
-
-            TextView bridgeParticipantCodeView = (TextView)convertView.findViewById(R.id.bridge_card_participantCode);
 
             if (!b.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)) {
-                bridgeParticipantCodeView.setText("Participant Code: " + b.getParticipantCode() + b.getFirstTone());
+                holder.bridgeParticipant.setText("Participant Code: " + b.getParticipantCode() + b.getFirstTone());
             }
             else {
-                bridgeParticipantCodeView.setText("Participant Code: " + b.getParticipantCode());
+                holder.bridgeParticipant.setText("Participant Code: " + b.getParticipantCode());
             }
 
+            holder.bridgeOrder.setText("Code Order: " + b.getCallOrder());
 
-
-            TextView bridgeCallOrder = (TextView)convertView.findViewById(R.id.bridge_call_order);
-            bridgeCallOrder.setText("Code Order: " +b.getCallOrder());
-
-            ImageView cardOverFlowMenu = (ImageView)convertView.findViewById(R.id.bridge_card_overflow);
-
-            cardOverFlowMenu.setOnClickListener(new View.OnClickListener() {
+            holder.overFlow.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
@@ -529,8 +560,7 @@ public class PhoneBookFragment extends ListFragment {
             });
 
 
-            Button callButton = (Button)convertView.findViewById(R.id.bridge_card_callButton);
-            callButton.setOnClickListener(new View.OnClickListener() {
+            holder.callButton.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
 
                     if (b.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)
@@ -552,15 +582,18 @@ public class PhoneBookFragment extends ListFragment {
                 }
             });
 
-            Button shareButton = (Button)convertView.findViewById(R.id.bridge_card_shareButton);
-            shareButton.setOnClickListener(new View.OnClickListener(){
+            holder.shareButton.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View v) {
                     Intent i = new Intent(Intent.ACTION_SEND);
                     i.setType(SHARE_TEXT_TYPE);
                     i.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject));
 
                     if (!b.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)){
-                        i.putExtra(Intent.EXTRA_TEXT, "Dial into my bridge at: " + b.getBridgeNumber() + " \n Participant Code: " + b.getParticipantCode() + b.getFirstTone());
+                        i.putExtra(Intent.EXTRA_TEXT, "Dial into my bridge at: "
+                                    + b.getBridgeNumber()
+                                    + " \nParticipant Code: "
+                                    + b.getParticipantCode()
+                                    + b.getFirstTone().substring(0,1));
                     }
                     else {
                         i.putExtra(Intent.EXTRA_TEXT, "Dial into my bridge at: " + b.getBridgeNumber());
@@ -598,6 +631,12 @@ public class PhoneBookFragment extends ListFragment {
             return view.findViewById(R.id.undo_row_undobutton);
         }
 
+    }
+
+    static class ViewHolder {
+        TextView bridgeName, bridgeNumber, bridgeParticipant, bridgeHost, bridgeOrder;
+        ImageView overFlow;
+        Button callButton, shareButton;
     }
 
 }

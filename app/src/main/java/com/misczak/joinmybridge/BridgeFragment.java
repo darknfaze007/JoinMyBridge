@@ -107,7 +107,7 @@ public class BridgeFragment extends DialogFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_bridge3, parent, false);
+        View v = inflater.inflate(R.layout.fragment_bridge, parent, false);
 
         mBridgeName = (EditText)v.findViewById(R.id.bridge_name);
         if (mBridgeId != null && !mBridge.getBridgeName().equals(DEFAULT_FIELD)) {
@@ -277,6 +277,8 @@ public class BridgeFragment extends DialogFragment {
         if (mBridgeId != null && (Integer)mBridge.getDialingPause() != null) {
             mDialingPause.setValue(mBridge.getDialingPause());
             mDialingPauseNumber = mBridge.getDialingPause();
+        } else {
+            mDialingPause.setValue(DEFAULT_PAUSE);
         }
         mDialingPause.setOnValueChangedListener(new Slider.OnValueChangedListener() {
             @Override

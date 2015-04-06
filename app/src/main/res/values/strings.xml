@@ -73,8 +73,14 @@
     <string name="uri_save_button">Dial In and Save Bridge</string>
 
     <string name="behavior_settings">Behavior</string>
+    <string name="info_settings">Info</string>
     <string name="pref_dialer_title">Use Custom Dialer</string>
-    <string name="pref_dialer_summary">"Provides a choice of which dialer to use, such as Hangouts or Skype"</string>
+    <string name="pref_dialer_summary">Adds the bridge to a dialer app selected by the user.</string>
+    <string name="pref_about_title">About</string>
+    <string name="pref_about_summary">About the app</string>
+    <string name="pref_about_dialog_title">Join My Bridge</string>
+    <string name="pref_about_dialog_message">Test message</string>
+    <string name="pref_about_dialog_positive">OK</string>
 
 
 </resources>

@@ -24,7 +24,7 @@ public class SettingsActivity extends ActionBarActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
-            toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
+            toolbar.setNavigationIcon(R.drawable.ic_arrow_back_white_24dp);
         }
 
         getFragmentManager().beginTransaction().replace(R.id.fragment_container, new SettingsFragment()).commit();
