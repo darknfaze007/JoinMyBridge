@@ -224,7 +224,7 @@ public class EventFragment extends ListFragment
 
         return new CursorLoader(getActivity(), baseUri,
                 EVENTS_SUMMARY_PROJECTION,
-                "calendar_id=" + mCalendarId + " AND dtstart >=" + nowTime, null,
+                "calendar_id=" + mCalendarId + " AND (dtstart >=" + nowTime + " OR rdate >=" + nowTime + ")", null,
                 CalendarContract.Events.DTSTART + " COLLATE LOCALIZED ASC");
 
     }
