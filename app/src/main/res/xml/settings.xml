@@ -11,6 +11,16 @@
             android:summary="@string/pref_dialer_summary"
             android:defaultValue="false" />
 
+        <EditTextPreference
+            android:id="@+id/pref_pause_length"
+            android:key="pref_pause"
+            android:title="@string/pref_pause_title"
+            android:summary="@string/pref_pause_summary"
+            android:defaultValue="2"
+            android:inputType="number" />
+
         </PreferenceCategory>
+
+
 
 </PreferenceScreen>

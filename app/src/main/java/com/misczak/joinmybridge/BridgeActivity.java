@@ -22,6 +22,7 @@ public class BridgeActivity extends SingleFragmentActivity {
         String bridgeNumber = (String)getIntent().getSerializableExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER);
         String participantCode = (String)getIntent().getSerializableExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE);
         String hostCode = (String)getIntent().getSerializableExtra(BridgeFragment.EXTRA_HOST_CODE);
+        //int pause = (int)getIntent().getSerializableExtra(BridgeFragment.EXTRA_PAUSE);
 
         return BridgeFragment.newInstance(bridgeId, bridgeName, bridgeNumber, participantCode, hostCode);
     }

@@ -57,10 +57,13 @@ public class PhoneBookFragment extends ListFragment {
     private static final String EXTRA_HOST_CODE = "hostCode";
     private static final String SHARE_TEXT_TYPE = "text/plain";
     static final String PREFERENCE_DIALER = "pref_dialer";
+    static final String PREFERENCE_PAUSE = "pref_pause";
 
     private static final int REQUEST_CALL = 0;
     private static final int REQUEST_CONTACT = 1;
     private final int DIVIDER_HEIGHT = 10;
+    private static final int NULL_PAUSE = 0;
+    private static final int MAX_PAUSE = 12;
 
     private String phoneNumber;
     private ArrayList<Bridge> mBridgeList;
@@ -73,6 +76,7 @@ public class PhoneBookFragment extends ListFragment {
     private SimpleSwipeUndoAdapter swipeUndoAdapter;
     private AlphaInAnimationAdapter animationAdapter;
     private boolean customDialer;
+    private String customPause;
     private String pauseTone;
     private int pauseLength;
 
@@ -180,8 +184,30 @@ public class PhoneBookFragment extends ListFragment {
         Log.d(TAG, "PhoneBook onResume");
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        SharedPreferences.Editor editor = preferences.edit();
         customDialer = preferences.getBoolean(PREFERENCE_DIALER, false);
+        customPause = preferences.getString(PREFERENCE_PAUSE, "");
+
+        if (!customPause.equals("")) {
+            int pause = Integer.parseInt(customPause);
+
+            if (pause <= MAX_PAUSE) {
+                BridgeFragment.DEFAULT_PAUSE = pause;
+            }
+            else{
+                BridgeFragment.DEFAULT_PAUSE = MAX_PAUSE;
+                editor.putString(PREFERENCE_PAUSE, MAX_PAUSE + "");
+                editor.commit();
+            }
+        }
+        else {
+            BridgeFragment.DEFAULT_PAUSE = NULL_PAUSE;
+            editor.putString(PREFERENCE_PAUSE, NULL_PAUSE + "");
+            editor.commit();
+        }
+
         Log.d(TAG, customDialer + "");
+        Log.d(TAG, BridgeFragment.DEFAULT_PAUSE + "");
 
     }
 

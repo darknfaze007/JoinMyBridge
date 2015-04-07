@@ -30,6 +30,7 @@ public class BridgeFragment extends DialogFragment {
     public static final String EXTRA_PARTICIPANT_CODE = "com.misczak.joinmybridge.participant_code";
     public static final String EXTRA_HOST_CODE = "com.misczak.joinmybridge.host_code";
     public static final String EXTRA_BRIDGE_NAME = "com.misczak.joinmybridge.bridge_name";
+    public static final String EXTRA_PAUSE = "com.misczak.joinmybridge.bridge_pause";
 
     private Bridge mBridge;
     private String mBridgeNameString, mBridgeNumberString, mParticipantCodeString, mHostCodeString,
@@ -41,13 +42,10 @@ public class BridgeFragment extends DialogFragment {
     private UUID mBridgeId;
 
     private static final String DEFAULT_TONE = "#";
-    private static final int DEFAULT_PAUSE = 2;
+    static int DEFAULT_PAUSE = 2;
     static final int MAX_NAME_LENGTH = 20;
     static final String DEFAULT_ORDER = "Participant Code First";
-    private static final int REQUEST_WARNING = 0;
-    private static final String DIALOG_WARNING= "warning";
     static final String DEFAULT_FIELD = "None";
-
     private static final String TAG = "BridgeFragment";
 
     @Override
@@ -69,6 +67,8 @@ public class BridgeFragment extends DialogFragment {
             mBridgeNumberString = mBridge.getBridgeNumber();
             mHostCodeString = mBridge.getHostCode();
             mParticipantCodeString = mBridge.getParticipantCode();
+
+
 
             getActivity().setTitle("Edit Bridge");
         }
@@ -275,11 +275,15 @@ public class BridgeFragment extends DialogFragment {
 
         mDialingPause = (Slider)v.findViewById(R.id.pauseSlider);
         if (mBridgeId != null && (Integer)mBridge.getDialingPause() != null) {
-            mDialingPause.setValue(mBridge.getDialingPause());
+            Log.d(TAG, "Pause passed null check" + mBridge.getDialingPause());
             mDialingPauseNumber = mBridge.getDialingPause();
+
         } else {
-            mDialingPause.setValue(DEFAULT_PAUSE);
+            Log.d(TAG, "Pause or bridge is null");
+            mDialingPauseNumber = DEFAULT_PAUSE;
+
         }
+        mDialingPause.setValue(mDialingPauseNumber);
         mDialingPause.setOnValueChangedListener(new Slider.OnValueChangedListener() {
             @Override
             public void onValueChanged(int i) {
@@ -298,6 +302,7 @@ public class BridgeFragment extends DialogFragment {
         args.putSerializable(EXTRA_BRIDGE_NUMBER, bridgeNumber);
         args.putSerializable(EXTRA_PARTICIPANT_CODE, participantCode);
         args.putSerializable(EXTRA_HOST_CODE, hostCode);
+        //args.putSerializable(EXTRA_PAUSE, pause);
 
         BridgeFragment fragment = new BridgeFragment();
         fragment.setArguments(args);
@@ -348,9 +353,11 @@ public class BridgeFragment extends DialogFragment {
             b.setParticipantCode(DEFAULT_FIELD);
 
         if ((Integer)mDialingPauseNumber != null) {
+            Log.d(TAG, "Setting Integer Pause Number" + mDialingPauseNumber);
             b.setDialingPause(mDialingPauseNumber);
         }
         else {
+            Log.d(TAG, "Setting Default Pause Number");
             b.setDialingPause(DEFAULT_PAUSE);
         }
 
