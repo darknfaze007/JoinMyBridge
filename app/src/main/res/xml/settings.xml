@@ -9,7 +9,7 @@
             android:key="pref_dialer"
             android:title="@string/pref_dialer_title"
             android:summary="@string/pref_dialer_summary"
-            android:defaultValue="false" />
+            android:defaultValue="true" />
 
         <EditTextPreference
             android:id="@+id/pref_pause_length"

@@ -21,9 +21,6 @@
 
     <string name="call_option_title">Call Options</string>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-
 
     <string name="empty_list">No Bridges Saved</string>
     <string name="deleted_bridge">Bridge Deleted</string>
@@ -31,26 +28,8 @@
 
     <string name="phonebook_title">PhoneBook</string>
 
-    <string name="bridgeNameLabel">Bridge Name</string>
-    <string name="bridgeNumberLabel">Bridge Number</string>
-
-    <string name="bridgeParticipantCodeLabel">Participant (PIN) Code</string>
+    <string name="bridgeParticipantCodeLabel">Participant Code</string>
     <string name="bridgeHostCodeLabel">Host Code</string>
-
-
-   <string name="bridgeFirstToneLabel">Participant Key</string>
-    <string name="bridgeSecondToneLabel">Host Key</string>
-
-    <string name="checkBoxHost">Use Host Code</string>
-    <string name="checkBoxPIN">Use PIN Code</string>
-    <string name="dialButton">Dial</string>
-    <string name="dialWithPINButton">Dial with PIN</string>
-    <string name="dialWithHostButton">Dial with PIN and Host Code</string>
-    <string name="next">Next</string>
-
-
-    <string name="drawer_open">Open</string>
-    <string name="drawer_close">Close</string>
 
 
     <string name="bridge_name_hint">Bridge Name</string>
@@ -74,8 +53,8 @@
 
     <string name="behavior_settings">Behavior</string>
     <string name="info_settings">Info</string>
-    <string name="pref_dialer_title">Use Custom Dialer</string>
-    <string name="pref_dialer_summary">Adds the bridge to a dialer app selected by the user.</string>
+    <string name="pref_dialer_title">Dial Automatically</string>
+    <string name="pref_dialer_summary">Places the call automatically once the dial in options are selected. Turn off to enable support for custom dialers.</string>
     <string name="pref_about_title">About</string>
     <string name="pref_about_summary">About the app</string>
     <string name="pref_pause_title">Default Pause</string>

@@ -77,7 +77,7 @@ public class CalendarFragment extends ListFragment
         Log.d("CalendarFragment", "Array: " + calendarInfo.toString());
 
         Intent eventIntent = new Intent(getActivity(), EventActivity.class);
-        eventIntent.putExtra("calendarId", id);
+        eventIntent.putExtra(EventFragment.CALENDAR_ID_EXTRA, id);
         startActivity(eventIntent);
 
     }

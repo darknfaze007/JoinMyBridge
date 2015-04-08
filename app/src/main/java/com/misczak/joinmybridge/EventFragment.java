@@ -36,6 +36,7 @@ public class EventFragment extends ListFragment
     private static final String TITLE_COLUMN = "title";
     private static final String LOCATION_COLUMN ="eventLocation";
     private static final String TAG = "EventFragment";
+    static final String CALENDAR_ID_EXTRA = "calendarId";
 
     SimpleCursorAdapter mAdapter;
 
@@ -50,7 +51,9 @@ public class EventFragment extends ListFragment
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCalendarId = (long)getArguments().getSerializable("calendarId");
+
+        //Store calendar that was selected on previous screen for use in event query
+        mCalendarId = (long)getArguments().getSerializable(CALENDAR_ID_EXTRA);
     }
 
     @Override
@@ -142,6 +145,7 @@ public class EventFragment extends ListFragment
 
         i.putExtra(BridgeFragment.EXTRA_BRIDGE_NAME, eventName);
 
+        //Variable will represent position of first number found in event's location field
         int finalLoop = 0;
 
         for (int loop = 0; loop < components; loop++) {
@@ -179,14 +183,19 @@ public class EventFragment extends ListFragment
             default:
                 Log.d(TAG, "Case default");
 
+                //Ensure a number exists somewhere in the location field before setting it as an extra
                 if (finalLoop < components) {
                     Log.d(TAG, bridgeComponents[finalLoop]);
                     i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[finalLoop]);
                 }
+
+                //Ensure a second set of numbers for the first code exists before setting it as an extra
                 if (finalLoop + 1 < components && Character.isDigit(bridgeComponents[finalLoop+1].charAt(0))) {
                     Log.d(TAG, bridgeComponents[finalLoop+1]);
                     i.putExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE, bridgeComponents[finalLoop+1]);
                 }
+
+                //Ensure a third set of numbers for the second code exists before setting it as an extra
                 if (finalLoop + 2 < components && Character.isDigit(bridgeComponents[finalLoop+2].charAt(0))) {
                     Log.d(TAG, bridgeComponents[finalLoop+2]);
                     i.putExtra(BridgeFragment.EXTRA_HOST_CODE, bridgeComponents[finalLoop+2]);
@@ -198,6 +207,7 @@ public class EventFragment extends ListFragment
     }
 
 
+    //List of columns to return when querying Event Provider
     static final String[] EVENTS_SUMMARY_PROJECTION = new String[] {
             CalendarContract.Events._ID,
             CalendarContract.Events.TITLE,

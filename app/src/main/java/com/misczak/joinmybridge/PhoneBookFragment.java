@@ -185,7 +185,7 @@ public class PhoneBookFragment extends ListFragment {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = preferences.edit();
-        customDialer = preferences.getBoolean(PREFERENCE_DIALER, false);
+        customDialer = preferences.getBoolean(PREFERENCE_DIALER, true);
         customPause = preferences.getString(PREFERENCE_PAUSE, "");
 
         if (!customPause.equals("")) {
@@ -407,7 +407,7 @@ public class PhoneBookFragment extends ListFragment {
 
         Intent dial;
 
-        if(customDialer == false) {
+        if(customDialer == true) {
             dial = new Intent(Intent.ACTION_CALL, Uri.parse(number));
         }
         else {
