@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.gc.materialdesign.views.Slider;
 
@@ -39,6 +40,7 @@ public class BridgeFragment extends DialogFragment {
     private EditText mBridgeName, mBridgeNumber, mParticipantCode, mHostCode;
     private Spinner mFirstTone, mSecondTone, mCallOrder;
     private Slider mDialingPause;
+    private TextView mPauseLabel;
     private UUID mBridgeId;
 
     private static final String DEFAULT_TONE = "#";
@@ -274,20 +276,26 @@ public class BridgeFragment extends DialogFragment {
 
 
         mDialingPause = (Slider)v.findViewById(R.id.pauseSlider);
+        mPauseLabel = (TextView)v.findViewById(R.id.pauseSliderLabel);
         if (mBridgeId != null && (Integer)mBridge.getDialingPause() != null) {
             Log.d(TAG, "Pause passed null check" + mBridge.getDialingPause());
             mDialingPauseNumber = mBridge.getDialingPause();
+
 
         } else {
             Log.d(TAG, "Pause or bridge is null");
             mDialingPauseNumber = DEFAULT_PAUSE;
 
         }
+
         mDialingPause.setValue(mDialingPauseNumber);
+        mPauseLabel.setText("Dialing Pause (" + mDialingPauseNumber + " seconds)");
+
         mDialingPause.setOnValueChangedListener(new Slider.OnValueChangedListener() {
             @Override
             public void onValueChanged(int i) {
                 mDialingPauseNumber = i;
+                mPauseLabel.setText("Dialing Pause (" + mDialingPauseNumber + " seconds)");
             }
         });
 
