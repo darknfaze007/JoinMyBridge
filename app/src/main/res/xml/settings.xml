@@ -21,6 +21,24 @@
 
         </PreferenceCategory>
 
+    <PreferenceCategory
+        android:title="@string/info_settings"
+        android:key="pref_key_info_settings">
+
+        <com.misczak.joinmybridge.AboutDialog
+            android:title="@string/pref_about_title"
+            android:summary="@string/pref_about_summary"/>
+
+        <Preference
+            android:title="@string/pref_contact_title"
+            android:key="pref_key_contact_settings"
+            android:summary="@string/pref_contact_summary">
+            <intent android:action="android.intent.action.VIEW"
+                android:data="@string/pref_contact_uri"/>
+        </Preference>
+
+    </PreferenceCategory>
+
 
 
 </PreferenceScreen>

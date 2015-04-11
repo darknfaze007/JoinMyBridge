@@ -21,7 +21,6 @@
 
     <string name="call_option_title">Call Options</string>
 
-
     <string name="empty_list">No Bridges Saved</string>
     <string name="deleted_bridge">Bridge Deleted</string>
 
@@ -56,13 +55,26 @@
     <string name="pref_dialer_title">Dial Automatically</string>
     <string name="pref_dialer_summary">Places the call automatically once the dial in options are selected. Turn off to enable support for custom dialers.</string>
     <string name="pref_about_title">About</string>
-    <string name="pref_about_summary">About the app</string>
+    <string name="pref_about_summary">About the app and its design.</string>
     <string name="pref_pause_title">Default Pause</string>
     <string name="pref_pause_summary">Default pause length (in seconds) between codes when dialing,
         up to 12 seconds. This setting can be overriden when creating or modifying a bridge.</string>
     <string name="pref_about_dialog_title">Join My Bridge</string>
     <string name="pref_about_dialog_message">Test message</string>
     <string name="pref_about_dialog_positive">OK</string>
+    <string name="about_dialog_title">Join My Bridge v1.0</string>
+    <string name="about_dialog_description">A conference call line management tool for Android 4.1 and above.</string>
+    <string name="about_dialog_author">Created by <b>John Misczak</b>.</string>
+    <string name="about_dialog_thanks">Join My Bridge makes use of the following libraries:\n
+        \n<a href="https://github.com/makovkastar/FloatingActionButton">FloatingActionButton</a>
+        \n<a href="https://github.com/nhaarman/ListViewAnimations">ListViewAnimations</a>
+        \n<a href="https://github.com/rengwuxian/MaterialEditText">MaterialEditText</a>
+        \n<a href="https://github.com/navasmdc/MaterialDesignLibrary">MaterialDesignLibrary</a></string>
+    <string name="pref_contact_title">Send Feedback</string>
+    <string name="pref_contact_summary">Send the developer questions, feature requests, and/or suggestions.</string>
+    <string name="pref_contact_uri">mailto:joinmybridge@gmail.com?subject=Join My Bridge Feedback</string>
+
+    <string name="about_dialog_okay">OK</string>
 
 
 </resources>
