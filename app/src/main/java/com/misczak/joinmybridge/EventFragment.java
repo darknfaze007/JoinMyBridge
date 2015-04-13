@@ -134,7 +134,7 @@ public class EventFragment extends ListFragment
 
         String eventId = listItemCursor.getString(listItemCursor.getColumnIndex(ID_COLUMN));
         String eventName = listItemCursor.getString(listItemCursor.getColumnIndex(TITLE_COLUMN));
-        String eventLocation = listItemCursor.getString(listItemCursor.getColumnIndex(LOCATION_COLUMN));
+        String eventLocation = listItemCursor.getString(listItemCursor.getColumnIndex(LOCATION_COLUMN)).trim();
 
         if (eventName.length() > BridgeFragment.MAX_NAME_LENGTH){
             eventName = eventName.substring(0, BridgeFragment.MAX_NAME_LENGTH);
@@ -158,6 +158,7 @@ public class EventFragment extends ListFragment
         int finalLoop = 0;
 
         for (int loop = 0; loop < components; loop++) {
+
             if (!Character.isDigit(bridgeComponents[loop].charAt(0))){
                 continue;
             }
