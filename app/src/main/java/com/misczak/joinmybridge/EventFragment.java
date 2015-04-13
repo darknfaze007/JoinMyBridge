@@ -1,3 +1,19 @@
+/*
+ * Copyright 2015 John Misczak
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.misczak.joinmybridge;
 
 import android.content.Context;
@@ -24,9 +40,7 @@ import android.widget.SimpleCursorAdapter;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- * Created by misczak on 3/30/15.
- */
+
 public class EventFragment extends ListFragment
         implements android.support.v7.widget.SearchView.OnQueryTextListener,
         android.support.v7.widget.SearchView.OnCloseListener,
@@ -39,13 +53,8 @@ public class EventFragment extends ListFragment
     static final String CALENDAR_ID_EXTRA = "calendarId";
 
     SimpleCursorAdapter mAdapter;
-
     SearchView mSearchView;
-
-    String mCurFilter;
-
     long mCalendarId;
-
     private String filterString;
 
     @Override
@@ -218,13 +227,8 @@ public class EventFragment extends ListFragment
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Uri baseUri;
-        /*if (mCurFilter != null) {
-            baseUri = Uri.withAppendedPath(CalendarContract.Events.CONTENT_URI,
-                    Uri.encode(mCurFilter));
-        } else {*/
-            baseUri = CalendarContract.Events.CONTENT_URI;
-        //}
+        Uri baseUri = CalendarContract.Events.CONTENT_URI;
+
 
         //Set the before boundary for events to select bridges from.
         Date cDate = new Date();
@@ -278,18 +282,6 @@ public class EventFragment extends ListFragment
     public boolean onQueryTextChange(String newText) {
 
         String newFilter = !TextUtils.isEmpty(newText) ? newText : null;
-
-        /*if (mCurFilter == null && newFilter == null) {
-            return true;
-        }
-
-        if (mCurFilter != null && mCurFilter.equals(newFilter)) {
-            return true;
-        }
-
-        mCurFilter = newFilter;
-        getLoaderManager().restartLoader(0, null, this);*/
-
 
         filterString = newFilter;
         mAdapter.getFilter().filter(filterString);

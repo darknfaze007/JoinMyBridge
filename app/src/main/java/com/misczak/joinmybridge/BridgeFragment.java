@@ -1,3 +1,19 @@
+/*
+ * Copyright 2015 John Misczak
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.misczak.joinmybridge;
 
 import android.os.Bundle;
@@ -21,9 +37,7 @@ import com.gc.materialdesign.views.Slider;
 
 import java.util.UUID;
 
-/**
- * Created by misczak on 3/3/15.
- */
+
 public class BridgeFragment extends DialogFragment {
 
     public static final String EXTRA_BRIDGE_ID = "com.misczak.joinmybridge.bridge_id";
@@ -212,7 +226,6 @@ public class BridgeFragment extends DialogFragment {
             }
 
             public void beforeTextChanged(CharSequence c, int start, int count, int after) {
-                //Left blank for now
             }
 
             public void afterTextChanged(Editable c) {
@@ -310,7 +323,6 @@ public class BridgeFragment extends DialogFragment {
         args.putSerializable(EXTRA_BRIDGE_NUMBER, bridgeNumber);
         args.putSerializable(EXTRA_PARTICIPANT_CODE, participantCode);
         args.putSerializable(EXTRA_HOST_CODE, hostCode);
-        //args.putSerializable(EXTRA_PAUSE, pause);
 
         BridgeFragment fragment = new BridgeFragment();
         fragment.setArguments(args);

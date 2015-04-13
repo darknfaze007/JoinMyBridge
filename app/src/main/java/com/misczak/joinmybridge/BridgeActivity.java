@@ -1,3 +1,19 @@
+/*
+ * Copyright 2015 John Misczak
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.misczak.joinmybridge;
 
 import android.os.Bundle;
@@ -12,8 +28,6 @@ import java.util.UUID;
 
 public class BridgeActivity extends SingleFragmentActivity {
 
-    //private Toolbar toolbar;
-
 
     @Override
     protected Fragment createFragment() {
@@ -22,7 +36,6 @@ public class BridgeActivity extends SingleFragmentActivity {
         String bridgeNumber = (String)getIntent().getSerializableExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER);
         String participantCode = (String)getIntent().getSerializableExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE);
         String hostCode = (String)getIntent().getSerializableExtra(BridgeFragment.EXTRA_HOST_CODE);
-        //int pause = (int)getIntent().getSerializableExtra(BridgeFragment.EXTRA_PAUSE);
 
         return BridgeFragment.newInstance(bridgeId, bridgeName, bridgeNumber, participantCode, hostCode);
     }
@@ -36,75 +49,12 @@ public class BridgeActivity extends SingleFragmentActivity {
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayShowHomeEnabled(true);
             toolbar.setNavigationIcon(R.drawable.ic_close_white_24dp);
-            //toolbar.setNavigationIcon(R.drawable.ic_settings_white_24dp);
         }
 
         FloatingActionButton fab = (FloatingActionButton)findViewById(R.id.fab);
         fab.setVisibility(View.INVISIBLE);
 
     }
-
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_fragment);
-
-        toolbar = (Toolbar) findViewById(R.id.app_bar);
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-    }
-
-        FragmentManager fm = getSupportFragmentManager();
-        Fragment bridgeFragment = fm.findFragmentById(R.id.fragment_container);
-
-        if (bridgeFragment == null){
-            bridgeFragment = new BridgeFragment();
-            fm.beginTransaction().add(R.id.fragment_container, bridgeFragment).commit();
-        }*/
-
-        /*NavigationDrawerFragment drawerFragment = (NavigationDrawerFragment)
-                fm.findFragmentById(R.id.fragment_navigation_drawer);
-        drawerFragment.setup(R.id.fragment_navigation_drawer, (DrawerLayout)findViewById(R.id.drawer_layout), toolbar);
-
-
-        if (findViewById(R.id.fragment_container) != null) {
-
-            if (savedInstanceState == null) {
-
-                PhoneBookFragment pbFragment = new PhoneBookFragment();
-
-                pbFragment.setArguments(getIntent().getExtras());
-
-                getSupportFragmentManager().beginTransaction()
-                    .add(R.id.fragment_container, pbFragment)
-                    .commit();
-            }
-        }
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
 
 }
 

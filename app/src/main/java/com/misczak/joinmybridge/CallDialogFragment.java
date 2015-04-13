@@ -1,3 +1,19 @@
+/*
+ * Copyright 2015 John Misczak
+ *
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ *
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ */
+
 package com.misczak.joinmybridge;
 
 import android.app.Activity;
@@ -12,11 +28,10 @@ import android.util.Log;
 import java.util.Arrays;
 import java.util.UUID;
 
-/**
- * Created by misczak on 3/8/15.
- */
+
 public class CallDialogFragment extends DialogFragment {
 
+    private static final String TAG = "CallDialogFragment";
     private static final String EXTRA_CALL_OPTIONS = "call_options";
     private static final String EXTRA_BRIDGE_ID = "bridge_id";
     private final boolean[] options = new boolean[2];
@@ -124,7 +139,7 @@ public class CallDialogFragment extends DialogFragment {
             return;
         }
 
-        Log.d("JOHNZZZ", "sendResult arr: " + Arrays.toString(options));
+        Log.d(TAG, "sendResult arr: " + Arrays.toString(options));
         Intent i = new Intent();
         i.putExtra(EXTRA_CALL_OPTIONS, options);
         i.putExtra(EXTRA_BRIDGE_ID, bridgeId);
