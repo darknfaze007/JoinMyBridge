@@ -46,7 +46,7 @@ public class EventActivity extends SingleFragmentActivity {
     @Override
     protected Fragment createFragment() {
 
-        long calendarId = (long) getIntent().getLongExtra("calendarId", -1);
+        long calendarId = getIntent().getLongExtra("calendarId", -1);
 
         return EventFragment.newInstance(calendarId);
     }

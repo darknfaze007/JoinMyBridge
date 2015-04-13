@@ -389,15 +389,5 @@ public class BridgeFragment extends DialogFragment {
 
     }
 
-    private boolean validateBridgeData() {
-        if (mBridgeNameString == null || mBridgeNumberString == null ||
-                mHostCodeString == null || mParticipantCodeString == null) {
-            return false;
-        }
-        else {
-            return true;
-        }
-    }
-
 
 }

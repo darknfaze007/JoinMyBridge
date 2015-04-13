@@ -135,13 +135,13 @@ public class Bridge {
     public JSONObject toJSON() throws JSONException {
         JSONObject json = new JSONObject();
         json.put(JSON_ID, mBridgeId.toString());
-        json.put(JSON_NAME, mBridgeName.toString());
-        json.put(JSON_NUMBER, mBridgeNumber.toString());
-        json.put(JSON_HOST, mHostCode.toString());
-        json.put(JSON_PARTICIPANT, mParticipantCode.toString());
-        json.put(JSON_FIRSTTONE, mFirstTone.toString());
-        json.put(JSON_SECONDTONE, mSecondTone.toString());
-        json.put(JSON_CALLORDER, mCallOrder.toString());
+        json.put(JSON_NAME, mBridgeName);
+        json.put(JSON_NUMBER, mBridgeNumber);
+        json.put(JSON_HOST, mHostCode);
+        json.put(JSON_PARTICIPANT, mParticipantCode);
+        json.put(JSON_FIRSTTONE, mFirstTone);
+        json.put(JSON_SECONDTONE, mSecondTone);
+        json.put(JSON_CALLORDER, mCallOrder);
         json.put(JSON_DIALINGPAUSE, mDialingPause);
 
         return json;

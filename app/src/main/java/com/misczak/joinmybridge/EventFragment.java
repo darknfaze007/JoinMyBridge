@@ -130,7 +130,7 @@ public class EventFragment extends ListFragment
     public void onListItemClick(ListView l, View v, int position, long id) {
         Log.d("EventFragment", "Item clicked: " + id);
 
-        Cursor listItemCursor = ((SimpleCursorAdapter)((ListView)l).getAdapter()).getCursor();
+        Cursor listItemCursor = ((SimpleCursorAdapter)l.getAdapter()).getCursor();
 
         String eventId = listItemCursor.getString(listItemCursor.getColumnIndex(ID_COLUMN));
         String eventName = listItemCursor.getString(listItemCursor.getColumnIndex(TITLE_COLUMN));

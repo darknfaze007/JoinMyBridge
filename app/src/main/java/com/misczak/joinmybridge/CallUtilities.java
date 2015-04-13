@@ -86,7 +86,7 @@ public class CallUtilities {
                 + mBridge.getBridgeNumber().trim()
                 + mFirstPauseTone
                 + mBridge.getParticipantCode().trim()
-                + encodeToneString(mBridge.getFirstTone().toString());
+                + encodeToneString(mBridge.getFirstTone());
 
     }
 
@@ -95,7 +95,7 @@ public class CallUtilities {
                 + mBridge.getBridgeNumber().trim()
                 + mFirstPauseTone
                 + mBridge.getHostCode().trim()
-                + encodeToneString(mBridge.getSecondTone().toString());
+                + encodeToneString(mBridge.getSecondTone());
     }
 
     private String getNumberWithBoth (UUID bridgeId) {
@@ -105,19 +105,19 @@ public class CallUtilities {
                     + mBridge.getBridgeNumber().trim()
                     + mFirstPauseTone
                     + mBridge.getHostCode().trim()
-                    + encodeToneString(mBridge.getSecondTone().toString())
+                    + encodeToneString(mBridge.getSecondTone())
                     + mSecondPauseTone
                     + mBridge.getParticipantCode().trim()
-                    + encodeToneString(mBridge.getFirstTone().toString());
+                    + encodeToneString(mBridge.getFirstTone());
         } else {
             return "tel:"
                     + mBridge.getBridgeNumber().trim()
                     + mFirstPauseTone
                     + mBridge.getParticipantCode().trim()
-                    + encodeToneString(mBridge.getFirstTone().toString())
+                    + encodeToneString(mBridge.getFirstTone())
                     + mSecondPauseTone
                     + mBridge.getHostCode().trim()
-                    + encodeToneString(mBridge.getSecondTone().toString());
+                    + encodeToneString(mBridge.getSecondTone());
         }
 
     }
