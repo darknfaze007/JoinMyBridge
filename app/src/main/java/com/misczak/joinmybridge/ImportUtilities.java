@@ -36,7 +36,9 @@ public class ImportUtilities {
 
         for (int component = 0; component < numberComponents.length; component++){
             if (!Character.isDigit(numberComponents[component].charAt(0))){
-                if (numberComponents[component].equals("#") || numberComponents[component].equals("*")) {
+                if (tonePosition < toneIndices.length && (numberComponents[component].equals("#") || numberComponents[component].equals("*"))) {
+                    Log.d(TAG, "Tone Length: " + toneIndices.length);
+                    Log.d(TAG, "Tone Position: " + tonePosition);
                     toneIndices[tonePosition] = numberComponents[component];
                     tonePosition++;
                     continue;
@@ -46,9 +48,12 @@ public class ImportUtilities {
                 }
             }
             else{
-                numberIndices[numberPosition] = numberComponents[component];
-                numberPosition++;
-                continue;
+
+                if (numberPosition < numberIndices.length) {
+                    numberIndices[numberPosition] = numberComponents[component];
+                    numberPosition++;
+                    continue;
+                }
             }
         }
 

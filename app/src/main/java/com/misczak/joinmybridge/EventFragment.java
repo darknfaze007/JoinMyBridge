@@ -100,6 +100,7 @@ public class EventFragment extends ListFragment
         }
     }
 
+
     public static class MySearchView extends SearchView {
         public MySearchView(Context context) {
             super(context);
