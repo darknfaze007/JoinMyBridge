@@ -144,74 +144,30 @@ public class EventFragment extends ListFragment
         Log.d(TAG, "Event Title" + eventName);
         Log.d(TAG, "Event Location " + eventLocation);
 
-
-        String delimiters = "[ ,x#*]+";
-        String[] bridgeComponents = eventLocation.split(delimiters);
-        int components = bridgeComponents.length;
-        Log.d(TAG, "bridge components #" + components);
-
         Intent i = new Intent(getActivity(), BridgeActivity.class);
 
         i.putExtra(BridgeFragment.EXTRA_BRIDGE_NAME, eventName);
 
-        //Variable will represent position of first number found in event's location field
-        int finalLoop = 0;
 
-        for (int loop = 0; loop < components; loop++) {
+        ImportUtilities iu = new ImportUtilities();
+        String[] bridgeComponents = iu.getNumberArray(eventLocation);
 
-            if (!Character.isDigit(bridgeComponents[loop].charAt(0))){
-                continue;
-            }
-            else{
-                finalLoop = loop;
-                break;
-            }
+        if (bridgeComponents[0] != null && !bridgeComponents[0].isEmpty()) {
+            i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[0]);
+        }
+        if (bridgeComponents[1] != null && !bridgeComponents[1].isEmpty()) {
+            i.putExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE, bridgeComponents[1]);
+        }
+        if (bridgeComponents[2] != null && !bridgeComponents[2].isEmpty()) {
+            i.putExtra(BridgeFragment.EXTRA_HOST_CODE, bridgeComponents[2]);
+        }
+        if (bridgeComponents[3] != null && !bridgeComponents[3].isEmpty()) {
+            i.putExtra(BridgeFragment.EXTRA_FIRST_TONE, bridgeComponents[3]);
+        }
+        if (bridgeComponents[4] != null && !bridgeComponents[4].isEmpty()) {
+            i.putExtra(BridgeFragment.EXTRA_SECOND_TONE, bridgeComponents[4]);
         }
 
-        Log.d(TAG, "position of first number " + finalLoop);
-
-        switch (components) {
-            case 1:
-                Log.d(TAG, bridgeComponents[0]);
-                i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[finalLoop]);
-                break;
-            case 2:
-                Log.d(TAG, bridgeComponents[0]);
-                Log.d(TAG, bridgeComponents[1]);
-                i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[finalLoop]);
-                i.putExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE, bridgeComponents[finalLoop+1]);
-                break;
-            case 3:
-                Log.d(TAG, "Case 3");
-                Log.d(TAG, bridgeComponents[0]);
-                Log.d(TAG, bridgeComponents[1]);
-                Log.d(TAG, bridgeComponents[2]);
-                i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[finalLoop]);
-                i.putExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE, bridgeComponents[finalLoop+1]);
-                i.putExtra(BridgeFragment.EXTRA_HOST_CODE, bridgeComponents[finalLoop+2]);
-                break;
-            default:
-                Log.d(TAG, "Case default");
-
-                //Ensure a number exists somewhere in the location field before setting it as an extra
-                if (finalLoop < components) {
-                    Log.d(TAG, bridgeComponents[finalLoop]);
-                    i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[finalLoop]);
-                }
-
-                //Ensure a second set of numbers for the first code exists before setting it as an extra
-                if (finalLoop + 1 < components && Character.isDigit(bridgeComponents[finalLoop+1].charAt(0))) {
-                    Log.d(TAG, bridgeComponents[finalLoop+1]);
-                    i.putExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE, bridgeComponents[finalLoop+1]);
-                }
-
-                //Ensure a third set of numbers for the second code exists before setting it as an extra
-                if (finalLoop + 2 < components && Character.isDigit(bridgeComponents[finalLoop+2].charAt(0))) {
-                    Log.d(TAG, bridgeComponents[finalLoop+2]);
-                    i.putExtra(BridgeFragment.EXTRA_HOST_CODE, bridgeComponents[finalLoop+2]);
-                }
-                break;
-        }
         startActivityForResult(i, 0);
 
     }

@@ -36,8 +36,10 @@ public class BridgeActivity extends SingleFragmentActivity {
         String bridgeNumber = (String)getIntent().getSerializableExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER);
         String participantCode = (String)getIntent().getSerializableExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE);
         String hostCode = (String)getIntent().getSerializableExtra(BridgeFragment.EXTRA_HOST_CODE);
+        String firstTone = (String)getIntent().getSerializableExtra(BridgeFragment.EXTRA_FIRST_TONE);
+        String secondTone = (String)getIntent().getSerializableExtra(BridgeFragment.EXTRA_SECOND_TONE);
 
-        return BridgeFragment.newInstance(bridgeId, bridgeName, bridgeNumber, participantCode, hostCode);
+        return BridgeFragment.newInstance(bridgeId, bridgeName, bridgeNumber, participantCode, hostCode, firstTone, secondTone);
     }
 
     @Override

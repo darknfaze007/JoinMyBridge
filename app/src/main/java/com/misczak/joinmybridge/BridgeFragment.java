@@ -46,6 +46,8 @@ public class BridgeFragment extends DialogFragment {
     public static final String EXTRA_HOST_CODE = "com.misczak.joinmybridge.host_code";
     public static final String EXTRA_BRIDGE_NAME = "com.misczak.joinmybridge.bridge_name";
     public static final String EXTRA_PAUSE = "com.misczak.joinmybridge.bridge_pause";
+    public static final String EXTRA_FIRST_TONE = "com.misczak.joinmybridge.first_tone";
+    public static final String EXTRA_SECOND_TONE = "com.misczak.joinmybridge.second_tone";
 
     private Bridge mBridge;
     private String mBridgeNameString, mBridgeNumberString, mParticipantCodeString, mHostCodeString,
@@ -237,6 +239,8 @@ public class BridgeFragment extends DialogFragment {
 
         if (mBridgeId != null && mBridge.getFirstTone() != null){
             mFirstTone.setSelection(getSpinnerIndex(mFirstTone, mBridge.getFirstTone()));
+        } else if (getArguments().getSerializable(EXTRA_FIRST_TONE) != null) {
+            mFirstTone.setSelection(getSpinnerIndex(mFirstTone, (String)getArguments().getSerializable(EXTRA_FIRST_TONE)));
         }
 
         mFirstTone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -255,6 +259,8 @@ public class BridgeFragment extends DialogFragment {
 
         if (mBridgeId != null && mBridge.getSecondTone() != null){
             mSecondTone.setSelection(getSpinnerIndex(mSecondTone, mBridge.getSecondTone()));
+        } else if (getArguments().getSerializable(EXTRA_SECOND_TONE) != null) {
+            mSecondTone.setSelection(getSpinnerIndex(mSecondTone, (String)getArguments().getSerializable(EXTRA_SECOND_TONE)));
         }
 
         mSecondTone.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -316,13 +322,15 @@ public class BridgeFragment extends DialogFragment {
         return v;
     }
 
-    public static BridgeFragment newInstance(UUID bridgeId, String bridgeName, String bridgeNumber, String participantCode, String hostCode) {
+    public static BridgeFragment newInstance(UUID bridgeId, String bridgeName, String bridgeNumber, String participantCode, String hostCode, String firstTone, String secondTone) {
         Bundle args = new Bundle();
         args.putSerializable(EXTRA_BRIDGE_ID, bridgeId);
         args.putSerializable(EXTRA_BRIDGE_NAME, bridgeName);
         args.putSerializable(EXTRA_BRIDGE_NUMBER, bridgeNumber);
         args.putSerializable(EXTRA_PARTICIPANT_CODE, participantCode);
         args.putSerializable(EXTRA_HOST_CODE, hostCode);
+        args.putSerializable(EXTRA_FIRST_TONE, firstTone);
+        args.putSerializable(EXTRA_SECOND_TONE, secondTone);
 
         BridgeFragment fragment = new BridgeFragment();
         fragment.setArguments(args);

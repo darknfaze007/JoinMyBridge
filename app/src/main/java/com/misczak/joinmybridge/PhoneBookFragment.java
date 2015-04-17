@@ -376,40 +376,32 @@ public class PhoneBookFragment extends ListFragment {
             c.moveToFirst();
             int phoneNumberColumn = c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
             int displayNameColumn = c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-            String contactPhoneNumber = c.getString(phoneNumberColumn);
+            String contactPhoneNumber = c.getString(phoneNumberColumn).trim();
             String contactDisplayName = c.getString(displayNameColumn);
             Log.d(TAG, contactDisplayName);
             Log.d(TAG, contactPhoneNumber);
-
-            String delimiters = "[ ,x#*]+";
-            String[] bridgeComponents = contactPhoneNumber.split(delimiters);
-            int components = bridgeComponents.length;
 
             Intent i = new Intent(getActivity(), BridgeActivity.class);
 
             i.putExtra(BridgeFragment.EXTRA_BRIDGE_NAME, contactDisplayName);
 
-            switch (components) {
-                case 1:
-                    Log.d(TAG, bridgeComponents[0]);
-                    i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[0]);
-                    break;
-                case 2:
-                    Log.d(TAG, bridgeComponents[0]);
-                    Log.d(TAG, bridgeComponents[1]);
-                    i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[0]);
-                    i.putExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE, bridgeComponents[1]);
-                    break;
-                case 3:
-                    Log.d(TAG, bridgeComponents[0]);
-                    Log.d(TAG, bridgeComponents[1]);
-                    Log.d(TAG, bridgeComponents[2]);
-                    i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[0]);
-                    i.putExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE, bridgeComponents[1]);
-                    i.putExtra(BridgeFragment.EXTRA_HOST_CODE, bridgeComponents[2]);
-                    break;
-                default:
-                    break;
+            ImportUtilities iu = new ImportUtilities();
+            String[] bridgeComponents = iu.getNumberArray(contactPhoneNumber);
+
+            if (bridgeComponents[0] != null && !bridgeComponents[0].isEmpty()) {
+                i.putExtra(BridgeFragment.EXTRA_BRIDGE_NUMBER, bridgeComponents[0]);
+            }
+            if (bridgeComponents[1] != null && !bridgeComponents[1].isEmpty()) {
+                i.putExtra(BridgeFragment.EXTRA_PARTICIPANT_CODE, bridgeComponents[1]);
+            }
+            if (bridgeComponents[2] != null && !bridgeComponents[2].isEmpty()) {
+                i.putExtra(BridgeFragment.EXTRA_HOST_CODE, bridgeComponents[2]);
+            }
+            if (bridgeComponents[3] != null && !bridgeComponents[3].isEmpty()) {
+                i.putExtra(BridgeFragment.EXTRA_FIRST_TONE, bridgeComponents[3]);
+            }
+            if (bridgeComponents[4] != null && !bridgeComponents[4].isEmpty()) {
+                i.putExtra(BridgeFragment.EXTRA_SECOND_TONE, bridgeComponents[4]);
             }
             startActivityForResult(i, 0);
 
