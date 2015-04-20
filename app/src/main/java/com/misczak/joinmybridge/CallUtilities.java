@@ -171,7 +171,7 @@ public class CallUtilities {
         String pauseTone = "";
 
         for (int i = 1; i <= pauseLength; i++) {
-            pauseTone += "%2C";
+            pauseTone += ",";
         }
 
         return pauseTone;
