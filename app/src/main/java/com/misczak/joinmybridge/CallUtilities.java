@@ -16,8 +16,6 @@
 
 package com.misczak.joinmybridge;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -53,7 +51,7 @@ public class CallUtilities {
 
         mFirstPauseTone = getPauseTone(mBridge.getDialingPause());
         mSecondPauseTone = getPauseTone(mBridge.getDialingPause());
-        Log.d(TAG, mFirstPauseTone);
+        //Log.d(TAG, mFirstPauseTone);
 
 
         if (dialWithParticipant == true && dialWithHost == true){
@@ -73,8 +71,8 @@ public class CallUtilities {
         }
 
 
-        log = "Number being called is " + mNumberToCall;
-        Log.d(TAG, log);
+        //log = "Number being called is " + mNumberToCall;
+        //Log.d(TAG, log);
         return mNumberToCall;
 
     }
@@ -144,7 +142,7 @@ public class CallUtilities {
             mSecondPauseTone = "";
         }
 
-        Log.d(TAG, "Tone Code is " + tonePosition);
+        //Log.d(TAG, "Tone Code is " + tonePosition);
 
         switch (tonePosition){
             case 0:

@@ -34,7 +34,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.ListFragment;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -57,7 +56,6 @@ import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.Simple
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.UndoAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.UUID;
 
 
@@ -101,7 +99,6 @@ public class PhoneBookFragment extends ListFragment {
         setHasOptionsMenu(true);
         getActivity().setTitle(R.string.phonebook_title);
         mBridgeList = PhoneBook.get(getActivity()).getBridges();
-
     }
 
     @Override
@@ -195,7 +192,7 @@ public class PhoneBookFragment extends ListFragment {
         super.onResume();
         buildAdapter(mBridgeList);
 
-        Log.d(TAG, "PhoneBook onResume");
+        //Log.d(TAG, "PhoneBook onResume");
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
         SharedPreferences.Editor editor = preferences.edit();
@@ -220,10 +217,11 @@ public class PhoneBookFragment extends ListFragment {
             editor.commit();
         }
 
-        Log.d(TAG, customDialer + "");
-        Log.d(TAG, BridgeFragment.DEFAULT_PAUSE + "");
+        //Log.d(TAG, customDialer + "");
+        //Log.d(TAG, BridgeFragment.DEFAULT_PAUSE + "");
 
     }
+
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -335,7 +333,7 @@ public class PhoneBookFragment extends ListFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        Log.d(TAG, "onActivityResult");
+        //Log.d(TAG, "onActivityResult");
         listView.invalidateViews();
 
         UUID bridgeId;
@@ -346,7 +344,7 @@ public class PhoneBookFragment extends ListFragment {
             boolean[] options = data.getBooleanArrayExtra(EXTRA_CALL_OPTIONS);
             bridgeId = (UUID)data.getSerializableExtra(EXTRA_BRIDGE_ID);
 
-            Log.d(TAG, " onActivityResult arr: " + Arrays.toString(options));
+            //Log.d(TAG, " onActivityResult arr: " + Arrays.toString(options));
 
 
             CallUtilities utils = new CallUtilities();
@@ -378,8 +376,8 @@ public class PhoneBookFragment extends ListFragment {
             int displayNameColumn = c.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
             String contactPhoneNumber = c.getString(phoneNumberColumn).trim();
             String contactDisplayName = c.getString(displayNameColumn);
-            Log.d(TAG, contactDisplayName);
-            Log.d(TAG, contactPhoneNumber);
+            //Log.d(TAG, contactDisplayName);
+            //Log.d(TAG, contactPhoneNumber);
 
             Intent i = new Intent(getActivity(), BridgeActivity.class);
 
@@ -434,10 +432,10 @@ public class PhoneBookFragment extends ListFragment {
 
         //Will remove bridge that is being deleted from search filter view, if active
         if (searchView.isShown()) {
-            Log.d(TAG, "searchView shown");
+            //Log.d(TAG, "searchView shown");
             adapter.getFilter().filter(filterString);
         } else {
-            Log.d(TAG, "searchView NOT shown");
+            //Log.d(TAG, "searchView NOT shown");
             adapter.getFilter().filter("");
         }
 
@@ -454,7 +452,7 @@ public class PhoneBookFragment extends ListFragment {
         pauseLength = bridgeExtra.getDialingPause();
         CallUtilities callUtils = new CallUtilities();
         pauseTone = callUtils.getPauseTone(pauseLength);
-        Log.d(TAG, "Phonebook pause tone " + pauseTone);
+        //Log.d(TAG, "Phonebook pause tone " + pauseTone);
 
 
 
@@ -501,6 +499,8 @@ public class PhoneBookFragment extends ListFragment {
 
     //Handle the act of dismissing a bridge through the swipe gesture
     private class MyOnDismissCallback implements OnDismissCallback {
+
+
 
         private final BridgeAdapter mAdapter;
 
@@ -586,8 +586,8 @@ public class PhoneBookFragment extends ListFragment {
 
                     final Bridge b = (Bridge) getListView().getItemAtPosition(position);
 
-                    String loggy = "Overflow menu for Position: " + position + " Bridge: " + b.getBridgeName();
-                    Log.d(TAG, loggy);
+                    //String logStatement = "Overflow menu for Position: " + position + " Bridge: " + b.getBridgeName();
+                    //Log.d(TAG, logStatement);
                 }
             });
 
@@ -654,6 +654,7 @@ public class PhoneBookFragment extends ListFragment {
             if (view == null) {
                 view = LayoutInflater.from(getActivity()).inflate(R.layout.undo_row, viewGroup, false);
             }
+
             return view;
         }
 

@@ -297,12 +297,12 @@ public class BridgeFragment extends DialogFragment {
         mDialingPause = (Slider)v.findViewById(R.id.pauseSlider);
         mPauseLabel = (TextView)v.findViewById(R.id.pauseSliderLabel);
         if (mBridgeId != null && (Integer)mBridge.getDialingPause() != null) {
-            Log.d(TAG, "Pause passed null check" + mBridge.getDialingPause());
+            //Log.d(TAG, "Pause passed null check" + mBridge.getDialingPause());
             mDialingPauseNumber = mBridge.getDialingPause();
 
 
         } else {
-            Log.d(TAG, "Pause or bridge is null");
+            //Log.d(TAG, "Pause or bridge is null");
             mDialingPauseNumber = DEFAULT_PAUSE;
 
         }
@@ -381,11 +381,11 @@ public class BridgeFragment extends DialogFragment {
             b.setParticipantCode(DEFAULT_FIELD);
 
         if ((Integer)mDialingPauseNumber != null) {
-            Log.d(TAG, "Setting Integer Pause Number" + mDialingPauseNumber);
+            //Log.d(TAG, "Setting Integer Pause Number" + mDialingPauseNumber);
             b.setDialingPause(mDialingPauseNumber);
         }
         else {
-            Log.d(TAG, "Setting Default Pause Number");
+            //Log.d(TAG, "Setting Default Pause Number");
             b.setDialingPause(DEFAULT_PAUSE);
         }
 

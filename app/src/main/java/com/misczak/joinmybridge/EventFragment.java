@@ -16,7 +16,6 @@
 
 package com.misczak.joinmybridge;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -28,10 +27,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.SearchView;
-import android.text.TextUtils;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -42,9 +37,7 @@ import java.util.Date;
 
 
 public class EventFragment extends ListFragment
-        implements android.support.v7.widget.SearchView.OnQueryTextListener,
-        android.support.v7.widget.SearchView.OnCloseListener,
-        LoaderManager.LoaderCallbacks<Cursor> {
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final String ID_COLUMN = "_id";
     private static final String TITLE_COLUMN = "title";
@@ -101,35 +94,10 @@ public class EventFragment extends ListFragment
     }
 
 
-    public static class MySearchView extends SearchView {
-        public MySearchView(Context context) {
-            super(context);
-        }
-
-        @Override
-        public void onActionViewCollapsed() {
-            setQuery("", false);
-            super.onActionViewCollapsed();
-        }
-    }
-
-    @Override
-    public void onCreateOptionsMenu (Menu menu, MenuInflater inflater) {
-        MenuItem item = menu.add("Search");
-        item.setIcon(R.drawable.ic_search_white_24dp);
-        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM |
-                MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-        mSearchView = new MySearchView(getActivity());
-        mSearchView.setOnQueryTextListener(this);
-        mSearchView.setOnCloseListener(this);
-        mSearchView.setIconifiedByDefault(true);
-        item.setActionView(mSearchView);
-    }
-
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Log.d("EventFragment", "Item clicked: " + id);
+        //Log.d("EventFragment", "Item clicked: " + id);
 
         Cursor listItemCursor = ((SimpleCursorAdapter)l.getAdapter()).getCursor();
 
@@ -141,9 +109,9 @@ public class EventFragment extends ListFragment
             eventName = eventName.substring(0, BridgeFragment.MAX_NAME_LENGTH);
         }
 
-        Log.d(TAG, "Event ID " + eventId);
-        Log.d(TAG, "Event Title" + eventName);
-        Log.d(TAG, "Event Location " + eventLocation);
+        //Log.d(TAG, "Event ID " + eventId);
+        //Log.d(TAG, "Event Title" + eventName);
+        //Log.d(TAG, "Event Location " + eventLocation);
 
         Intent i = new Intent(getActivity(), BridgeActivity.class);
 
@@ -220,34 +188,6 @@ public class EventFragment extends ListFragment
         mAdapter.swapCursor(null);
 
     }
-
-    @Override
-    public boolean onClose() {
-
-        if (!TextUtils.isEmpty(mSearchView.getQuery())) {
-            mSearchView.setQuery(null, true);
-        }
-
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return true;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-
-        String newFilter = !TextUtils.isEmpty(newText) ? newText : null;
-
-        filterString = newFilter;
-        mAdapter.getFilter().filter(filterString);
-        mAdapter.notifyDataSetChanged();
-        return true;
-
-    }
-
 
     public static EventFragment newInstance(long calendarId) {
 

@@ -17,7 +17,6 @@
 package com.misczak.joinmybridge;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -42,7 +41,7 @@ public class PhoneBook {
             mBridgeList = mSerializer.loadPhoneBook();
         } catch (Exception e) {
             mBridgeList = new ArrayList<Bridge>();
-            Log.e(TAG, "Error loading PhoneBook: ", e);
+            //Log.e(TAG, "Error loading PhoneBook: ", e);
         }
     }
 
@@ -77,11 +76,11 @@ public class PhoneBook {
     public boolean savePhoneBook() {
         try {
             mSerializer.savePhoneBook(mBridgeList);
-            Log.d(TAG, "PhoneBook saved to file");
+            //Log.d(TAG, "PhoneBook saved to file");
             return true;
         }
         catch (Exception e) {
-            Log.e(TAG, "Error saving PhoneBook: ", e);
+            //Log.e(TAG, "Error saving PhoneBook: ", e);
             return false;
         }
     }

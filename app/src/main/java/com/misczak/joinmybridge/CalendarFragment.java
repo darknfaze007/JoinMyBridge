@@ -27,7 +27,6 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.SearchView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
@@ -85,10 +84,10 @@ public class CalendarFragment extends ListFragment
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
-        Log.d("CalendarFragment", "Item clicked: " + id);
-        Log.d("CalendarFragment", "Position: " + position);
+        //Log.d("CalendarFragment", "Item clicked: " + id);
+        //Log.d("CalendarFragment", "Position: " + position);
         Object calendarInfo = l.getItemAtPosition(position);
-        Log.d("CalendarFragment", "Array: " + calendarInfo.toString());
+        //Log.d("CalendarFragment", "Array: " + calendarInfo.toString());
 
         Intent eventIntent = new Intent(getActivity(), EventActivity.class);
         eventIntent.putExtra(EventFragment.CALENDAR_ID_EXTRA, id);

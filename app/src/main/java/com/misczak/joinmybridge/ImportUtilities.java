@@ -16,8 +16,6 @@
 
 package com.misczak.joinmybridge;
 
-import android.util.Log;
-
 public class ImportUtilities {
 
     private static final String TAG = "ImportUtilities";
@@ -37,8 +35,8 @@ public class ImportUtilities {
         for (int component = 0; component < numberComponents.length; component++){
             if (!Character.isDigit(numberComponents[component].charAt(0))){
                 if (tonePosition < toneIndices.length && (numberComponents[component].equals("#") || numberComponents[component].equals("*"))) {
-                    Log.d(TAG, "Tone Length: " + toneIndices.length);
-                    Log.d(TAG, "Tone Position: " + tonePosition);
+                    //Log.d(TAG, "Tone Length: " + toneIndices.length);
+                    //Log.d(TAG, "Tone Position: " + tonePosition);
                     toneIndices[tonePosition] = numberComponents[component];
                     tonePosition++;
                     continue;
@@ -59,11 +57,11 @@ public class ImportUtilities {
 
         for (int assignment = 0; assignment < endComponents.length; assignment++) {
             if (assignment < 3) {
-                Log.d(TAG, "Number Index #" + assignment + ": " + numberIndices[assignment]);
+                //Log.d(TAG, "Number Index #" + assignment + ": " + numberIndices[assignment]);
                 endComponents[assignment] = numberIndices[assignment];
             }
             else {
-                Log.d(TAG, "Tone Index #" + (assignment-3) + ": " + toneIndices[assignment-3]);
+                //Log.d(TAG, "Tone Index #" + (assignment-3) + ": " + toneIndices[assignment-3]);
 
                 endComponents[assignment] = toneIndices[assignment-3];
             }
