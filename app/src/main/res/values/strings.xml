@@ -22,7 +22,7 @@
     <string name="call_option_title">Call Options</string>
 
     <string name="empty_list">No Bridges Saved</string>
-    <string name="deleted_bridge">Bridge Deleted</string>
+    <string name="deleted_bridge">Bridge Deleted.\nSwipe again to confirm.</string>
 
 
     <string name="phonebook_title">Join My Bridge</string>
