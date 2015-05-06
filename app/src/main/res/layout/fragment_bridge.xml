@@ -126,7 +126,6 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:layout_below="@id/pauseSliderLabel"
-            android:paddingBottom="16dp"
             materialdesign:max="12"
             materialdesign:min="0"
             materialdesign:showNumberIndicator="true"/>

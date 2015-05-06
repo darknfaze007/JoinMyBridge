@@ -16,6 +16,8 @@
 
 package com.misczak.joinmybridge;
 
+import android.util.Log;
+
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -71,8 +73,8 @@ public class CallUtilities {
         }
 
 
-        //log = "Number being called is " + mNumberToCall;
-        //Log.d(TAG, log);
+        log = "Number being called is " + mNumberToCall;
+        Log.d(TAG, log);
         return mNumberToCall;
 
     }
@@ -168,10 +170,14 @@ public class CallUtilities {
 
         String pauseTone = "";
 
-        for (int i = 1; i <= pauseLength; i++) {
-            pauseTone += ",";
+        if (pauseLength == 0){
+            return ",";
         }
-
+        else {
+            for (int i = 1; i <= pauseLength; i++) {
+                pauseTone += ",";
+            }
+        }
         return pauseTone;
     }
 }
