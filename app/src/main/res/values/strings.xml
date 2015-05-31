@@ -62,7 +62,7 @@
     <string name="pref_about_dialog_title">Join My Bridge</string>
     <string name="pref_about_dialog_message">Test message</string>
     <string name="pref_about_dialog_positive">OK</string>
-    <string name="about_dialog_title">Join My Bridge v1.0.1</string>
+    <string name="about_dialog_title">Join My Bridge v1.1.0</string>
     <string name="about_dialog_description">A conference call line management tool for Android 4.1 and above.</string>
     <string name="about_dialog_author">Created by <b>John Misczak</b>.</string>
     <string name="about_dialog_thanks">Join My Bridge makes use of the following libraries:\n

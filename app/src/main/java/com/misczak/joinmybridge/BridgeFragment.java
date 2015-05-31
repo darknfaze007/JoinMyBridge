@@ -52,7 +52,7 @@ public class BridgeFragment extends DialogFragment {
     private Bridge mBridge;
     private String mBridgeNameString, mBridgeNumberString, mParticipantCodeString, mHostCodeString,
             mFirstToneString, mSecondToneString, mCallOrderString;
-    private int mDialingPauseNumber;
+    private int mDialingPauseNumber, mDialOptions;
     private EditText mBridgeName, mBridgeNumber, mParticipantCode, mHostCode;
     private Spinner mFirstTone, mSecondTone, mCallOrder;
     private Slider mDialingPause;
@@ -85,6 +85,9 @@ public class BridgeFragment extends DialogFragment {
             mBridgeNumberString = mBridge.getBridgeNumber();
             mHostCodeString = mBridge.getHostCode();
             mParticipantCodeString = mBridge.getParticipantCode();
+
+            mDialOptions = mBridge.getDialOptions();
+            Log.d(TAG, "Dial Options = " + mDialOptions);
 
 
 
@@ -388,6 +391,7 @@ public class BridgeFragment extends DialogFragment {
             //Log.d(TAG, "Setting Default Pause Number");
             b.setDialingPause(DEFAULT_PAUSE);
         }
+
 
         b.setFirstTone(mFirstToneString);
         b.setSecondTone(mSecondToneString);

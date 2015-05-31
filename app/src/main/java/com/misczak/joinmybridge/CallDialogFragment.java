@@ -23,9 +23,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
 
-import java.util.Arrays;
 import java.util.UUID;
 
 
@@ -37,8 +35,13 @@ public class CallDialogFragment extends DialogFragment {
     private final boolean[] options = new boolean[2];
     private final int participantCodeIndex = 0;
     private final int hostCodeIndex = 1;
+    private final int noDialOptions = 0;
+    private final int participantDialOptions = 1;
+    private final int hostDialOptions = 2;
+    private final int bothDialOptions = 3;
     private UUID mBridgeId;
     private Bridge mBridge;
+    private int mDialOptions;
 
 
     public static CallDialogFragment newInstance(UUID bridgeId) {
@@ -55,19 +58,45 @@ public class CallDialogFragment extends DialogFragment {
      @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-         options[participantCodeIndex] = false;
-         options[hostCodeIndex] = false;
 
          mBridgeId = (UUID)getArguments().getSerializable(EXTRA_BRIDGE_ID);
 
          mBridge = PhoneBook.get(getActivity()).getBridge(mBridgeId);
+
+         mDialOptions = mBridge.getDialOptions();
+
+         switch (mDialOptions){
+             case 0:
+                 options[participantCodeIndex] = false;
+                 options[hostCodeIndex] = false;
+                 break;
+             case 1:
+                 options[participantCodeIndex] = true;
+                 options[hostCodeIndex] = false;
+                 break;
+             case 2:
+                 options[participantCodeIndex] = false;
+                 options[hostCodeIndex] = true;
+                 break;
+             case 3:
+                 options[participantCodeIndex] = true;
+                 options[hostCodeIndex] = true;
+                 break;
+             default:
+                 options[participantCodeIndex] = false;
+                 options[hostCodeIndex] = false;
+
+         }
+         //Log.d(TAG, "options[0] = " + options[participantCodeIndex]);
+         //Log.d(TAG, "options[1] = " + options[hostCodeIndex]);
+
 
          if (!mBridge.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)
                  & mBridge.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)){
 
              return new AlertDialog.Builder(getActivity())
                      .setTitle(R.string.call_picker_title)
-                     .setMultiChoiceItems(R.array.participant_only_call_options, null,
+                     .setMultiChoiceItems(R.array.participant_only_call_options, options,
                              new DialogInterface.OnMultiChoiceClickListener() {
                                  @Override
                                  public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -89,9 +118,15 @@ public class CallDialogFragment extends DialogFragment {
          else if (mBridge.getParticipantCode().equals(BridgeFragment.DEFAULT_FIELD)
                  & !mBridge.getHostCode().equals(BridgeFragment.DEFAULT_FIELD)){
 
+             //Have to do some re-configuring since host code shifts to index 0 in this case
+             if (options[hostCodeIndex]){
+                 options[participantCodeIndex] = true;
+                 options[hostCodeIndex] = false;
+             }
+
              return new AlertDialog.Builder(getActivity())
                      .setTitle(R.string.call_picker_title)
-                     .setMultiChoiceItems(R.array.host_only_call_options, null,
+                     .setMultiChoiceItems(R.array.host_only_call_options, options,
                              new DialogInterface.OnMultiChoiceClickListener() {
                                  @Override
                                  public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -113,7 +148,7 @@ public class CallDialogFragment extends DialogFragment {
 
                 return new AlertDialog.Builder(getActivity())
                      .setTitle(R.string.call_picker_title)
-                     .setMultiChoiceItems(R.array.call_options, null,
+                     .setMultiChoiceItems(R.array.call_options, options,
                              new DialogInterface.OnMultiChoiceClickListener() {
                                  @Override
                                  public void onClick(DialogInterface dialog, int which, boolean isChecked) {
@@ -135,11 +170,27 @@ public class CallDialogFragment extends DialogFragment {
      }
 
     private void sendResult(int resultCode, UUID bridgeId){
+
+        if (options[participantCodeIndex] && options[hostCodeIndex]){
+            mBridge.setDialOptions(bothDialOptions);
+        }
+        else if (options[participantCodeIndex]) {
+            mBridge.setDialOptions(participantDialOptions);
+        }
+        else if (options[hostCodeIndex]) {
+            mBridge.setDialOptions(hostDialOptions);
+        }
+        else {
+            mBridge.setDialOptions(noDialOptions);
+        }
+
+        PhoneBook.get(getActivity()).savePhoneBook();
+
         if (getTargetFragment() == null) {
             return;
         }
 
-        Log.d(TAG, "sendResult arr: " + Arrays.toString(options));
+        //Log.d(TAG, "sendResult arr: " + Arrays.toString(options));
         Intent i = new Intent();
         i.putExtra(EXTRA_CALL_OPTIONS, options);
         i.putExtra(EXTRA_BRIDGE_ID, bridgeId);
