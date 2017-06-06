@@ -1,0 +1,22 @@
+{
+  "summary": {
+    "title": "Test Threat Model",
+    "owner": "John Misczak",
+    "description": "Just a simple threat model for demo purposes"
+  },
+  "detail": {
+    "contributors": [],
+    "diagrams": [
+      {
+        "title": "User Registration",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "id": 0
+      },
+      {
+        "title": "Purchasing Flow",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "id": 1
+      }
+    ]
+  }
+}
